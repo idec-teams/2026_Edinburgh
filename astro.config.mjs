@@ -5,4 +5,5 @@ export default defineConfig({
   base: '/cxna-site',
   output: 'static',
   compressHTML: true,
+  integrations: [],
 });

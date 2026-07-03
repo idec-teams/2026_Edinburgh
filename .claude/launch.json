@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "cxna-dev",
-      "runtimeExecutable": "D:\\杂七杂八\\nodejs\\npm.cmd",
-      "runtimeArgs": ["run", "dev", "--", "--port", "4321", "--host"],
-      "port": 4321
+      "runtimeExecutable": "D:\\claudeStuff\\nodejs-link\\npm.cmd",
+      "runtimeArgs": ["run", "dev", "--", "--host"],
+      "port": 4321,
+      "autoPort": true
     }
   ]
 }

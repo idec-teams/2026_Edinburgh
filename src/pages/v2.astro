@@ -1,0 +1,1507 @@
+---
+// Standalone cinematic page — pure vanilla JS, no React.
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CxnA — Cinematic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet" />
+
+  <script is:inline>
+    (function() {
+      var t = localStorage.getItem('theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+
+  <style is:inline>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-snap-type: y mandatory; }
+    body {
+      background: #000;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── Palette variables ──────────────────────────── */
+    :root {
+      --cv-primary: #3dd68c;
+      --cv-accent:  #fbbf24;
+    }
+    [data-palette="B"] {
+      --cv-primary: #34d5b0;
+      --cv-accent:  #e8702a;
+    }
+
+    /* ── Palette toggle ─────────────────────────────── */
+    #palette-toggle {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      z-index: 200;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    #palette-toggle label {
+      font-size: 0.625rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .palette-swatches {
+      display: flex;
+      gap: 6px;
+    }
+    .palette-swatch {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.25);
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.15s;
+      position: relative;
+      overflow: hidden;
+      background: none;
+      padding: 0;
+    }
+    .palette-swatch::before,
+    .palette-swatch::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+    .palette-swatch::before { clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); }
+    .palette-swatch::after  { clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%); }
+    .swatch-A::before { background: #3dd68c; }
+    .swatch-A::after  { background: #fbbf24; }
+    .swatch-B::before { background: #34d5b0; }
+    .swatch-B::after  { background: #e8702a; }
+    .palette-swatch.active { border-color: #fff; transform: scale(1.12); }
+
+    /* ── Fixed Nav ─────────────────────────────────── */
+    #lithos-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 8px; }
+    .nav-logo span { font-size: 1.25rem; font-weight: 600; color: #fff; }
+    .nav-pills {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 999px;
+      padding: 8px;
+    }
+    .nav-pill {
+      display: inline-block;
+      color: rgba(255,255,255,0.8);
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 6px 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .nav-pill:hover, .nav-pill.active {
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+    }
+    .nav-cta {
+      background: #fff;
+      color: #111;
+      border: none;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 10px 24px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: #e5e5e5; }
+    @media (max-width: 767px) { .nav-pills, .nav-cta { display: none; } }
+
+    /* ── Liquid-glass utility ───────────────────────── */
+    .liquid-glass {
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .liquid-glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.4px;
+      background: linear-gradient(180deg,
+        rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 20%,
+        rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+        rgba(255,255,255,0.1) 80%, rgba(255,255,255,0.3) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ── VEX HERO ───────────────────────────────────── */
+    #vex-hero {
+      position: relative;
+      min-height: 100dvh;
+      background: #000;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+    }
+    #magnet-square {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: min(600px, 90vw);
+      height: min(600px, 90vw);
+      margin-top: calc(min(600px, 90vw) / -2);
+      margin-left: calc(min(600px, 90vw) / -2);
+      background:
+        linear-gradient(rgba(0,0,12,0.28), rgba(0,0,12,0.28)),
+        url('https://images.unsplash.com/photo-1714844437236-de8ef1c7286f?w=1200&q=80') center/cover;
+      border-radius: 16px;
+      transform: rotate(9deg);
+      pointer-events: none;
+      will-change: transform;
+    }
+    .vex-inner-nav {
+      padding: 80px 24px 0;
+    }
+    @media (min-width: 768px) { .vex-inner-nav { padding: 80px 48px 0; } }
+    @media (min-width: 1024px) { .vex-inner-nav { padding: 80px 64px 0; } }
+    .vex-inner-nav nav {
+      border-radius: 12px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .vex-nav-logo { font-size: 1.5rem; font-weight: 600; }
+    .vex-nav-links {
+      display: none;
+      gap: 32px;
+      font-size: 0.875rem;
+      list-style: none;
+    }
+    @media (min-width: 768px) { .vex-nav-links { display: flex; } }
+    .vex-nav-links a { color: #fff; text-decoration: none; transition: color 0.2s; }
+    .vex-nav-links a:hover { color: rgba(255,255,255,0.6); }
+    .vex-nav-cta {
+      background: #fff;
+      color: #000;
+      border: none;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 8px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    .vex-nav-cta:hover { background: #e5e5e5; }
+
+    .vex-content {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 24px 48px;
+    }
+    @media (min-width: 768px) { .vex-content { padding: 0 48px 64px; } }
+    @media (min-width: 1024px) { .vex-content { padding: 0 64px 64px; } }
+    .vex-grid {
+      width: 100%;
+      display: grid;
+      gap: 32px;
+    }
+    @media (min-width: 1024px) {
+      .vex-grid { grid-template-columns: 1fr 1fr; align-items: end; }
+    }
+    .vex-h1 {
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 16px;
+    }
+    .vex-h1 .char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateX(-18px);
+      transition: opacity 500ms, transform 500ms;
+    }
+    .vex-h1.animated .char { opacity: 1; transform: translateX(0); }
+
+    .vex-para {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 20px;
+      max-width: 40ch;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+    @media (min-width: 768px) { .vex-para { font-size: 1.125rem; } }
+    .vex-para.visible { opacity: 1; }
+
+    .vex-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+    .vex-buttons.visible { opacity: 1; }
+    .btn-primary {
+      background: #fff;
+      color: #000;
+      border: none;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 12px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: #e5e5e5; }
+    .btn-glass {
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 12px 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      transition: background 0.2s, color 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-glass:hover { background: #fff; color: #000; }
+
+    .vex-pill-wrap {
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      opacity: 0;
+      transition: opacity 1s;
+    }
+    @media (min-width: 1024px) { .vex-pill-wrap { justify-content: flex-end; } }
+    .vex-pill-wrap.visible { opacity: 1; }
+    .vex-pill {
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 1.25rem;
+      font-weight: 300;
+    }
+    @media (min-width: 768px) { .vex-pill { font-size: 1.5rem; } }
+
+    /* ── LITHOS HERO ────────────────────────────────── */
+    #lithos-hero {
+      position: relative;
+      width: 100%;
+      height: 100dvh;
+      background: #000;
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+    #lithos-base {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1657573100558-c15355cc9c49?w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      z-index: 1;
+    }
+    #lithos-reveal {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1709651808265-977ed7ef78c6?w=1920&q=80');
+      background-size: cover;
+      background-position: center;
+      z-index: 3;
+      pointer-events: none;
+    }
+    #lithos-canvas { position: absolute; inset: 0; display: none; }
+
+    .lithos-heading {
+      position: absolute;
+      top: 14%;
+      left: 0; right: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .lithos-heading h1 {
+      color: #fff;
+      line-height: 0.95;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .lithos-h-italic {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(3rem, 10vw, 6rem);
+      letter-spacing: -0.05em;
+      display: block;
+    }
+    .lithos-h-plain {
+      font-weight: 400;
+      font-size: clamp(3rem, 10vw, 6rem);
+      letter-spacing: -0.08em;
+      display: block;
+      margin-top: -4px;
+    }
+
+    .lithos-bl {
+      position: absolute;
+      bottom: 56px;
+      left: 40px;
+      max-width: 260px;
+      z-index: 5;
+      display: none;
+    }
+    @media (min-width: 640px) { .lithos-bl { display: block; } }
+    .lithos-bl p {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.6;
+    }
+
+    .lithos-br {
+      position: absolute;
+      bottom: 40px;
+      right: 20px;
+      left: 20px;
+      max-width: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+      z-index: 5;
+    }
+    @media (min-width: 640px) {
+      .lithos-br { left: auto; right: 56px; bottom: 96px; }
+    }
+    .lithos-br p {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.6;
+    }
+    .btn-lithos {
+      background: var(--cv-accent);
+      color: #000;
+      border: none;
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 12px 28px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s, filter 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-lithos:hover { filter: brightness(1.1); transform: scale(1.03); }
+    .btn-lithos:active { transform: scale(0.95); }
+
+    /* ── Keyframe animations ────────────────────────── */
+    @keyframes heroReveal {
+      0%   { opacity: 0; transform: translateY(28px); filter: blur(12px); }
+      100% { opacity: 1; transform: translateY(0);    filter: blur(0); }
+    }
+    @keyframes heroFadeUp {
+      0%   { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes heroZoom {
+      0%   { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+
+    .hero-anim {
+      opacity: 0;
+      animation-fill-mode: forwards;
+      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .hero-reveal { animation-name: heroReveal; animation-duration: 1.1s; }
+    .hero-fade   { animation-name: heroFadeUp; animation-duration: 1s; }
+    .hero-zoom   { animation: heroZoom 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-anim, .hero-zoom { animation: none; opacity: 1; }
+      .vex-h1 .char { opacity: 1; transform: none; }
+    }
+
+    /* ── Theme toggle button ────────────────────────── */
+    #v2-theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      padding: 7px;
+      display: flex;
+      align-items: center;
+      border-radius: 8px;
+      opacity: 0.75;
+      transition: opacity 0.2s, background 0.2s;
+    }
+    #v2-theme-toggle:hover { opacity: 1; background: rgba(255,255,255,0.12); }
+    [data-theme="dark"]  .icon-sun  { display: none; }
+    [data-theme="light"] .icon-moon { display: none; }
+    [data-theme="light"] #v2-theme-toggle { color: #111; }
+    [data-theme="light"] #v2-theme-toggle:hover { background: rgba(0,0,0,0.08); }
+
+    /* ── Light mode overrides ───────────────────────── */
+    [data-theme="light"] {
+      --cv-primary: #1a6648;
+      --cv-accent:  #b5721f;
+    }
+    [data-theme="light"][data-palette="B"] {
+      --cv-primary: #0d7a6a;
+      --cv-accent:  #c4561a;
+    }
+
+    [data-theme="light"] body { background: #f5f5f0; color: #111; }
+
+    /* Palette toggle */
+    [data-theme="light"] #palette-toggle label { color: rgba(0,0,0,0.4); }
+    [data-theme="light"] .palette-swatch { border-color: rgba(0,0,0,0.18); }
+    [data-theme="light"] .palette-swatch.active { border-color: #111; }
+
+    /* Nav */
+    [data-theme="light"] #lithos-nav { background: rgba(245,245,240,0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.08); }
+    [data-theme="light"] .nav-logo span { color: #111; }
+    [data-theme="light"] .nav-logo svg { fill: #111; }
+    [data-theme="light"] .nav-pills { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.12); }
+    [data-theme="light"] .nav-pill { color: rgba(0,0,0,0.65); }
+    [data-theme="light"] .nav-pill:hover,
+    [data-theme="light"] .nav-pill.active { background: rgba(0,0,0,0.08); color: #111; }
+    [data-theme="light"] .nav-cta { background: #111; color: #fff; }
+    [data-theme="light"] .nav-cta:hover { background: #333; }
+
+    /* Liquid glass (light) */
+    [data-theme="light"] .liquid-glass { background: rgba(255,255,255,0.65); box-shadow: inset 0 1px 1px rgba(0,0,0,0.06); }
+    [data-theme="light"] .liquid-glass::before {
+      background: linear-gradient(180deg,
+        rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 20%,
+        transparent 40%, transparent 60%,
+        rgba(0,0,0,0.02) 80%, rgba(0,0,0,0.08) 100%);
+    }
+
+    /* VexHero */
+    [data-theme="light"] #vex-hero { background: #f5f5f0; }
+    [data-theme="light"] #magnet-square { filter: brightness(1.08) saturate(0.85); }
+    [data-theme="light"] .vex-nav-links a { color: #111; }
+    [data-theme="light"] .vex-nav-links a:hover { color: rgba(0,0,0,0.45); }
+    [data-theme="light"] .vex-nav-cta { background: #111; color: #fff; }
+    [data-theme="light"] .vex-nav-cta:hover { background: #333; }
+    [data-theme="light"] .vex-para { color: rgba(0,0,0,0.6); }
+    [data-theme="light"] .btn-primary { background: #111; color: #fff; }
+    [data-theme="light"] .btn-primary:hover { background: #333; }
+    [data-theme="light"] .btn-glass { border-color: rgba(0,0,0,0.18); color: #111; background: rgba(255,255,255,0.55); }
+    [data-theme="light"] .btn-glass:hover { background: #111; color: #fff; }
+    [data-theme="light"] .vex-pill { border-color: rgba(0,0,0,0.15); color: #111; }
+
+    /* Beat 3 */
+    [data-theme="light"] #beat3-sticky { background: #f5f5f0; }
+    [data-theme="light"] #b3-webp-img,
+    [data-theme="light"] #b3-webp-canvas { opacity: 0.18; }
+    [data-theme="light"] #b3-webp-img { transition: none; }
+    [data-theme="light"] #b3-mol-overlay {
+      background: radial-gradient(ellipse at 50% 45%, rgba(245,245,240,0.1) 0%, rgba(245,245,240,0.92) 100%);
+    }
+    [data-theme="light"] .b3-backbone { stroke: rgba(0,0,0,0.15); }
+    [data-theme="light"] .b3-gh10-shape { fill: rgba(26,102,72,0.07); }
+    [data-theme="light"] .b3-gh10-shape.lit { filter: drop-shadow(0 0 10px rgba(26,102,72,0.5)); }
+    [data-theme="light"] .b3-cbm-shape { fill: rgba(181,114,31,0.07); }
+    [data-theme="light"] .b3-cbm-shape.lit { filter: drop-shadow(0 0 8px rgba(181,114,31,0.5)); }
+    [data-theme="light"] .b3-gh1-shape { fill: rgba(26,102,72,0.07); }
+    [data-theme="light"] .b3-gh1-shape.lit { filter: drop-shadow(0 0 10px rgba(26,102,72,0.5)); }
+    [data-theme="light"] .b3-svg-label { fill: rgba(0,0,0,0.5); }
+    [data-theme="light"] .b3-svg-domain-name { fill: rgba(0,0,0,0.8); }
+    [data-theme="light"] .b3-svg-sublabel { fill: rgba(0,0,0,0.4); }
+    [data-theme="light"] .b3-card { border-color: rgba(0,0,0,0.09); background: rgba(255,255,255,0.75); }
+    [data-theme="light"] .b3-card-gh10 { border-color: rgba(26,102,72,0.22); }
+    [data-theme="light"] .b3-card-cbm  { border-color: rgba(181,114,31,0.22); }
+    [data-theme="light"] .b3-card-gh1  { border-color: rgba(26,102,72,0.22); }
+    [data-theme="light"] .b3-card p { color: rgba(0,0,0,0.55); }
+    [data-theme="light"] .b3-final { color: rgba(0,0,0,0.45); }
+    [data-theme="light"] .b3-final strong { color: rgba(0,0,0,0.75); }
+
+    /* Beat 4 */
+    [data-theme="light"] #beat4 { background: #f5f5f0; }
+    [data-theme="light"] .b4-card { border-color: rgba(0,0,0,0.09); background: rgba(255,255,255,0.7); }
+    [data-theme="light"] .b4-card:hover { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.18); }
+    [data-theme="light"] .b4-card-title { color: rgba(0,0,0,0.8); }
+    [data-theme="light"] .b4-card-arrow { color: rgba(0,0,0,0.28); }
+    [data-theme="light"] .b4-card:hover .b4-card-arrow { color: rgba(0,0,0,0.65); }
+    [data-theme="light"] .b4-footer p { color: rgba(0,0,0,0.4); }
+
+    /* ── BEAT 3: Mechanism ──────────────────────────── */
+    #beat3 {
+      height: 300vh;
+      scroll-snap-align: start;
+    }
+    #beat3-sticky {
+      position: sticky;
+      top: 0;
+      height: 100dvh;
+      overflow: hidden;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+    .b3-eyebrow {
+      font-size: 0.6875rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--cv-primary);
+      margin-bottom: 20px;
+      transition: opacity 0.8s, transform 0.8s;
+    }
+    .b3-heading {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      letter-spacing: -0.04em;
+      text-align: center;
+      line-height: 1.08;
+      margin-bottom: 52px;
+      transition: opacity 0.8s, transform 0.8s;
+    }
+    .b3-heading em {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--cv-primary);
+    }
+
+    /* SVG protein domain diagram */
+    .b3-svg-wrap {
+      width: min(700px, 90vw);
+      margin-bottom: 32px;
+      transition: opacity 0.8s;
+    }
+    .b3-backbone {
+      stroke: rgba(255,255,255,0.15);
+      stroke-width: 3;
+      fill: none;
+    }
+    .b3-domain {
+      fill: none;
+      stroke-width: 2.5;
+      opacity: 0;
+      transition: opacity 0.7s, filter 0.7s;
+      filter: drop-shadow(0 0 0px transparent);
+    }
+    .b3-domain.lit {
+      opacity: 1;
+    }
+    .b3-gh10-shape {
+      stroke: var(--cv-primary);
+      fill: rgba(61, 214, 140, 0.08);
+    }
+    .b3-gh10-shape.lit {
+      filter: drop-shadow(0 0 14px var(--cv-primary));
+    }
+    .b3-cbm-shape {
+      stroke: var(--cv-accent);
+      fill: rgba(251, 191, 36, 0.08);
+    }
+    .b3-cbm-shape.lit {
+      filter: drop-shadow(0 0 10px var(--cv-accent));
+    }
+    .b3-gh1-shape {
+      stroke: var(--cv-primary);
+      fill: rgba(61, 214, 140, 0.08);
+    }
+    .b3-gh1-shape.lit {
+      filter: drop-shadow(0 0 14px var(--cv-primary));
+    }
+    .b3-svg-label {
+      fill: rgba(255,255,255,0.5);
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 0.7s;
+    }
+    .b3-svg-label.lit { opacity: 1; }
+    .b3-svg-sublabel {
+      fill: rgba(255,255,255,0.28);
+      font-family: 'Inter', sans-serif;
+      font-size: 8px;
+    }
+    .b3-svg-domain-name {
+      fill: rgba(255,255,255,0.85);
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    /* Domain info cards below svg */
+    .b3-cards {
+      display: flex;
+      gap: 16px;
+      width: min(700px, 90vw);
+      transition: opacity 0.8s;
+    }
+    .b3-card {
+      flex: 1;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.08);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+    .b3-card.lit {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .b3-card-name {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .b3-card-gh10 { border-color: rgba(61, 214, 140, 0.25); }
+    .b3-card-gh10 .b3-card-name { color: var(--cv-primary); }
+    .b3-card-cbm  { border-color: rgba(251, 191, 36, 0.25); }
+    .b3-card-cbm  .b3-card-name { color: var(--cv-accent); }
+    .b3-card-gh1  { border-color: rgba(61, 214, 140, 0.25); }
+    .b3-card-gh1  .b3-card-name { color: var(--cv-primary); }
+    .b3-card p {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.5;
+    }
+
+    .b3-final {
+      margin-top: 28px;
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.02em;
+      text-align: center;
+      transition: opacity 0.8s;
+    }
+    .b3-final strong { color: rgba(255,255,255,0.75); }
+
+    /* ── Beat 3 WebP scroll-scrub background ────────── */
+    #b3-webp-img,
+    #b3-webp-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 0;
+    }
+    #b3-webp-img {
+      opacity: 0.55;
+      transition: opacity 0.4s ease;
+    }
+    #b3-webp-canvas {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    #b3-mol-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.82) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+    #b3-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      padding: 0 20px;
+    }
+
+    /* ── BEAT 4: Bento grid ─────────────────────────── */
+    #beat4 {
+      background: #000;
+      scroll-snap-align: start;
+      padding: 80px 20px;
+    }
+    @media (min-width: 768px) { #beat4 { padding: 100px 48px; } }
+    @media (min-width: 1024px) { #beat4 { padding: 120px 64px; } }
+
+    .b4-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .b4-eyebrow {
+      font-size: 0.6875rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--cv-accent);
+      margin-bottom: 16px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.7s, transform 0.7s;
+    }
+    .b4-eyebrow.visible { opacity: 1; transform: translateY(0); }
+    .b4-heading {
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 400;
+      letter-spacing: -0.04em;
+      margin-bottom: 48px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.7s 0.1s, transform 0.7s 0.1s;
+    }
+    .b4-heading.visible { opacity: 1; transform: translateY(0); }
+
+    .b4-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 640px) {
+      .b4-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto auto auto;
+      }
+      .b4-card--large { grid-column: 1 / 3; }
+    }
+    @media (min-width: 1024px) {
+      .b4-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto auto;
+      }
+      .b4-card--large {
+        grid-column: 1 / 2;
+        grid-row: 1 / 3;
+      }
+    }
+
+    .b4-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 28px 24px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+      text-decoration: none;
+      color: #fff;
+      min-height: 160px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s, transform 0.6s,
+                  background 0.2s, border-color 0.2s;
+    }
+    .b4-card--large { min-height: 280px; }
+    .b4-card.visible { opacity: 1; transform: translateY(0); }
+    .b4-card:hover {
+      background: rgba(255,255,255,0.055);
+      border-color: rgba(255,255,255,0.16);
+    }
+    .b4-card-tag {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cv-primary);
+      margin-bottom: 12px;
+    }
+    .b4-card-title {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: -0.02em;
+      color: rgba(255,255,255,0.85);
+      margin-top: auto;
+    }
+    .b4-card--large .b4-card-title {
+      font-size: 1.25rem;
+    }
+    .b4-card-arrow {
+      margin-top: 20px;
+      color: rgba(255,255,255,0.3);
+      font-size: 1.125rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .b4-card:hover .b4-card-arrow {
+      color: rgba(255,255,255,0.7);
+      transform: translateX(4px);
+    }
+
+    .b4-footer {
+      margin-top: 48px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.7s 0.6s, transform 0.7s 0.6s;
+    }
+    .b4-footer.visible { opacity: 1; transform: translateY(0); }
+    .b4-footer p {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.4);
+    }
+    .b4-footer a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--cv-accent);
+      text-decoration: none;
+    }
+    .b4-footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Palette toggle -->
+  <div id="palette-toggle" aria-label="Colour palette">
+    <label>Palette</label>
+    <div class="palette-swatches">
+      <button class="palette-swatch swatch-A active" data-pal="A" title="Green + Amber (design system)" aria-pressed="true"></button>
+      <button class="palette-swatch swatch-B" data-pal="B" title="Teal + Coral (biotech variant)" aria-pressed="false"></button>
+    </div>
+  </div>
+
+  <!-- Fixed nav overlays all sections -->
+  <nav id="lithos-nav" aria-label="Site navigation">
+    <div class="nav-logo">
+      <svg width="22" height="22" viewBox="0 0 256 256" fill="#fff" aria-hidden="true">
+        <path d="M256 256L128 256L0 128L128 128ZM256 128L128 128L0 0L128 0"/>
+      </svg>
+      <span>TriCel</span>
+    </div>
+    <div class="nav-pills">
+      <a href="/cxna-site/science/"   class="nav-pill">Science</a>
+      <a href="/cxna-site/methods/"   class="nav-pill">Methods</a>
+      <a href="/cxna-site/results/"   class="nav-pill">Results</a>
+      <a href="/cxna-site/notebook/"  class="nav-pill">Notebook</a>
+      <a href="/cxna-site/overview/"  class="nav-pill">Team</a>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button id="v2-theme-toggle" aria-label="Toggle colour scheme">
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/>
+          <line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+          <line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/>
+          <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/>
+        </svg>
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+      <a href="/cxna-site/" class="nav-cta">iDEC 2025</a>
+    </div>
+  </nav>
+
+  <!-- ── Section 1: VEX HERO ────────────────────── -->
+  <section id="vex-hero" aria-label="CxnA overview">
+    <div id="magnet-square" aria-hidden="true"></div>
+
+    <div class="vex-inner-nav">
+      <nav class="liquid-glass">
+        <div class="vex-nav-logo">CxnA</div>
+        <ul class="vex-nav-links">
+          <li><a href="/cxna-site/science/">Science</a></li>
+          <li><a href="/cxna-site/methods/">Methods</a></li>
+          <li><a href="/cxna-site/results/">Results</a></li>
+          <li><a href="/cxna-site/notebook/">Notebook</a></li>
+        </ul>
+        <a href="/cxna-site/results/" class="vex-nav-cta">Explore</a>
+      </nav>
+    </div>
+
+    <div class="vex-content">
+      <div class="vex-grid">
+        <div>
+          <h1 class="vex-h1" id="vex-heading" aria-label="One enzyme. Three activities."></h1>
+          <p class="vex-para" id="vex-para">
+            Engineering a trifunctional cellulase to break cellulose completely —
+            GH10, CBM, and GH1 fused into one.
+          </p>
+          <div class="vex-buttons" id="vex-buttons">
+            <a href="/cxna-site/science/" class="btn-primary">Read the Science</a>
+            <a href="/cxna-site/results/" class="btn-glass liquid-glass">View Results</a>
+          </div>
+        </div>
+        <div class="vex-pill-wrap" id="vex-pill">
+          <div class="vex-pill liquid-glass">GH10 · CBM · GH1</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 2: LITHOS HERO ─────────────────── -->
+  <section id="lithos-hero" aria-label="Cellulose to glucose">
+    <div id="lithos-base" class="hero-zoom" aria-hidden="true"></div>
+    <canvas id="lithos-canvas" aria-hidden="true"></canvas>
+    <div id="lithos-reveal" aria-hidden="true"></div>
+
+    <div class="lithos-heading">
+      <h1>
+        <span class="lithos-h-italic hero-anim hero-reveal" style="animation-delay:0.25s">Cellulose to</span>
+        <span class="lithos-h-plain hero-anim hero-reveal" style="animation-delay:0.42s">glucose.</span>
+      </h1>
+    </div>
+
+    <div class="lithos-bl hero-anim hero-fade" style="animation-delay:0.7s">
+      <p>Plant cell walls are the planet's most abundant carbon store. CxnA evolved to break them down — three enzymatic domains, one protein chain.</p>
+    </div>
+
+    <div class="lithos-br hero-anim hero-fade" style="animation-delay:0.85s">
+      <p>Move your cursor to reveal the living material we're engineering a future from — guided by directed evolution and structural biology.</p>
+      <a href="/cxna-site/results/" class="btn-lithos">Explore Results</a>
+    </div>
+  </section>
+
+  <!-- ── Section 3: BEAT 3 — Mechanism ──────────── -->
+  <section id="beat3" aria-label="How CxnA works">
+    <div id="beat3-sticky">
+      <!-- Animated WebP fallback — always visible until canvas takes over -->
+      <img id="b3-webp-img" src="/cxna-site/helix-spin.webp" alt="" aria-hidden="true" />
+      <!-- Canvas receives scroll-scrubbed frames via ImageDecoder -->
+      <canvas id="b3-webp-canvas" aria-hidden="true"></canvas>
+      <div id="b3-mol-overlay" aria-hidden="true"></div>
+      <div id="b3-content">
+
+      <p class="b3-eyebrow" id="b3-eyebrow" style="opacity:0">Mechanism</p>
+
+      <h2 class="b3-heading" id="b3-heading" style="opacity:0;transform:translateY(20px)">
+        Three enzymes.<br><em>One chain.</em>
+      </h2>
+
+      <!-- Protein domain SVG diagram -->
+      <div class="b3-svg-wrap" id="b3-svg-wrap" style="opacity:0">
+        <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Backbone -->
+          <line x1="40" y1="80" x2="660" y2="80" class="b3-backbone" />
+
+          <!-- GH10 domain (left, larger) -->
+          <rect id="b3-gh10-dom" x="40" y="32" width="220" height="96" rx="48"
+                class="b3-domain b3-gh10-shape" />
+          <!-- Internal helix zigzag decoration -->
+          <polyline id="b3-gh10-helix" points="70,60 90,100 110,60 130,100 150,60 170,100 190,60 210,100 230,60"
+                    stroke="rgba(61,214,140,0.35)" stroke-width="2" fill="none" opacity="0"
+                    style="transition:opacity 0.7s 0.2s" />
+          <text x="150" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-gh10">GH10</text>
+          <text x="150" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-gh10-sub">Endo-xylanase</text>
+
+          <!-- CBM/Linker (centre, smaller) -->
+          <rect id="b3-cbm-dom" x="290" y="50" width="120" height="60" rx="30"
+                class="b3-domain b3-cbm-shape" />
+          <text x="350" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-cbm">CBM</text>
+          <text x="350" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-cbm-sub">Carbohydrate-Binding</text>
+
+          <!-- GH1 domain (right, larger) -->
+          <rect id="b3-gh1-dom" x="440" y="32" width="220" height="96" rx="48"
+                class="b3-domain b3-gh1-shape" />
+          <polyline id="b3-gh1-helix" points="470,60 490,100 510,60 530,100 550,60 570,100 590,60 610,100 630,60"
+                    stroke="rgba(61,214,140,0.35)" stroke-width="2" fill="none" opacity="0"
+                    style="transition:opacity 0.7s 0.2s" />
+          <text x="550" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-gh1">GH1</text>
+          <text x="550" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-gh1-sub">β-glucosidase</text>
+
+          <!-- Linker connector lines (dim always visible) -->
+          <line x1="260" y1="80" x2="290" y2="80" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="4 4"/>
+          <line x1="410" y1="80" x2="440" y2="80" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="4 4"/>
+        </svg>
+      </div>
+
+      <!-- Domain info cards -->
+      <div class="b3-cards">
+        <div class="b3-card b3-card-gh10" id="b3-card-gh10">
+          <div class="b3-card-name">GH10</div>
+          <p>Endo-β-1,4-xylanase. Cleaves the cellulose backbone into oligosaccharides, breaking crystalline structure.</p>
+        </div>
+        <div class="b3-card b3-card-cbm" id="b3-card-cbm">
+          <div class="b3-card-name">CBM · Linker</div>
+          <p>Carbohydrate-Binding Module anchors CxnA to the substrate surface, increasing local enzyme concentration.</p>
+        </div>
+        <div class="b3-card b3-card-gh1" id="b3-card-gh1">
+          <div class="b3-card-name">GH1</div>
+          <p>β-glucosidase. Completes degradation by releasing free glucose monomers — the final metabolisable product.</p>
+        </div>
+      </div>
+
+      <p class="b3-final" id="b3-final" style="opacity:0">
+        Complete cellulose-to-glucose cascade in <strong>a single protein chain</strong>.
+      </p>
+
+      </div><!-- /#b3-content -->
+    </div>
+  </section>
+
+  <!-- ── Section 4: BEAT 4 — Bento grid ─────────── -->
+  <section id="beat4" aria-label="Explore the project">
+    <div class="b4-container">
+      <p class="b4-eyebrow" id="b4-eyebrow">iDEC 2025</p>
+      <h2 class="b4-heading" id="b4-heading">Explore the project</h2>
+
+      <div class="b4-grid">
+        <!-- Science — large card -->
+        <a href="/cxna-site/science/" class="b4-card b4-card--large" data-b4-delay="0">
+          <div>
+            <div class="b4-card-tag">Science</div>
+          </div>
+          <div>
+            <h3 class="b4-card-title">Why cellulose is the hardest problem in green chemistry — and how a trifunctional enzyme changes the equation.</h3>
+            <div class="b4-card-arrow">→</div>
+          </div>
+        </a>
+
+        <!-- Methods -->
+        <a href="/cxna-site/methods/" class="b4-card" data-b4-delay="100">
+          <div>
+            <div class="b4-card-tag">Methods</div>
+          </div>
+          <div>
+            <h3 class="b4-card-title">Directed evolution protocol — dry-lab to wet-lab pipeline.</h3>
+            <div class="b4-card-arrow">→</div>
+          </div>
+        </a>
+
+        <!-- Results -->
+        <a href="/cxna-site/results/" class="b4-card" data-b4-delay="200">
+          <div>
+            <div class="b4-card-tag">Results</div>
+          </div>
+          <div>
+            <h3 class="b4-card-title">Structural models, binding analysis & activity assays.</h3>
+            <div class="b4-card-arrow">→</div>
+          </div>
+        </a>
+
+        <!-- Notebook -->
+        <a href="/cxna-site/notebook/" class="b4-card" data-b4-delay="300">
+          <div>
+            <div class="b4-card-tag">Notebook</div>
+          </div>
+          <div>
+            <h3 class="b4-card-title">Lab diary — week-by-week experimental record.</h3>
+            <div class="b4-card-arrow">→</div>
+          </div>
+        </a>
+
+        <!-- Overview -->
+        <a href="/cxna-site/overview/" class="b4-card" data-b4-delay="400">
+          <div>
+            <div class="b4-card-tag">Overview</div>
+          </div>
+          <div>
+            <h3 class="b4-card-title">Plain-language project summary — what we built and why.</h3>
+            <div class="b4-card-arrow">→</div>
+          </div>
+        </a>
+      </div>
+
+      <div class="b4-footer" id="b4-footer">
+        <p>Competing at iDEC 2025 ·</p>
+        <a href="/cxna-site/">Back to home</a>
+      </div>
+    </div>
+  </section>
+
+  <script is:inline>
+    // ── Char-by-char heading ────────────────────────────────────
+    (function() {
+      var el = document.getElementById('vex-heading');
+      var text = 'One enzyme.\nThree activities.';
+      var CHAR_DELAY = 30;
+      var lines = text.split('\n');
+      el.innerHTML = lines.map(function(line, li) {
+        return '<span class="block">' +
+          line.split('').map(function(ch, ci) {
+            var delay = (li * line.length * CHAR_DELAY) + (ci * CHAR_DELAY);
+            return '<span class="char" style="transition-delay:' + delay + 'ms">' +
+              (ch === ' ' ? '&nbsp;' : ch) + '</span>';
+          }).join('') +
+          '</span>';
+      }).join('');
+      setTimeout(function() { el.classList.add('animated'); }, 200);
+    })();
+
+    // ── Staggered fade-ins (Beat 1) ─────────────────────────────
+    (function() {
+      var items = [
+        { el: document.getElementById('vex-para'),    delay: 800  },
+        { el: document.getElementById('vex-buttons'), delay: 1200 },
+        { el: document.getElementById('vex-pill'),    delay: 1400 },
+      ];
+      items.forEach(function(item) {
+        setTimeout(function() { item.el.classList.add('visible'); }, item.delay);
+      });
+    })();
+
+    // ── Magnetic square ─────────────────────────────────────────
+    (function() {
+      var sq = document.getElementById('magnet-square');
+      var near = false;
+      var STRENGTH = 20, PAD = 100;
+      window.addEventListener('mousemove', function(e) {
+        var r = sq.getBoundingClientRect();
+        var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        var isNear = Math.abs(e.clientX - cx) < r.width / 2 + PAD &&
+                     Math.abs(e.clientY - cy) < r.height / 2 + PAD;
+        if (isNear) {
+          near = true;
+          sq.style.transition = 'transform 0.3s ease-out';
+          sq.style.transform = 'rotate(9deg) translate3d(' +
+            ((e.clientX - cx) / STRENGTH) + 'px,' +
+            ((e.clientY - cy) / STRENGTH) + 'px,0)';
+        } else if (near) {
+          near = false;
+          sq.style.transition = 'transform 0.6s ease-in-out';
+          sq.style.transform = 'rotate(9deg) translate3d(0,0,0)';
+        }
+      });
+    })();
+
+    // ── Lithos spotlight ────────────────────────────────────────
+    (function() {
+      var section  = document.getElementById('lithos-hero');
+      var canvas   = document.getElementById('lithos-canvas');
+      var reveal   = document.getElementById('lithos-reveal');
+      var RADIUS   = 260;
+      var mouse    = { x: -999, y: -999 };
+      var smooth   = { x: -999, y: -999 };
+
+      function resize() {
+        canvas.width  = section.offsetWidth;
+        canvas.height = section.offsetHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      window.addEventListener('mousemove', function(e) {
+        var r = section.getBoundingClientRect();
+        mouse.x = e.clientX - r.left;
+        mouse.y = e.clientY - r.top;
+      });
+
+      function tick() {
+        smooth.x += (mouse.x - smooth.x) * 0.1;
+        smooth.y += (mouse.y - smooth.y) * 0.1;
+
+        var ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        var g = ctx.createRadialGradient(smooth.x, smooth.y, 0, smooth.x, smooth.y, RADIUS);
+        g.addColorStop(0,    'rgba(255,255,255,1)');
+        g.addColorStop(0.4,  'rgba(255,255,255,1)');
+        g.addColorStop(0.6,  'rgba(255,255,255,0.75)');
+        g.addColorStop(0.75, 'rgba(255,255,255,0.4)');
+        g.addColorStop(0.88, 'rgba(255,255,255,0.12)');
+        g.addColorStop(1,    'rgba(255,255,255,0)');
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(smooth.x, smooth.y, RADIUS, 0, Math.PI * 2);
+        ctx.fill();
+
+        var url = canvas.toDataURL();
+        reveal.style.maskImage        = 'url(' + url + ')';
+        reveal.style.webkitMaskImage  = 'url(' + url + ')';
+        reveal.style.maskSize         = '100% 100%';
+        reveal.style.webkitMaskSize   = '100% 100%';
+
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+
+    // ── Beat 3: scroll-driven domain reveal ─────────────────────
+    (function() {
+      var section = document.getElementById('beat3');
+      var eyebrow = document.getElementById('b3-eyebrow');
+      var heading = document.getElementById('b3-heading');
+      var svgWrap = document.getElementById('b3-svg-wrap');
+      var gh10Dom = document.getElementById('b3-gh10-dom');
+      var gh10Helix = document.getElementById('b3-gh10-helix');
+      var labGh10 = document.getElementById('b3-lab-gh10');
+      var labGh10Sub = document.getElementById('b3-lab-gh10-sub');
+      var cbmDom  = document.getElementById('b3-cbm-dom');
+      var labCbm  = document.getElementById('b3-lab-cbm');
+      var labCbmSub = document.getElementById('b3-lab-cbm-sub');
+      var gh1Dom  = document.getElementById('b3-gh1-dom');
+      var gh1Helix = document.getElementById('b3-gh1-helix');
+      var labGh1  = document.getElementById('b3-lab-gh1');
+      var labGh1Sub = document.getElementById('b3-lab-gh1-sub');
+      var cardGh10 = document.getElementById('b3-card-gh10');
+      var cardCbm  = document.getElementById('b3-card-cbm');
+      var cardGh1  = document.getElementById('b3-card-gh1');
+      var final    = document.getElementById('b3-final');
+
+      function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+      function mapRange(v, i0, i1, o0, o1) {
+        return o0 + (o1 - o0) * clamp((v - i0) / (i1 - i0), 0, 1);
+      }
+
+      var state = { gh10: false, cbm: false, gh1: false, final: false };
+
+      function lit(el, on) {
+        if (on) el.classList.add('lit');
+        else    el.classList.remove('lit');
+      }
+
+      function tick() {
+        var rect = section.getBoundingClientRect();
+        var totalScroll = section.offsetHeight - window.innerHeight;
+        var p = clamp(-rect.top / totalScroll, 0, 1);
+
+        // Eyebrow + heading: 0–0.15
+        var headOp = mapRange(p, 0, 0.12, 0, 1);
+        eyebrow.style.opacity = headOp;
+        eyebrow.style.transform = 'translateY(' + mapRange(p, 0, 0.12, 16, 0) + 'px)';
+        heading.style.opacity = headOp;
+        heading.style.transform = 'translateY(' + mapRange(p, 0, 0.12, 20, 0) + 'px)';
+
+        // SVG fades in: 0.05–0.2
+        svgWrap.style.opacity = mapRange(p, 0.05, 0.2, 0, 1);
+
+        // GH10: 0.2–0.45
+        var gh10On = p >= 0.2;
+        if (gh10On !== state.gh10) {
+          state.gh10 = gh10On;
+          lit(gh10Dom, gh10On);
+          lit(labGh10, gh10On);
+          lit(labGh10Sub, gh10On);
+          lit(cardGh10, gh10On);
+          gh10Helix.style.opacity = gh10On ? '1' : '0';
+        }
+
+        // CBM: 0.45–0.65
+        var cbmOn = p >= 0.45;
+        if (cbmOn !== state.cbm) {
+          state.cbm = cbmOn;
+          lit(cbmDom, cbmOn);
+          lit(labCbm, cbmOn);
+          lit(labCbmSub, cbmOn);
+          lit(cardCbm, cbmOn);
+        }
+
+        // GH1: 0.65–0.85
+        var gh1On = p >= 0.65;
+        if (gh1On !== state.gh1) {
+          state.gh1 = gh1On;
+          lit(gh1Dom, gh1On);
+          lit(labGh1, gh1On);
+          lit(labGh1Sub, gh1On);
+          lit(cardGh1, gh1On);
+          gh1Helix.style.opacity = gh1On ? '1' : '0';
+        }
+
+        // Final text: 0.85–1.0
+        var finalOp = mapRange(p, 0.85, 1.0, 0, 1);
+        final.style.opacity = finalOp;
+
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
+
+    // ── Beat 4: stagger reveal on scroll ───────────────────────
+    (function() {
+      var eyebrow = document.getElementById('b4-eyebrow');
+      var heading = document.getElementById('b4-heading');
+      var footer  = document.getElementById('b4-footer');
+      var cards   = document.querySelectorAll('.b4-card');
+
+      var io = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          var el = entry.target;
+          var delay = parseInt(el.dataset.b4Delay || '0', 10);
+          setTimeout(function() { el.classList.add('visible'); }, delay);
+          io.unobserve(el);
+        });
+      }, { threshold: 0.15 });
+
+      var headerIo = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          eyebrow.classList.add('visible');
+          heading.classList.add('visible');
+          footer.classList.add('visible');
+          headerIo.disconnect();
+        });
+      }, { threshold: 0.2 });
+
+      headerIo.observe(document.getElementById('beat4'));
+      cards.forEach(function(card) { io.observe(card); });
+    })();
+
+    // ── Light/dark theme toggle ─────────────────────────────────
+    (function() {
+      var btn = document.getElementById('v2-theme-toggle');
+      function applyTheme(t) {
+        document.documentElement.dataset.theme = t;
+        localStorage.setItem('theme', t);
+      }
+      btn.addEventListener('click', function() {
+        applyTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+      });
+    })();
+
+    // ── Beat 3: scroll-scrubbed WebP background ─────────────────
+    (function() {
+      var WEBP_URL = '/cxna-site/helix-spin.webp';
+      var section = document.getElementById('beat3');
+      var imgEl   = document.getElementById('b3-webp-img');
+      var canvas  = document.getElementById('b3-webp-canvas');
+      if (!canvas) return;
+
+      var ctx = canvas.getContext('2d');
+      var frames = [];
+      var scrubReady = false;
+
+      function clampF(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+      // Size canvas to viewport
+      function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      // Draw frame with object-fit: cover semantics
+      function drawCover(frame) {
+        var cw = canvas.width, ch = canvas.height;
+        var fW = frame.width,  fH = frame.height;
+        var ca = cw / ch, fa = fW / fH;
+        var sx = 0, sy = 0, sw = fW, sh = fH;
+        if (ca > fa) { sh = fW / ca; sy = (fH - sh) / 2; }
+        else         { sw = fH * ca; sx = (fW - sw) / 2; }
+        ctx.drawImage(frame, sx, sy, sw, sh, 0, 0, cw, ch);
+      }
+
+      // Sequential frame decode using ImageDecoder
+      function decodeAll(decoder, total, idx, bitmaps, done) {
+        if (idx >= total) { done(bitmaps); return; }
+        decoder.decode({ frameIndex: idx })
+          .then(function(result) {
+            return createImageBitmap(result.image).then(function(bmp) {
+              result.image.close();
+              bitmaps.push(bmp);
+              decodeAll(decoder, total, idx + 1, bitmaps, done);
+            });
+          })
+          .catch(function() { done(bitmaps); });
+      }
+
+      if (typeof window.ImageDecoder !== 'undefined') {
+        fetch(WEBP_URL)
+          .then(function(r) { return r.arrayBuffer(); })
+          .then(function(buf) {
+            var dec = new window.ImageDecoder({ data: buf, type: 'image/webp' });
+            return dec.tracks.ready.then(function() {
+              var track = dec.tracks.selectedTrack;
+              var total = (track && track.frameCount) || 0;
+              if (total <= 1) { dec.close(); return; }
+              decodeAll(dec, total, 0, [], function(bitmaps) {
+                if (bitmaps.length > 1) {
+                  frames = bitmaps;
+                  scrubReady = true;
+                  canvas.style.opacity = '0.55';
+                  imgEl.style.opacity  = '0';
+                }
+                dec.close();
+              });
+            });
+          })
+          .catch(function(e) { console.warn('[Beat3 WebP]', e); });
+      }
+
+      // RAF: draw frame matching scroll progress
+      var lastIdx = -1;
+      function tickWebp() {
+        if (scrubReady && frames.length > 0) {
+          var rect = section.getBoundingClientRect();
+          var totalScroll = section.offsetHeight - window.innerHeight;
+          var p   = clampF(-rect.top / totalScroll, 0, 1);
+          var idx = clampF(Math.round(p * (frames.length - 1)), 0, frames.length - 1);
+          if (idx !== lastIdx) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (frames[idx]) drawCover(frames[idx]);
+            lastIdx = idx;
+          }
+        }
+        requestAnimationFrame(tickWebp);
+      }
+      tickWebp();
+    })();
+
+    // ── Palette toggle ──────────────────────────────────────────
+    (function() {
+      var swatches = document.querySelectorAll('.palette-swatch');
+      var current = 'A';
+      swatches.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var pal = btn.dataset.pal;
+          if (pal === current) return;
+          current = pal;
+          if (pal === 'B') {
+            document.documentElement.dataset.palette = 'B';
+          } else {
+            delete document.documentElement.dataset.palette;
+          }
+          swatches.forEach(function(b) {
+            var isActive = b.dataset.pal === pal;
+            b.classList.toggle('active', isActive);
+            b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

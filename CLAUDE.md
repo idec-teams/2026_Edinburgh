@@ -138,6 +138,60 @@ The index page has "All entries / Wet lab / Dry lab" buttons that toggle `hidden
 - Missing attachment files: `*[Attachment: filename.ext]*` in italics — these are deliberate placeholders, not errors.
 - Preserve negative results honestly. Use `status: pending` for entries whose outcome isn't recorded yet; use `status: in-progress` for entries that are partially complete.
 
+---
+<!-- ▼▼▼ V2 EXPERIMENTAL — to remove: delete this section + src/pages/v2.astro + public/helix-spin.webp ▼▼▼ -->
+
+## V2 Cinematic Home Page (experimental, parallel to index.astro)
+
+`src/pages/v2.astro` is a standalone cinematic alternative to `index.astro`, accessible at `/cxna-site/v2/`. It is a **separate branch** of the home page — both coexist; neither replaces the other. To remove it entirely, delete `src/pages/v2.astro`, `public/helix-spin.webp`, and this CLAUDE.md section.
+
+### Architecture
+
+**Standalone page** — has its own `<html>` root, no `BaseLayout.astro`. All styles use `<style is:inline>` and all scripts use `<script is:inline>` to prevent Astro/Vite from scoping or bundling them. This is intentional: the page uses `@astrojs/react` is NOT installed; everything is pure vanilla JS. Do not add React here.
+
+**Why `is:inline`:** Astro's scoped `<style>` blocks and `<script>` bundling break two things on this page — esbuild parses CSS as JS in dev mode (hyphens in property names become subtraction), and the global scroll-driven RAF loops need access to IDs that Astro would otherwise rename.
+
+**Base-path links:** All internal hrefs are hardcoded with `/cxna-site/` prefix (e.g. `/cxna-site/science/`) because `import.meta.env.BASE_URL` is not available inside `<script is:inline>` blocks.
+
+### Four-beat narrative arc
+
+| Beat | Section ID | Description |
+|---|---|---|
+| 1 | `#vex-hero` | Identity — black hero, magnetic tilted square with plant-cell microscopy, char-by-char headline |
+| 2 | `#lithos-hero` | Problem — full-bleed wheat-field base, cursor spotlight reveals sugar-cube glucose layer |
+| 3 | `#beat3` | Mechanism — 300vh sticky scroll section, animated WebP protein scrubs with scroll, SVG domain diagram (GH10 / CBM / GH1) lights up sequentially |
+| 4 | `#beat4` | Invitation — bento card grid (Science / Methods / Results / Notebook / Overview), stagger-reveal on IntersectionObserver |
+
+### Colour system
+
+The page uses its own palette variables (`--cv-primary`, `--cv-accent`) that are independent from `global.css`'s `--c-primary` / `--c-accent`. Two palette variants are togglable at runtime:
+
+| Palette | `--cv-primary` | `--cv-accent` | When |
+|---|---|---|---|
+| A (default) | `#3dd68c` dark / `#1a6648` light | `#fbbf24` dark / `#b5721f` light | No `data-palette` attribute |
+| B (biotech) | `#34d5b0` dark / `#0d7a6a` light | `#e8702a` dark / `#c4561a` light | `data-palette="B"` on `<html>` |
+
+### Light/dark mode
+
+v2.astro has its own FOUC-prevention inline script in `<head>` and its own `#v2-theme-toggle` button (moon/sun in the nav). It reads and writes the same `localStorage('theme')` key as `BaseLayout.astro`, so the theme persists across navigation between v2 and the wiki pages. All light-mode overrides live in a `[data-theme="light"]` block at the bottom of the `<style is:inline>` section.
+
+### Beat 3: scroll-scrubbed WebP
+
+`public/helix-spin.webp` is an animated WebP of the CxnA protein structure rotating. It is decoded frame-by-frame using the `ImageDecoder` API (Chrome/Edge 94+) into `ImageBitmap[]`, then the RAF loop maps scroll progress → frame index and draws to `<canvas id="b3-webp-canvas">`. A standard animated `<img id="b3-webp-img">` is the fallback (auto-plays the loop on browsers without `ImageDecoder`). The canvas switches in (img fades out) once `scrubReady = true`.
+
+Beat 3 also has a radial-gradient overlay (`#b3-mol-overlay`) that darkens the edges and an `#b3-content` wrapper (`z-index: 2`) that holds the SVG domain diagram and info cards above the canvas.
+
+### Images
+
+| Element | Unsplash ID | Description |
+|---|---|---|
+| VexHero magnet square | `photo-1714844437236-de8ef1c7286f` | Plant vascular bundle cross-section at 400× (teal/purple) |
+| Beat 2 base | `photo-1657573100558-c15355cc9c49` | Wide wheat field at harvest (cellulose waste) |
+| Beat 2 reveal | `photo-1709651808265-977ed7ef78c6` | White sugar cubes macro (glucose product) |
+
+<!-- ▲▲▲ V2 EXPERIMENTAL — end of deletable block ▲▲▲ -->
+---
+
 ## Deployment
 
 Site is live at `https://hanw404.github.io/cxna-site`. Push to `main` — GitHub Actions deploys automatically via `actions/deploy-pages`. GitHub Pages source is set to GitHub Actions in repo Settings.

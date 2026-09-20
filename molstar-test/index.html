@@ -1,0 +1,349 @@
+<!DOCTYPE html><html lang="en" data-theme="dark" data-astro-cid-6m5vfqd3> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mol* — GH10 vs 1FHD Cα RMSD</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/molstar/build/viewer/molstar.css"><link rel="stylesheet" href="/2026_Edinburgh/_astro/molstar-test.DwGJmMCW.css"></head> <body data-astro-cid-6m5vfqd3> <div id="topbar" data-astro-cid-6m5vfqd3> <div id="info" data-astro-cid-6m5vfqd3>Loading…</div> <div class="sep" data-astro-cid-6m5vfqd3></div> <div id="controls" data-astro-cid-6m5vfqd3> <button class="btn active" id="btn-both" disabled data-astro-cid-6m5vfqd3>Overlaid</button> <button class="btn" id="btn-wt" disabled data-astro-cid-6m5vfqd3>WT only</button> <button class="btn" id="btn-cry" disabled data-astro-cid-6m5vfqd3>Crystal only</button> </div> </div> <div id="viewer-overlay" data-astro-cid-6m5vfqd3> <div class="ov-box" data-astro-cid-6m5vfqd3> <div class="spinner" data-astro-cid-6m5vfqd3></div> <p class="ov-msg" id="ov-msg" data-astro-cid-6m5vfqd3>Loading 3D viewer…</p> </div> </div> <div id="viewer-fallback" hidden data-astro-cid-6m5vfqd3> <div class="fb-box" data-astro-cid-6m5vfqd3> <svg class="fb-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" data-astro-cid-6m5vfqd3> <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" data-astro-cid-6m5vfqd3></path> </svg> <p class="fb-title" data-astro-cid-6m5vfqd3>3D viewer unavailable</p> <p class="fb-sub" data-astro-cid-6m5vfqd3>This viewer requires WebGL, which isn't supported in your browser or device. Try Chrome or Firefox on a desktop or modern mobile browser.</p> </div> </div> <div id="viewer" data-astro-cid-6m5vfqd3></div> <script src="https://cdn.jsdelivr.net/npm/molstar/build/viewer/molstar.js"></script> <script>(function(){const b = "/2026_Edinburgh";
+
+  (function () {
+
+    /* ── 3×3 matrix helpers ── */
+    function mul3(A,B){const C=[[0,0,0],[0,0,0],[0,0,0]];for(let i=0;i<3;i++)for(let j=0;j<3;j++)for(let k=0;k<3;k++)C[i][j]+=A[i][k]*B[k][j];return C;}
+    function T3(A){return[[A[0][0],A[1][0],A[2][0]],[A[0][1],A[1][1],A[2][1]],[A[0][2],A[1][2],A[2][2]]];}
+    function mv3(A,v){return[A[0][0]*v[0]+A[0][1]*v[1]+A[0][2]*v[2],A[1][0]*v[0]+A[1][1]*v[1]+A[1][2]*v[2],A[2][0]*v[0]+A[2][1]*v[1]+A[2][2]*v[2]];}
+    function det3(A){return A[0][0]*(A[1][1]*A[2][2]-A[1][2]*A[2][1])-A[0][1]*(A[1][0]*A[2][2]-A[1][2]*A[2][0])+A[0][2]*(A[1][0]*A[2][1]-A[1][1]*A[2][0]);}
+
+    /* ── Jacobi eigensolver for 3×3 symmetric matrix ── */
+    function symEig3(A){
+      const M=[[A[0][0],A[0][1],A[0][2]],[A[1][0],A[1][1],A[1][2]],[A[2][0],A[2][1],A[2][2]]];
+      const V=[[1,0,0],[0,1,0],[0,0,1]];
+      for(let it=0;it<100;it++){
+        let mx=0,p=0,q=1;
+        for(const [i,j] of [[0,1],[0,2],[1,2]]) if(Math.abs(M[i][j])>mx){mx=Math.abs(M[i][j]);p=i;q=j;}
+        if(mx<1e-14) break;
+        const apq=M[p][q],th=(M[q][q]-M[p][p])/(2*apq);
+        const t=(th>=0?1:-1)/(Math.abs(th)+Math.sqrt(1+th*th));
+        const c=1/Math.sqrt(1+t*t),s=t*c,h=t*apq;
+        M[p][p]-=h;M[q][q]+=h;M[p][q]=M[q][p]=0;
+        const r=3-p-q,grp=M[r][p],grq=M[r][q];
+        M[r][p]=M[p][r]=c*grp-s*grq;M[r][q]=M[q][r]=s*grp+c*grq;
+        for(let i=0;i<3;i++){const gp=V[i][p],gq=V[i][q];V[i][p]=c*gp-s*gq;V[i][q]=s*gp+c*gq;}
+      }
+      return{d:[M[0][0],M[1][1],M[2][2]],V};
+    }
+
+    /* ── SVD of 3×3 via eigendecomposition of H^T H ── */
+    function svd3(H){
+      const{d,V}=symEig3(mul3(T3(H),H));
+      const U=[[0,0,0],[0,0,0],[0,0,0]];
+      for(let j=0;j<3;j++){
+        const vj=[V[0][j],V[1][j],V[2][j]],hv=mv3(H,vj),s=Math.sqrt(Math.max(0,d[j]));
+        if(s<1e-10){U[0][j]=vj[0];U[1][j]=vj[1];U[2][j]=vj[2];}
+        else{U[0][j]=hv[0]/s;U[1][j]=hv[1]/s;U[2][j]=hv[2]/s;}
+      }
+      return{U,V};
+    }
+
+    /* ── Kabsch: returns {rmsd, R, t} where aligned_wt = R*wt_pos + t ── */
+    function kabsch(P, Q) {
+      const n=P.length;
+      const cp=[0,0,0],cq=[0,0,0];
+      for(let i=0;i<n;i++){cp[0]+=P[i][0];cp[1]+=P[i][1];cp[2]+=P[i][2];cq[0]+=Q[i][0];cq[1]+=Q[i][1];cq[2]+=Q[i][2];}
+      for(let k=0;k<3;k++){cp[k]/=n;cq[k]/=n;}
+      const Pc=P.map(p=>[p[0]-cp[0],p[1]-cp[1],p[2]-cp[2]]);
+      const Qc=Q.map(q=>[q[0]-cq[0],q[1]-cq[1],q[2]-cq[2]]);
+      const H=[[0,0,0],[0,0,0],[0,0,0]];
+      for(let i=0;i<n;i++) for(let r=0;r<3;r++) for(let c=0;c<3;c++) H[r][c]+=Pc[i][r]*Qc[i][c];
+      const{U,V}=svd3(H);
+      const sgn=det3(mul3(V,T3(U)))<0?-1:1;
+      const R=mul3(mul3(V,[[1,0,0],[0,1,0],[0,0,sgn]]),T3(U));
+      const Rcp=mv3(R,cp);
+      const t=[cq[0]-Rcp[0],cq[1]-Rcp[1],cq[2]-Rcp[2]];
+      let ss=0;
+      for(let i=0;i<n;i++){const rp=mv3(R,Pc[i]);const d0=rp[0]-Qc[i][0],d1=rp[1]-Qc[i][1],d2=rp[2]-Qc[i][2];ss+=d0*d0+d1*d1+d2*d2;}
+      return{rmsd:Math.sqrt(ss/n),R,t};
+    }
+
+    /* ── Build column-major 4×4 Mat4 (regular Array) from R and t ── */
+    function buildMat4(R, t) {
+      const m = molstar.lib.math.LinearAlgebra.Mat4.identity();
+      m[0]=R[0][0]; m[1]=R[1][0]; m[2]=R[2][0]; m[3]=0;
+      m[4]=R[0][1]; m[5]=R[1][1]; m[6]=R[2][1]; m[7]=0;
+      m[8]=R[0][2]; m[9]=R[1][2]; m[10]=R[2][2]; m[11]=0;
+      m[12]=t[0];   m[13]=t[1];   m[14]=t[2];    m[15]=1;
+      return m;
+    }
+
+    /* ── Extract Cα coords from Mol* Structure ── */
+    function extractCa(structure, chainFilter) {
+      const lib=window.molstar.lib, SP=lib.structure.StructureProperties;
+      const SEL=lib.structure.StructureElement, Unit=lib.structure.Unit;
+      const loc=SEL.Location.create(structure);
+      const map=new Map();
+      for(const unit of structure.units){
+        if(!Unit.isAtomic(unit)) continue;
+        loc.unit=unit;
+        const elems=unit.elements;
+        for(let i=0;i<elems.length;i++){
+          loc.element=elems[i];
+          if(SP.atom.label_atom_id(loc)!=='CA') continue;
+          let chain='A', res=i;
+          try{chain=SP.chain.auth_asym_id(loc);}catch(e){}
+          try{res=SP.residue.auth_seq_id(loc);}catch(e){}
+          if(chainFilter && chain!==chainFilter) continue;
+          map.set(chain+':'+res,[SP.atom.x(loc),SP.atom.y(loc),SP.atom.z(loc)]);
+        }
+      }
+      return map;
+    }
+
+    /* ── Match two Cα maps, return paired arrays ── */
+    function matchPairs(mapA, mapB) {
+      const pairs=[];
+      for(const [k,va] of mapA){if(mapB.has(k)) pairs.push([va,mapB.get(k)]);}
+      if(pairs.length>=10) return{P:pairs.map(p=>p[0]),Q:pairs.map(p=>p[1]),n:pairs.length,method:'resnum'};
+      const A=[...mapA.values()],B=[...mapB.values()],n=Math.min(A.length,B.length);
+      if(n<3) return{P:[],Q:[],n:0,method:'none'};
+      return{P:A.slice(0,n),Q:B.slice(0,n),n,method:'sequential'};
+    }
+
+    /* ── Highlight specific residues as spacefill ──
+         Bypasses the Mol* query system entirely. Both Queries.generators and StructureComponent
+         type:'script' (PyMOL) internally call Bundle.fromQuery → compiled expression runner (Ae)
+         which throws in the CDN build. Instead: iterate atoms directly (same pattern as extractCa),
+         collect UnitIndex values, build StructureElement.Loci with plain Int32Array indices, convert
+         to Bundle via Bundle.fromLoci (no fromQuery call), pass pre-computed bundle to StructureComponent
+         as type:'bundle'. The StructureComponent reads the bundle directly — no internal query needed. */
+    async function highlightResidues(plugin, parentRef, structure, residueNums, colorHex, tag) {
+      if (!structure) return;
+      const state = plugin.state.data;
+      const STR = molstar.lib.plugin.StateTransforms;
+      const { Unit, StructureElement, StructureProperties: SP } = molstar.lib.structure;
+
+      const targetSet = new Set(residueNums);
+      const lociElements = [];
+      const loc = StructureElement.Location.create(structure);
+      for (const unit of structure.units) {
+        if (!Unit.isAtomic(unit)) continue;
+        loc.unit = unit;
+        const hits = [];
+        for (let i = 0; i < unit.elements.length; i++) {
+          loc.element = unit.elements[i];
+          if (targetSet.has(SP.residue.auth_seq_id(loc))) hits.push(i);
+        }
+        if (hits.length > 0) lociElements.push({ unit, indices: new Int32Array(hits) });
+      }
+      if (lociElements.length === 0) return;
+
+      const loci = StructureElement.Loci(structure, lociElements);
+      const bundle = StructureElement.Bundle.fromLoci(loci);
+      if (!bundle?.elements?.length) return;
+
+      const compRef = parentRef + ':hl-' + tag;
+      const reprRef = compRef + ':repr';
+
+      await state.build()
+        .to(parentRef)
+        .apply(STR.Model.StructureComponent,
+          { type: { name: 'bundle', params: bundle }, label: '' },
+          { ref: compRef }
+        )
+        .commit();
+
+      const compCell = state.cells.get(compRef);
+      if (!compCell?.obj) return;
+
+      const reprParams = STR.Representation.StructureRepresentation3D.createDefaultParams(compCell.obj, plugin);
+      reprParams.type = { name: 'spacefill', params: {} };
+      reprParams.colorTheme = { name: 'uniform', params: { value: colorHex } };
+
+      await state.build()
+        .to(compRef)
+        .apply(STR.Representation.StructureRepresentation3D, reprParams, { ref: reprRef })
+        .commit();
+    }
+
+    /* ── Apply visual superposition: move WT onto Crystal in 3D space ── */
+    async function applyVisualSuperposition(plugin, wtEntry, mat4) {
+      const state = plugin.state.data;
+      const STR = molstar.lib.plugin.StateTransforms;
+      const wtRef = wtEntry.cell.transform.ref;
+      const txRef = wtRef + ':tx';
+      const compRef = txRef + ':comp';
+      const reprRef = compRef + ':repr';
+
+      // Snapshot original WT component refs BEFORE modifying state
+      const origWtComps = (plugin.managers.structure.hierarchy.current.structures
+        .find(s => s.cell.transform.ref === wtRef)?.components ?? [])
+        .map(c => c.cell.transform.ref);
+
+      // 1. Apply the Kabsch transform — creates a child structure at txRef
+      await state.build()
+        .to(wtRef)
+        .apply(STR.Model.TransformStructureConformation,
+          { transform: { name: 'matrix', params: { data: mat4, transpose: false } } },
+          { ref: txRef }
+        )
+        .commit();
+
+      // 2. Add StructureComponent (polymer) to the transformed cell
+      //    commit() is a Promise in this CDN build — await directly, no runTask
+      await state.build()
+        .to(txRef)
+        .apply(STR.Model.StructureComponent,
+          { type: { name: 'static', params: 'polymer' }, label: '' },
+          { ref: compRef }
+        )
+        .commit();
+
+      // 3. Add StructureRepresentation3D (cartoon) to the component
+      const compCell = state.cells.get(compRef);
+      if (compCell) {
+        const reprParams = STR.Representation.StructureRepresentation3D.createDefaultParams(compCell.obj, plugin);
+        await state.build()
+          .to(compRef)
+          .apply(STR.Representation.StructureRepresentation3D, reprParams, { ref: reprRef })
+          .commit();
+      }
+
+      // 4. Delete original WT representations (snapshot taken before step 1)
+      if (origWtComps.length > 0) {
+        const del = state.build();
+        origWtComps.forEach(r => del.delete(r));
+        await del.commit();
+      }
+    }
+
+    /* ── Main ── */
+    const info = document.getElementById('info');
+    const [btnBoth, btnWt, btnCry] = ['btn-both','btn-wt','btn-cry'].map(id => document.getElementById(id));
+    function setInfo(msg) { info.innerHTML = msg; }
+
+    /* ── Theme sync from parent page via postMessage ── */
+    window.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'cxna-theme') {
+        document.documentElement.setAttribute('data-theme', e.data.theme);
+      }
+    });
+
+    const overlay   = document.getElementById('viewer-overlay');
+    const ovMsg     = document.getElementById('ov-msg');
+    const fallback  = document.getElementById('viewer-fallback');
+    function setOverlay(msg) { ovMsg.textContent = msg; }
+    function hideOverlay()   { overlay.classList.add('hidden'); }
+
+    /* ── WebGL detection — check before handing off to Mol* ── */
+    function hasWebGL() {
+      try {
+        const c = document.createElement('canvas');
+        return !!(c.getContext('webgl2') || c.getContext('webgl') || c.getContext('experimental-webgl'));
+      } catch(e) { return false; }
+    }
+
+    if (!hasWebGL()) {
+      hideOverlay();
+      fallback.hidden = false;
+      setInfo('3D viewer unavailable — WebGL not supported on this device');
+    } else {
+
+    molstar.Viewer.create('viewer', {
+      layoutIsExpanded: false,
+      layoutShowControls: false,
+      layoutShowRemoteState: false,
+      layoutShowSequence: true,
+      layoutShowLog: false,
+      layoutShowLeftPanel: true,
+      viewportShowExpand: false,
+      viewportShowSelectionMode: false,
+      viewportShowAnimation: false,
+    }).then(async function (viewer) {
+
+      setOverlay('Fetching GH10.cif (AlphaFold WT)…');
+      setInfo('Loading GH10.cif (AlphaFold WT)…');
+      await viewer.loadStructureFromUrl(b + '/structures/GH10.cif', 'mmcif', false);
+
+      setOverlay('Fetching 1FHD.cif (crystal structure)…');
+      setInfo('Loading 1FHD.cif (crystal structure)…');
+      await viewer.loadStructureFromUrl(b + '/structures/1FHD.cif', 'mmcif', false);
+
+      setOverlay('Aligning structures…');
+      setInfo('Aligning…');
+
+      const hier = viewer.plugin.managers.structure.hierarchy.current;
+      const wtEntry  = hier.structures[0];
+      const cryEntry = hier.structures[1];
+      const wtRef  = wtEntry.cell.transform.ref;
+      const cryRef = cryEntry.cell.transform.ref;
+
+      const wtStruct  = wtEntry.cell.obj?.data;
+      const cryStruct = cryEntry.cell.obj?.data;
+
+      if (wtStruct && cryStruct) {
+        try {
+          const wtCa  = extractCa(wtStruct, null);
+          const cryCa = extractCa(cryStruct, 'A');
+          const { P, Q, n, method } = matchPairs(wtCa, cryCa);
+
+          if (n >= 3) {
+            const { rmsd, R, t } = kabsch(P, Q);
+            setInfo(
+              `Cα RMSD <strong>${rmsd.toFixed(3)} Å</strong>` +
+              `<em>full structure · ${n} pairs</em>` +
+              `<span class="sep2">·</span>` +
+              `<span class="pymol-val">PyMOL rigid-core <strong>0.293 Å</strong></span>`
+            );
+
+            // Apply 3D superposition: move WT onto Crystal
+            const mat4 = buildMat4(R, t);
+            await applyVisualSuperposition(viewer.plugin, wtEntry, mat4);
+
+            // Highlight catalytic triad: GLU127 (acid/base), GLU233 (nucleophile), GLN87
+            const CATALYTIC = [127, 233, 87];
+            const HL_COLOR = 0xFFFF44; // bright yellow — visible against both teal (WT) and orange (crystal)
+            const plugin = viewer.plugin;
+            const txRef = wtRef + ':tx';
+            const txStruct = plugin.state.data.cells.get(txRef)?.obj?.data;
+            await highlightResidues(plugin, txRef,  txStruct,  CATALYTIC, HL_COLOR, 'wt');
+            await highlightResidues(plugin, cryRef, cryStruct, CATALYTIC, HL_COLOR, 'cry');
+            hideOverlay();
+          } else {
+            hideOverlay();
+            setInfo('RMSD: insufficient Cα pairs');
+          }
+        } catch(e) {
+          hideOverlay();
+          setInfo('Alignment error: ' + e.message);
+          console.error(e);
+        }
+      } else {
+        hideOverlay();
+        setInfo('Structure data unavailable');
+      }
+
+      // Toggle buttons — use ref strings so we always look up fresh hierarchy entries
+      const hierMgr = viewer.plugin.managers.structure.hierarchy;
+      [btnBoth, btnWt, btnCry].forEach(btn => btn.disabled = false);
+
+      function getEntry(ref) {
+        return hierMgr.current.structures.find(s => s.cell.transform.ref === ref);
+      }
+
+      function setMode(mode) {
+        btnBoth.classList.toggle('active', mode === 'both');
+        btnWt.classList.toggle('active',   mode === 'wt');
+        btnCry.classList.toggle('active',  mode === 'cry');
+        const wt  = getEntry(wtRef);
+        const cry = getEntry(cryRef);
+        if (wt)  hierMgr.toggleVisibility([wt],  mode === 'cry' ? 'hide' : 'show');
+        if (cry) hierMgr.toggleVisibility([cry], mode === 'wt'  ? 'hide' : 'show');
+      }
+
+      btnBoth.addEventListener('click', () => setMode('both'));
+      btnWt.addEventListener('click',   () => setMode('wt'));
+      btnCry.addEventListener('click',  () => setMode('cry'));
+
+    }).catch(function (err) {
+      hideOverlay();
+      setInfo('Error: ' + err.message);
+      console.error(err);
+    });
+
+    } // end hasWebGL else
+
+  })();
+  })();</script> </body> </html>

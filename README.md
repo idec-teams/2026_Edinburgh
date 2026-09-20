@@ -1,13 +1,9 @@
-# Wiki repoistory for iDEC 2026 | Edinburgh
+# Wiki repository for iDEC 2026 | Edinburgh
 
-(This a temporary README file that needs to be updated before you submit the team wiki. Please stay tuned at [idec.io](https://idec.io) for future relevant announcements.)
+This is the wiki repository for iDEC 2026, Team: Edinburgh — the TriCel/CxnA directed evolution project.
 
-This is the wiki repository for iDEC 2026, Team: Edinburgh.
-
-The wiki created from this repository is hosted at [idec-teams.github.io/2026_Edinburgh](https://idec-teams.github.io/2026_Edinburgh).
-
-The default wiki layout is powered by [MkDocs](http://mkdocs.org) with the [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) theme.
+The wiki is a custom [Astro](https://astro.build) static site (not the default MkDocs template) and is hosted at [idec-teams.github.io/2026_Edinburgh](https://idec-teams.github.io/2026_Edinburgh). See [CLAUDE.md](CLAUDE.md) for the site's architecture and local dev commands.
 
 ## License
 
-[MkDocs](http://mkdocs.org) and [Material for MkDocs](https://squidfunk.github.io/mkdocs-material/) are under the MIT Licence. Contents of this wiki are under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/legalcode) Copyright License.
+Contents of this wiki are under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/legalcode) Copyright License.

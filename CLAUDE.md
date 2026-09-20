@@ -24,7 +24,7 @@ The dev server launch config is at `.claude/launch.json` and can be started with
 
 **Stack:** Astro 4 (static output) → GitHub Pages via `.github/workflows/deploy.yml`. Site is live; `site` and `base` are already set in `astro.config.mjs`.
 
-**Base path:** `base: '/cxna-site'` means all internal links must be `${b}/page` where `b = import.meta.env.BASE_URL.replace(/\/$/, '')`. Every page file already does this. Forgetting the separator produces broken URLs like `/cxna-sitescience`.
+**Base path:** `base: '/2026_Edinburgh'` means all internal links must be `${b}/page` where `b = import.meta.env.BASE_URL.replace(/\/$/, '')`. Every page file already does this. Forgetting the separator produces broken URLs like `/2026_Edinburghscience`.
 
 **Layout:** `src/layouts/BaseLayout.astro` owns everything in the shell:
 - Sticky header with CSS-only mobile hamburger (`<input type="checkbox" id="nav-toggle">`), slide/X animation, active nav link via `aria-current="page"` set by JS on load
@@ -143,7 +143,7 @@ The index page has "All entries / Wet lab / Dry lab" buttons that toggle `hidden
 
 ## V2 Cinematic Home Page (experimental, parallel to index.astro)
 
-`src/pages/v2.astro` is a standalone cinematic alternative to `index.astro`, accessible at `/cxna-site/v2/`. It is a **separate branch** of the home page — both coexist; neither replaces the other. To remove it entirely, delete `src/pages/v2.astro`, `public/helix-spin.webp`, and this CLAUDE.md section.
+`src/pages/v2.astro` is a standalone cinematic alternative to `index.astro`, accessible at `/2026_Edinburgh/v2/`. It is a **separate branch** of the home page — both coexist; neither replaces the other. To remove it entirely, delete `src/pages/v2.astro`, `public/helix-spin.webp`, and this CLAUDE.md section.
 
 ### Architecture
 
@@ -151,7 +151,7 @@ The index page has "All entries / Wet lab / Dry lab" buttons that toggle `hidden
 
 **Why `is:inline`:** Astro's scoped `<style>` blocks and `<script>` bundling break two things on this page — esbuild parses CSS as JS in dev mode (hyphens in property names become subtraction), and the global scroll-driven RAF loops need access to IDs that Astro would otherwise rename.
 
-**Base-path links:** All internal hrefs are hardcoded with `/cxna-site/` prefix (e.g. `/cxna-site/science/`) because `import.meta.env.BASE_URL` is not available inside `<script is:inline>` blocks.
+**Base-path links:** All internal hrefs are hardcoded with `/2026_Edinburgh/` prefix (e.g. `/2026_Edinburgh/science/`) because `import.meta.env.BASE_URL` is not available inside `<script is:inline>` blocks.
 
 ### Four-beat narrative arc
 
@@ -194,4 +194,6 @@ Beat 3 also has a radial-gradient overlay (`#b3-mol-overlay`) that darkens the e
 
 ## Deployment
 
-Site is live at `https://hanw404.github.io/cxna-site`. Push to `main` — GitHub Actions deploys automatically via `actions/deploy-pages`. GitHub Pages source is set to GitHub Actions in repo Settings.
+Site is live at `https://idec-teams.github.io/2026_Edinburgh`. Push to `main` — GitHub Actions deploys automatically via `actions/deploy-pages`. GitHub Pages source must be set to "GitHub Actions" in the repo's Settings → Pages (the repo previously deployed via `mkdocs gh-deploy` to a `gh-pages` branch; that old branch and Pages source setting are now stale and should be switched over).
+
+The `personal` remote (`https://github.com/hanw404/cxna-site.git`) is kept as a backup/mirror of pre-migration history; `origin` is `https://github.com/idec-teams/2026_Edinburgh.git`, the canonical team repo.

@@ -1,8 +1,8 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://hanw404.github.io',
-  base: '/cxna-site',
+  site: 'https://idec-teams.github.io',
+  base: '/2026_Edinburgh',
   output: 'static',
   compressHTML: true,
   integrations: [],

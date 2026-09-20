@@ -194,6 +194,6 @@ Beat 3 also has a radial-gradient overlay (`#b3-mol-overlay`) that darkens the e
 
 ## Deployment
 
-Site is live at `https://idec-teams.github.io/2026_Edinburgh`. Push to `main` — GitHub Actions deploys automatically via `actions/deploy-pages`. GitHub Pages source must be set to "GitHub Actions" in the repo's Settings → Pages (the repo previously deployed via `mkdocs gh-deploy` to a `gh-pages` branch; that old branch and Pages source setting are now stale and should be switched over).
+Site is live at `https://idec-teams.github.io/2026_Edinburgh`. Push to `main` — GitHub Actions builds the site and publishes `dist/` to the `gh-pages` branch via `peaceiris/actions-gh-pages`, same as the classic `mkdocs gh-deploy` mechanism this replaced. This deliberately avoids `actions/deploy-pages` / the `github-pages` Environment, whose deployment-branch protection rule requires repo Admin (not just Maintain) to configure — the branch-based method needs no Environment and no elevated permissions. Repo Settings → Pages → Source should stay on "Deploy from a branch: gh-pages".
 
 The `personal` remote (`https://github.com/hanw404/cxna-site.git`) is kept as a backup/mirror of pre-migration history; `origin` is `https://github.com/idec-teams/2026_Edinburgh.git`, the canonical team repo.

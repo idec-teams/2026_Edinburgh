@@ -87,7 +87,33 @@ iDEC
 
 <table><thead><tr><th>Rank</th><th>Mutation</th><th>PDB #</th><th>ΔΔG</th></tr></thead><tbody><tr><td>1</td><td>NA44W</td><td>113</td><td>−3.215</td></tr><tr><td>2</td><td>EA43R</td><td>65</td><td>−2.177</td></tr><tr><td>3</td><td>SA86R</td><td>45</td><td>−1.864</td></tr><tr><td>4</td><td>NA44Y</td><td>109</td><td>−1.788</td></tr><tr><td>5</td><td>NA44F</td><td>111</td><td>−1.719</td></tr><tr><td>6</td><td>EA43L</td><td>76</td><td>−0.797</td></tr><tr><td>7</td><td>TA81G</td><td>59</td><td>−0.783</td></tr><tr><td>8</td><td>KA47R</td><td>81</td><td>−0.745</td></tr><tr><td>9</td><td>EA43M</td><td>70</td><td>−0.684</td></tr><tr><td>10</td><td>SA86D</td><td>32</td><td>−0.637</td></tr></tbody></table>
 <p><em>(Full ranked table of 25 mutations available in <code>Raw_GH10_Repair.fxout</code>. Mutant PDB files follow the pattern <code>GH10_Repair_[PDB#]_0.pdb</code> through <code>_4.pdb</code> for each mutation’s 5 repair runs.)</em></p>
-<p>These mutations are candidates for targeting in the epPCR library or for site-directed mutagenesis, prioritising those with the most negative ΔΔG (greatest predicted stabilisation).</p> </article> <nav class="entry-nav" aria-label="Adjacent notebook entries" data-astro-cid-dqlbjqn2> <div class="entry-nav-prev" data-astro-cid-dqlbjqn2> <a href="/2026_Edinburgh/notebook/2026-06-24-wet" class="entry-nav-link entry-nav-link--prev" data-astro-cid-dqlbjqn2> <span class="entry-nav-dir" data-astro-cid-dqlbjqn2>← Previous entry</span> <span class="entry-nav-title" data-astro-cid-dqlbjqn2>CxnA activity assay setup; CMC &amp; MUC plate prep</span> <span class="entry-nav-meta" data-astro-cid-dqlbjqn2> 24 Jun
+<p>These mutations are candidates for targeting in the epPCR library or for site-directed mutagenesis, prioritising those with the most negative ΔΔG (greatest predicted stabilisation).</p>
+<h2 id="docking-re-screen-of-stabilised-mutants">Docking re-screen of stabilised mutants</h2>
+<p>Converted the stabilised-mutant PDBs to <code>.pdbqt</code> and re-ran AutoDock Vina — this time scripted from the terminal rather than docked manually one at a time, to process the full candidate set. Output: a sorted summary of predicted binding free energy (more negative = better binding) per mutation.</p>
+<p><em>[Attachment: vina_summary_sorted.csv]</em></p>
+<p><strong>Result:</strong> 8 of the stability-screened single-residue mutants also showed improved cellobiose binding scores relative to WT (−6.6 kcal/mol), with the best two at <strong>−6.7 and −6.8 kcal/mol</strong>.</p>
+<blockquote>
+<p>The improvement is small. Even if wet-lab work confirms these single mutants bind better, the activity increase is likely minor and may be difficult to distinguish from noise in an assay.</p>
+</blockquote>
+<p>Next step under consideration: combining multiple stabilising/binding-improving mutations, since single substitutions alone are unlikely to produce a wet-lab-detectable change.</p>
+<h2 id="gh1-glucose-tolerance--literature-review">GH1 glucose tolerance — literature review</h2>
+<p>Background reading on a known limitation of most β-glucosidases: product inhibition by glucose, which caps activity at the high glucose concentrations industrial cellulose degradation would produce. Some GH1 β-glucosidases specifically (relevant here since GH1 is our fusion track’s target domain, and structurally simpler than other GH families) have engineered or natural glucose-tolerant variants. Proposed mechanisms:</p>
+<ul>
+<li>Decoy glucose-binding sites that reduce the fraction of glucose occupying the true active site.</li>
+<li>Glucose disrupting the active-site water matrix, perturbing hydrogen-bond formation and substrate binding/stability.</li>
+</ul>
+<p><strong>Examples from the literature:</strong></p>
+<ul>
+<li>Thr228, Gln301, Phe302 mutations increased glucose tolerance via transglycosylation of glucose into usable intermediates (acting as decoy binding sites).</li>
+<li>“Gate-keeper” mutants L167W and P172L (tested individually, not combined) increased glucose tolerance roughly 3-fold (0.1–0.25 M) and maintained activity at 1.0 M glucose, likely by narrowing the substrate channel. Both also raised thermostability (optimum temperature 40 °C → 50 °C, lower Km).</li>
+</ul>
+<p><strong>Further reading:</strong></p>
+<ul>
+<li>Notenboom et al. — crystallography/mutation study of Cex cellulose/xylan specificity (already cited above).</li>
+<li>“An engineered GH1 β-glucosidase displays enhanced glucose tolerance and increased sugar release from lignocellulosic materials,” <em>Scientific Reports</em>.</li>
+<li>“Structural basis for glucose tolerance in GH1 β-glucosidases,” IUCr.</li>
+<li>“A mechanism of glucose tolerance and stimulation of GH1 β-glucosidases,” <em>Scientific Reports</em>.</li>
+</ul> </article> <nav class="entry-nav" aria-label="Adjacent notebook entries" data-astro-cid-dqlbjqn2> <div class="entry-nav-prev" data-astro-cid-dqlbjqn2> <a href="/2026_Edinburgh/notebook/2026-06-24-wet" class="entry-nav-link entry-nav-link--prev" data-astro-cid-dqlbjqn2> <span class="entry-nav-dir" data-astro-cid-dqlbjqn2>← Previous entry</span> <span class="entry-nav-title" data-astro-cid-dqlbjqn2>CxnA activity assay setup; CMC &amp; MUC plate prep</span> <span class="entry-nav-meta" data-astro-cid-dqlbjqn2> 24 Jun
 &nbsp;·&nbsp;Wet lab </span> </a> </div> <div class="entry-nav-next" data-astro-cid-dqlbjqn2> <a href="/2026_Edinburgh/notebook/2026-06-25-wet" class="entry-nav-link entry-nav-link--next" data-astro-cid-dqlbjqn2> <span class="entry-nav-dir" data-astro-cid-dqlbjqn2>Next entry →</span> <span class="entry-nav-title" data-astro-cid-dqlbjqn2>Positive control transformation &amp; activity results</span> <span class="entry-nav-meta" data-astro-cid-dqlbjqn2> 25 Jun
 &nbsp;·&nbsp;Wet lab </span> </a> </div> </nav> </main>  </main>  <footer class="site-footer" data-astro-cid-37fxchfa> <div class="container footer-inner" data-astro-cid-37fxchfa> <div class="footer-brand" data-astro-cid-37fxchfa> <span class="logo-icon" aria-hidden="true" data-astro-cid-37fxchfa>⬡</span> <span data-astro-cid-37fxchfa><strong data-astro-cid-37fxchfa>TriCel</strong> — CxnA Directed Evolution Project</span> </div> <p class="footer-idec" data-astro-cid-37fxchfa>
 Affiliated with <a href="https://idec.io" target="_blank" rel="noopener" data-astro-cid-37fxchfa>iDEC</a> <span class="footer-idec-note" data-astro-cid-37fxchfa>(International Directed Evolution Competition)</span> </p> <p class="footer-note" data-astro-cid-37fxchfa>

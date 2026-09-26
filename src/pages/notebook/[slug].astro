@@ -158,24 +158,28 @@ const formattedDate = date.toLocaleDateString('en-GB', {
     padding-bottom: var(--sp-16);
   }
 
-  /* ─── Prose ─── */
+  /* ─── Prose ───
+     .prose itself is rendered by this component, so it keeps Astro's
+     scope attribute — but everything inside it comes from the markdown
+     body via <Content />, which renders in its own scope. Descendant
+     selectors need :global() or they silently match nothing. */
   .prose {
     max-width: 70ch;
   }
-  .prose h2 {
+  :global(.prose h2) {
     font-size: 1.25rem;
     color: var(--c-secondary);
     margin: var(--sp-8) 0 var(--sp-3);
     padding-top: var(--sp-4);
     border-top: 1px solid var(--c-border);
   }
-  .prose h2:first-child { margin-top: 0; border-top: none; padding-top: 0; }
-  .prose h3 {
+  :global(.prose h2:first-child) { margin-top: 0; border-top: none; padding-top: 0; }
+  :global(.prose h3) {
     font-size: 1.05rem;
     color: var(--c-secondary);
     margin: var(--sp-5) 0 var(--sp-2);
   }
-  .prose h4 {
+  :global(.prose h4) {
     font-size: 0.9rem;
     font-weight: 700;
     color: var(--c-text-muted);
@@ -183,19 +187,19 @@ const formattedDate = date.toLocaleDateString('en-GB', {
     letter-spacing: 0.06em;
     margin: var(--sp-4) 0 var(--sp-2);
   }
-  .prose p { margin: 0 0 var(--sp-4); line-height: 1.75; }
-  .prose ul, .prose ol { margin: 0 0 var(--sp-4); padding-left: var(--sp-6); }
-  .prose li { margin-bottom: var(--sp-2); line-height: 1.6; }
-  .prose strong { color: var(--c-secondary); }
-  .prose em { font-style: italic; }
-  .prose code {
+  :global(.prose p) { margin: 0 0 var(--sp-4); line-height: 1.75; }
+  :global(.prose ul), :global(.prose ol) { margin: 0 0 var(--sp-4); padding-left: var(--sp-6); }
+  :global(.prose li) { margin-bottom: var(--sp-2); line-height: 1.6; }
+  :global(.prose strong) { color: var(--c-secondary); }
+  :global(.prose em) { font-style: italic; }
+  :global(.prose code) {
     font-family: var(--font-mono);
     font-size: 0.85em;
     background: var(--c-surface-alt, color-mix(in srgb, var(--c-border) 40%, transparent));
     border-radius: 3px;
     padding: 0.1em 0.35em;
   }
-  .prose blockquote {
+  :global(.prose blockquote) {
     border-left: 3px solid var(--c-primary);
     margin: var(--sp-4) 0;
     padding: var(--sp-3) var(--sp-5);
@@ -204,31 +208,37 @@ const formattedDate = date.toLocaleDateString('en-GB', {
     color: var(--c-text-muted);
     font-style: italic;
   }
-  .prose blockquote p { margin: 0; }
-  .prose table {
+  :global(.prose blockquote p) { margin: 0; }
+  :global(.prose table) {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.88rem;
     margin: var(--sp-4) 0;
     overflow-x: auto;
     display: block;
+    border: 1px solid var(--c-secondary);
+    border-radius: var(--radius);
   }
-  .prose th {
+  :global(.prose th) {
     background: color-mix(in srgb, var(--c-primary) 8%, transparent);
     color: var(--c-secondary);
     font-weight: 600;
     text-align: left;
     padding: var(--sp-2) var(--sp-3);
-    border-bottom: 2px solid var(--c-border);
+    border-bottom: 2px solid var(--c-secondary);
+    border-right: 1px solid var(--c-secondary);
     white-space: nowrap;
   }
-  .prose td {
+  :global(.prose th:last-child) { border-right: none; }
+  :global(.prose td) {
     padding: var(--sp-2) var(--sp-3);
-    border-bottom: 1px solid var(--c-border);
+    border-bottom: 1px solid var(--c-secondary);
+    border-right: 1px solid color-mix(in srgb, var(--c-secondary) 40%, transparent);
     vertical-align: top;
   }
-  .prose tr:last-child td { border-bottom: none; }
-  .prose tr:nth-child(even) { background: color-mix(in srgb, var(--c-border) 20%, transparent); }
+  :global(.prose td:last-child) { border-right: none; }
+  :global(.prose tr:last-child td) { border-bottom: none; }
+  :global(.prose tr:nth-child(even)) { background: color-mix(in srgb, var(--c-secondary) 8%, transparent); }
 
   /* ─── Prev / Next navigation ─── */
   .entry-nav {

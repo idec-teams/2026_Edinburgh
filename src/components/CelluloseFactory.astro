@@ -1,0 +1,553 @@
+---
+// Scroll-driven "cellulose factory" explainer — Apple-product-page style.
+// Self-contained: scoped Astro <style> is fine here (everything lives inside
+// this single component, not split across a page + markdown Content like
+// notebook/[slug].astro), but scripts still run as a page-level <script> so
+// GSAP registers once globally. Uses the project's existing npm `gsap`
+// dependency (already imported/registered in BaseLayout.astro) — do not add
+// a second copy from a CDN.
+//
+// ── Where to edit ──────────────────────────────────────────────────────
+// - Captions/headlines: the `scenes` array markup below (search "Scene 0" … "Scene 6").
+// - Colours: the --eg / --cbh / --bgl custom properties near the top of <style>.
+// - Chain lengths: the `data-count` attribute on each `.cf-chain` placeholder.
+---
+
+<section class="cf" id="cellulose-factory" aria-label="Animated explainer: how enzymes break down cellulose into glucose">
+
+  <!-- Reduced-motion fallback lives in the DOM always; JS + CSS decide which mode shows -->
+  <div class="cf-track">
+    <div class="cf-viewport">
+      <div class="cf-stage">
+
+        <!-- Scene 0 — The raw material -->
+        <div class="cf-scene" data-scene="0">
+          <p class="cf-eyebrow">Cellulose degradation, step by step</p>
+          <h3 class="cf-headline">Cellulose. Nature's toughest chain.</h3>
+          <div class="cf-belt">
+            <div class="cf-chain cf-chain--long" data-count="14" data-color="var(--fibre)"></div>
+            <div class="cf-chain cf-chain--long cf-chain--ghost" data-count="14" data-color="var(--fibre)"></div>
+            <div class="cf-chain cf-chain--long cf-chain--ghost2" data-count="14" data-color="var(--fibre)"></div>
+          </div>
+          <p class="cf-caption">Long chains of glucose, linked end to end and packed tightly together — this is what a plant cell wall is mostly made of.</p>
+        </div>
+
+        <!-- Scene 1 — Machine 1: Endoglucanase -->
+        <div class="cf-scene" data-scene="1">
+          <p class="cf-eyebrow">Machine 1 — Endoglucanase</p>
+          <h3 class="cf-headline">It cuts in the middle.</h3>
+          <div class="cf-belt">
+            <div class="cf-chain cf-chain--eg" data-count="14" data-color="var(--eg)"></div>
+            <div class="cf-machine cf-machine--eg">
+              <span class="cf-machine-glow"></span>
+              <span class="cf-machine-label">EG</span>
+            </div>
+          </div>
+          <p class="cf-caption">Endoglucanase cleaves random bonds inside the chain, creating new free ends for the next machine to grab.</p>
+        </div>
+
+        <!-- Scene 2 — Machine 2: Exoglucanase / CBH -->
+        <div class="cf-scene" data-scene="2">
+          <p class="cf-eyebrow">Machine 2 — Cellobiohydrolase</p>
+          <h3 class="cf-headline">It chews from the ends.</h3>
+          <div class="cf-belt">
+            <div class="cf-chain cf-chain--cbh" data-count="8" data-color="var(--eg)"></div>
+            <div class="cf-machine cf-machine--cbh">
+              <span class="cf-machine-glow"></span>
+              <span class="cf-machine-label">CBH</span>
+            </div>
+            <div class="cf-output cf-output--cellobiose"></div>
+          </div>
+          <p class="cf-caption">Cellobiohydrolase latches onto a chain end and walks along it, releasing two linked glucose units — cellobiose — one pair at a time.</p>
+        </div>
+
+        <!-- Scene 3 — Machine 3: β-Glucosidase -->
+        <div class="cf-scene" data-scene="3">
+          <p class="cf-eyebrow">Machine 3 — β-Glucosidase</p>
+          <h3 class="cf-headline">It splits the last bond.</h3>
+          <div class="cf-belt">
+            <div class="cf-pair-feed"></div>
+            <div class="cf-machine cf-machine--bgl">
+              <span class="cf-machine-glow"></span>
+              <span class="cf-machine-label">BGL</span>
+            </div>
+            <div class="cf-output cf-output--glucose"></div>
+          </div>
+          <p class="cf-caption">β-Glucosidase breaks the one remaining bond in cellobiose, releasing two separate glucose molecules.</p>
+        </div>
+
+        <!-- Scene 4 — The output -->
+        <div class="cf-scene" data-scene="4">
+          <p class="cf-eyebrow">The payoff</p>
+          <h3 class="cf-headline">Glucose. Ready for fermentation.</h3>
+          <div class="cf-bin-wrap">
+            <div class="cf-bin"></div>
+            <div class="cf-counter"><span class="cf-counter-num">0</span></div>
+          </div>
+          <p class="cf-caption">The smallest unit — a simple sugar that yeast and bacteria can ferment straight into fuel.</p>
+        </div>
+
+        <!-- Scene 5 — The problem: three separate machines -->
+        <div class="cf-scene" data-scene="5">
+          <p class="cf-eyebrow">The catch</p>
+          <h3 class="cf-headline">Three separate machines. A long way to travel.</h3>
+          <div class="cf-map">
+            <div class="cf-map-machine cf-map-machine--eg">EG</div>
+            <div class="cf-map-machine cf-map-machine--cbh">CBH</div>
+            <div class="cf-map-machine cf-map-machine--bgl">BGL</div>
+            <svg class="cf-map-paths" viewBox="0 0 600 260" preserveAspectRatio="none" aria-hidden="true">
+              <path class="cf-path cf-path--1" d="M110,60 C220,20 260,140 320,120 S460,40 500,80" />
+              <path class="cf-path cf-path--2" d="M110,200 C200,230 260,120 340,160 S470,200 500,160" />
+            </svg>
+            <div class="cf-lost-fragment cf-lost-fragment--1"></div>
+            <div class="cf-lost-fragment cf-lost-fragment--2"></div>
+            <div class="cf-pileup"></div>
+          </div>
+          <p class="cf-caption">Every intermediate has to drift through the cell, find the right enzyme, and bind it — by chance. Some wander. Some pile up waiting.</p>
+        </div>
+
+        <!-- Scene 6 — The 3-in-1 machine (the goal) -->
+        <div class="cf-scene" data-scene="6">
+          <p class="cf-eyebrow">The idea behind this project</p>
+          <h3 class="cf-headline cf-headline--big">One machine. Every step. One place.</h3>
+          <div class="cf-fusion">
+            <div class="cf-fusion-chain" data-count="10" data-color="var(--fibre)"></div>
+            <div class="cf-fusion-machine">
+              <span class="cf-fusion-module cf-fusion-module--eg">EG</span>
+              <span class="cf-fusion-module cf-fusion-module--cbh">CBH</span>
+              <span class="cf-fusion-module cf-fusion-module--bgl">BGL</span>
+            </div>
+            <div class="cf-fusion-output"></div>
+          </div>
+          <p class="cf-caption cf-caption--big">Fuse the enzymes together and the intermediates never have to travel — no drifting, no searching, no waiting in line. That's the bet this project is testing.</p>
+        </div>
+
+      </div>
+
+      <!-- Progress dots -->
+      <div class="cf-dots" aria-hidden="true">
+        <span class="cf-dot" data-dot="0"></span>
+        <span class="cf-dot" data-dot="1"></span>
+        <span class="cf-dot" data-dot="2"></span>
+        <span class="cf-dot" data-dot="3"></span>
+        <span class="cf-dot" data-dot="4"></span>
+        <span class="cf-dot" data-dot="5"></span>
+        <span class="cf-dot" data-dot="6"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Static fallback for prefers-reduced-motion: plain stacked cards, no JS needed -->
+  <noscript>
+    <div class="cf-static-note">Enable JavaScript to see the animated version of this explainer.</div>
+  </noscript>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+  gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
+
+  const root = document.getElementById('cellulose-factory');
+  if (root) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── Build hexagon chains programmatically (avoids hand-writing hundreds of SVG nodes) ──
+    function hexPoints(cx: number, cy: number, r: number) {
+      const pts = [];
+      for (let i = 0; i < 6; i++) {
+        const a = (Math.PI / 180) * (60 * i - 30);
+        pts.push(`${(cx + r * Math.cos(a)).toFixed(1)},${(cy + r * Math.sin(a)).toFixed(1)}`);
+      }
+      return pts.join(' ');
+    }
+
+    function buildChain(el: Element) {
+      const count = parseInt(el.getAttribute('data-count') || '8', 10);
+      const color = el.getAttribute('data-color') || 'var(--fibre)';
+      const r = 15;
+      const spacing = r * 1.7;
+      const width = spacing * (count - 1) + r * 2 + 8;
+      const height = r * 2 + 8;
+      const cy = height / 2;
+      let svg = `<svg viewBox="0 0 ${width} ${height}" class="cf-chain-svg" preserveAspectRatio="xMidYMid meet">`;
+      for (let i = 0; i < count - 1; i++) {
+        const x1 = r + 4 + i * spacing + r * 0.8;
+        const x2 = r + 4 + (i + 1) * spacing - r * 0.8;
+        svg += `<line x1="${x1}" y1="${cy}" x2="${x2}" y2="${cy}" stroke="${color}" stroke-width="3" class="cf-bond" data-bond="${i}"/>`;
+      }
+      for (let i = 0; i < count; i++) {
+        const cx = r + 4 + i * spacing;
+        svg += `<polygon points="${hexPoints(cx, cy, r)}" fill="${color}" fill-opacity="0.22" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" class="cf-hex" data-hex="${i}"/>`;
+      }
+      svg += `</svg>`;
+      el.innerHTML = svg;
+    }
+
+    document.querySelectorAll('.cf-chain, .cf-fusion-chain').forEach(buildChain);
+
+    // Small reusable pair (cellobiose: 2 hexagons) / single hexagon builders
+    function buildPair(parent: Element, color = 'var(--eg)') {
+      const r = 13;
+      const w = r * 3.2, h = r * 2 + 6;
+      const cy = h / 2;
+      const el = document.createElement('div');
+      el.className = 'cf-pair';
+      el.innerHTML = `<svg viewBox="0 0 ${w} ${h}" class="cf-pair-svg">
+        <line x1="${r*1.1}" y1="${cy}" x2="${w - r*1.1}" y2="${cy}" stroke="${color}" stroke-width="2.5"/>
+        <polygon points="${hexPoints(r, cy, r)}" fill="${color}" fill-opacity="0.25" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>
+        <polygon points="${hexPoints(w - r, cy, r)}" fill="${color}" fill-opacity="0.25" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>
+      </svg>`;
+      parent.appendChild(el);
+      return el;
+    }
+    function buildSingle(parent: Element, color = 'var(--bgl)') {
+      const r = 13;
+      const w = r * 2 + 6, h = r * 2 + 6;
+      const el = document.createElement('div');
+      el.className = 'cf-single';
+      el.innerHTML = `<svg viewBox="0 0 ${w} ${h}" class="cf-single-svg">
+        <polygon points="${hexPoints(w/2, h/2, r)}" fill="${color}" fill-opacity="0.3" stroke="${color}" stroke-width="2" stroke-linejoin="round"/>
+      </svg>`;
+      parent.appendChild(el);
+      return el;
+    }
+
+    if (reduceMotion) {
+      // ── Reduced-motion fallback: static stacked scenes, no pinning/scrubbing ──
+      root.classList.add('cf-reduced');
+      document.querySelectorAll('.cf-pair-feed').forEach(el => buildPair(el));
+      document.querySelectorAll('.cf-output--cellobiose').forEach(el => buildPair(el));
+      document.querySelectorAll('.cf-output--glucose').forEach(el => { buildSingle(el); buildSingle(el); });
+    } else {
+      const scenes = Array.from(root.querySelectorAll<HTMLElement>('.cf-scene'));
+      const dots = Array.from(root.querySelectorAll<HTMLElement>('.cf-dot'));
+      gsap.set(scenes, { autoAlpha: 0 });
+      gsap.set(scenes[0], { autoAlpha: 1 });
+      dots[0]?.classList.add('is-active');
+
+      const N = scenes.length; // 7
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.cf-track',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 0.6,
+          pin: '.cf-viewport',
+          onUpdate: self => {
+            const idx = Math.min(N - 1, Math.round(self.progress * (N - 1)));
+            dots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+          },
+        },
+        defaults: { ease: 'none' },
+      });
+
+      // Crossfades between scenes, evenly spaced across the timeline (unit = 1 per scene)
+      for (let i = 0; i < N; i++) {
+        const t = i; // start time of this scene's "hold"
+        if (i > 0) {
+          tl.to(scenes[i - 1], { autoAlpha: 0, duration: 0.25 }, t - 0.25);
+          tl.to(scenes[i], { autoAlpha: 1, duration: 0.25 }, t - 0.25);
+        }
+      }
+
+      // Scene 0 — chain drifts in, ghost chains parallax behind it
+      const chain0 = root.querySelector('.cf-chain--long:not(.cf-chain--ghost):not(.cf-chain--ghost2)');
+      const ghost1 = root.querySelector('.cf-chain--ghost');
+      const ghost2 = root.querySelector('.cf-chain--ghost2');
+      if (chain0) tl.fromTo(chain0, { x: -80, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.8 }, 0);
+      if (ghost1) tl.fromTo(ghost1, { x: -40, autoAlpha: 0 }, { x: 0, autoAlpha: 0.4, duration: 0.8 }, 0.05);
+      if (ghost2) tl.fromTo(ghost2, { x: -120, autoAlpha: 0 }, { x: 0, autoAlpha: 0.25, duration: 0.8 }, 0.1);
+
+      // Scene 1 — endoglucanase cuts two internal bonds, chain gaps open
+      const egChain = root.querySelector('.cf-chain--eg');
+      const egMachine = root.querySelector('.cf-machine--eg');
+      if (egChain && egMachine) {
+        tl.fromTo(egMachine, { autoAlpha: 0, scale: 0.85 }, { autoAlpha: 1, scale: 1, duration: 0.3 }, 1.1);
+        tl.to(egChain.querySelectorAll('[data-bond="4"], [data-bond="9"]'), { opacity: 0, duration: 0.2 }, 1.4);
+      }
+
+      // Scene 2 — CBH machine "walks" the chain end, pairs peel off into cellobiose output
+      const cbhMachine = root.querySelector('.cf-machine--cbh');
+      const cbhOutput = root.querySelector('.cf-output--cellobiose');
+      if (cbhMachine && cbhOutput) {
+        tl.fromTo(cbhMachine, { autoAlpha: 0, x: -20 }, { autoAlpha: 1, x: 0, duration: 0.3 }, 2.1);
+        for (let p = 0; p < 3; p++) {
+          const pairEl = buildPair(cbhOutput, 'var(--eg)');
+          gsap.set(pairEl, { opacity: 0, y: -10 });
+          tl.to(pairEl, { opacity: 1, y: 0, duration: 0.18 }, 2.35 + p * 0.18);
+        }
+      }
+
+      // Scene 3 — cellobiose pair arrives, BGL splits it into two glucose
+      const pairFeed = root.querySelector('.cf-pair-feed');
+      const bglMachine = root.querySelector('.cf-machine--bgl');
+      const glucoseOutput = root.querySelector('.cf-output--glucose');
+      if (pairFeed && bglMachine && glucoseOutput) {
+        const feedPair = buildPair(pairFeed, 'var(--eg)');
+        tl.fromTo(feedPair, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2 }, 3.1);
+        tl.fromTo(bglMachine, { autoAlpha: 0, scale: 0.85 }, { autoAlpha: 1, scale: 1, duration: 0.25 }, 3.25);
+        tl.to(feedPair, { autoAlpha: 0, duration: 0.15 }, 3.55);
+        const g1 = buildSingle(glucoseOutput, 'var(--bgl)');
+        const g2 = buildSingle(glucoseOutput, 'var(--bgl)');
+        gsap.set([g1, g2], { opacity: 0 });
+        tl.to(g1, { opacity: 1, x: -10, duration: 0.15 }, 3.6);
+        tl.to(g2, { opacity: 1, x: 10, duration: 0.15 }, 3.65);
+      }
+
+      // Scene 4 — glucose drops into bin, counter ticks
+      const counter = root.querySelector('.cf-counter-num');
+      const bin = root.querySelector('.cf-bin');
+      if (counter && bin) {
+        const counterObj = { v: 0 };
+        tl.fromTo(bin, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.25 }, 4.1);
+        tl.to(counterObj, {
+          v: 42, duration: 0.6, snap: 'v',
+          onUpdate: () => { (counter as HTMLElement).textContent = String(Math.round(counterObj.v)); },
+        }, 4.2);
+      }
+
+      // Scene 5 — zoom to factory map, fragments drift along winding paths, one pile forms
+      const path1 = root.querySelector('.cf-path--1') as SVGPathElement | null;
+      const path2 = root.querySelector('.cf-path--2') as SVGPathElement | null;
+      const lost1 = root.querySelector('.cf-lost-fragment--1');
+      const lost2 = root.querySelector('.cf-lost-fragment--2');
+      const pileup = root.querySelector('.cf-pileup');
+      if (path1 && lost1) {
+        const len = path1.getTotalLength();
+        gsap.set(lost1, { motionPath: { path: path1, align: path1 } });
+        tl.fromTo(lost1, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1 }, 5.1);
+        tl.to(lost1, { motionPath: { path: path1, align: path1, alignOrigin: [0.5, 0.5] }, duration: 0.7, ease: 'power1.inOut' }, 5.15);
+      }
+      if (path2 && lost2) {
+        tl.fromTo(lost2, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1 }, 5.2);
+        tl.to(lost2, { motionPath: { path: path2, align: path2, alignOrigin: [0.5, 0.5] }, duration: 0.65, ease: 'power1.inOut' }, 5.25);
+      }
+      if (pileup) {
+        tl.fromTo(pileup, { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.3, ease: 'back.out(1.7)' }, 5.6);
+      }
+
+      // Scene 6 — three machines slide together and fuse; chain flows through in one pass
+      const modules = root.querySelectorAll('.cf-fusion-module');
+      const fusionChain = root.querySelector('.cf-fusion-chain');
+      const fusionOutput = root.querySelector('.cf-fusion-output');
+      if (modules.length) {
+        tl.fromTo(modules[0], { x: -70, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.3 }, 6.05);
+        tl.fromTo(modules[1], { x: 0, autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, 6.1);
+        tl.fromTo(modules[2], { x: 70, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.3 }, 6.15);
+      }
+      if (fusionChain) tl.fromTo(fusionChain, { x: -60, autoAlpha: 0 }, { x: 0, autoAlpha: 1, duration: 0.3 }, 6.3);
+      if (fusionOutput) {
+        const s1 = buildSingle(fusionOutput, 'var(--bgl)');
+        const s2 = buildSingle(fusionOutput, 'var(--bgl)');
+        const s3 = buildSingle(fusionOutput, 'var(--bgl)');
+        gsap.set([s1, s2, s3], { opacity: 0 });
+        tl.to([s1, s2, s3], { opacity: 1, stagger: 0.1, duration: 0.2 }, 6.55);
+      }
+    }
+  }
+</script>
+
+<style>
+  /* ── Palette: one accent per enzyme machine ─────────────────────── */
+  .cf {
+    --fibre: #8fa89c;
+    --eg: #4f8fe8;
+    --cbh: #e8954f;
+    --bgl: #a35fe8;
+    --cf-bg: var(--c-bg);
+    --cf-surface: var(--c-surface);
+  }
+  :global([data-theme="dark"]) .cf {
+    --fibre: #7a9589;
+    --eg: #6fa6f2;
+    --cbh: #f0a868;
+    --bgl: #b87cf0;
+  }
+
+  .cf { position: relative; background: var(--cf-bg); }
+
+  /* ── Scroll track + pinned viewport ──────────────────────────────── */
+  .cf-track { position: relative; height: 700vh; }
+  .cf-viewport {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .cf-stage { position: relative; width: min(900px, 92vw); height: min(560px, 76vh); }
+
+  .cf-scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: var(--sp-5);
+  }
+
+  .cf-eyebrow {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--c-text-muted);
+    margin: 0;
+  }
+  .cf-headline {
+    font-size: clamp(1.4rem, 4vw, 2.1rem);
+    color: var(--c-secondary);
+    margin: 0;
+    line-height: 1.2;
+  }
+  .cf-headline--big { font-size: clamp(1.6rem, 4.5vw, 2.5rem); }
+  .cf-caption {
+    max-width: 52ch;
+    font-size: 0.98rem;
+    color: var(--c-text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+  .cf-caption--big { font-size: 1.05rem; max-width: 56ch; }
+
+  /* ── Belt / chain elements ────────────────────────────────────────── */
+  .cf-belt { position: relative; width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; }
+  .cf-chain, .cf-fusion-chain { display: inline-block; }
+  /* These SVGs are built at runtime via innerHTML (see <script> below), so they never
+     get Astro's scope attribute — :global() is required or these rules silently no-op. */
+  :global(.cf-chain-svg) { height: 60px; width: auto; display: block; overflow: visible; }
+  .cf-chain--long { position: absolute; }
+  .cf-chain--ghost { opacity: 0.4; transform: translateY(18px) scale(0.92); }
+  .cf-chain--ghost2 { opacity: 0.25; transform: translateY(-18px) scale(0.85); }
+
+  .cf-machine {
+    position: relative;
+    width: 86px; height: 86px;
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    margin-left: var(--sp-6);
+    background: var(--cf-surface);
+    border: 2px solid currentColor;
+  }
+  .cf-machine--eg { color: var(--eg); }
+  .cf-machine--cbh { color: var(--cbh); }
+  .cf-machine--bgl { color: var(--bgl); }
+  .cf-machine-glow {
+    position: absolute; inset: 14px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.35;
+    filter: blur(6px);
+  }
+  .cf-machine-label {
+    position: relative;
+    font-weight: 800;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    color: currentColor;
+  }
+
+  .cf-output, .cf-pair-feed { display: flex; gap: var(--sp-2); align-items: center; margin-left: var(--sp-6); min-width: 90px; min-height: 40px; }
+  :global(.cf-pair-svg), :global(.cf-single-svg) { height: 36px; width: auto; display: block; }
+
+  /* ── Bin / counter (Scene 4) ──────────────────────────────────────── */
+  .cf-bin-wrap { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); }
+  .cf-bin {
+    width: 120px; height: 70px;
+    border: 3px solid var(--bgl);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    background: color-mix(in srgb, var(--bgl) 10%, transparent);
+  }
+  .cf-counter-num {
+    font-family: var(--font-mono);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--bgl);
+  }
+
+  /* ── Factory map (Scene 5) ────────────────────────────────────────── */
+  .cf-map { position: relative; width: 100%; height: 260px; }
+  .cf-map-machine {
+    position: absolute;
+    width: 64px; height: 64px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.78rem;
+    background: var(--cf-surface);
+    border: 2px solid currentColor;
+  }
+  .cf-map-machine--eg { color: var(--eg); left: 2%; top: 10%; }
+  .cf-map-machine--cbh { color: var(--cbh); left: 46%; top: 70%; }
+  .cf-map-machine--bgl { color: var(--bgl); left: 80%; top: 15%; }
+  .cf-map-paths { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .cf-path { fill: none; stroke: var(--c-border); stroke-width: 2; stroke-dasharray: 4,5; }
+  .cf-lost-fragment, .cf-lost-fragment--2 {
+    position: absolute; top: 0; left: 0;
+    width: 16px; height: 16px; border-radius: 4px;
+    background: var(--fibre);
+  }
+  .cf-pileup {
+    position: absolute; left: 44%; top: 42%;
+    width: 46px; height: 30px; border-radius: 8px;
+    background: color-mix(in srgb, var(--c-accent) 30%, transparent);
+    border: 2px dashed var(--c-accent);
+  }
+
+  /* ── Fusion machine (Scene 6) ─────────────────────────────────────── */
+  .cf-fusion { display: flex; align-items: center; justify-content: center; gap: var(--sp-5); flex-wrap: wrap; }
+  :global(.cf-fusion-chain .cf-chain-svg) { height: 44px; }
+  .cf-fusion-machine {
+    display: flex; border-radius: 18px; overflow: hidden;
+    border: 2px solid var(--c-border);
+  }
+  .cf-fusion-module {
+    width: 64px; height: 72px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.75rem; color: #fff;
+  }
+  .cf-fusion-module--eg { background: var(--eg); }
+  .cf-fusion-module--cbh { background: var(--cbh); }
+  .cf-fusion-module--bgl { background: var(--bgl); }
+  .cf-fusion-output { display: flex; gap: var(--sp-2); min-width: 80px; }
+
+  /* ── Progress dots ────────────────────────────────────────────────── */
+  .cf-dots {
+    position: absolute;
+    right: var(--sp-6);
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: var(--sp-3);
+  }
+  .cf-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--c-border);
+    transition: background 0.2s, transform 0.2s;
+  }
+  .cf-dot.is-active { background: var(--c-primary); transform: scale(1.4); }
+  @media (max-width: 640px) { .cf-dots { display: none; } }
+
+  .cf-static-note { padding: var(--sp-6); text-align: center; color: var(--c-text-muted); }
+
+  /* ── Reduced-motion fallback: stack scenes, no pin/scrub ─────────── */
+  :global(.cf-reduced) .cf-track { height: auto; }
+  :global(.cf-reduced) .cf-viewport { height: auto; display: block; }
+  :global(.cf-reduced) .cf-stage { position: static; width: 100%; height: auto; display: flex; flex-direction: column; gap: var(--sp-16); padding: var(--sp-10) 0; }
+  :global(.cf-reduced) .cf-scene { position: static; opacity: 1; visibility: visible; }
+  :global(.cf-reduced) .cf-dots { display: none; }
+  :global(.cf-reduced) .cf-chain--ghost,
+  :global(.cf-reduced) .cf-chain--ghost2 { display: none; }
+  :global(.cf-reduced) .cf-chain--long { position: static; }
+
+  @media (max-width: 640px) {
+    .cf-stage { width: 94vw; }
+    .cf-belt { flex-direction: column; height: auto; gap: var(--sp-4); }
+    .cf-machine { margin-left: 0; }
+    .cf-output, .cf-pair-feed { margin-left: 0; }
+    .cf-map { height: 220px; }
+  }
+</style>

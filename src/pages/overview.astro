@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CelluloseFactory from '../components/CelluloseFactory.astro';
 const b = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
@@ -20,6 +21,9 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
       </p>
     </div>
   </section>
+
+  <!-- ═══ SCROLL-DRIVEN FACTORY EXPLAINER ═══ -->
+  <CelluloseFactory />
 
   <!-- ═══ PLAIN LANGUAGE SUMMARY ═══ -->
   <section class="section section--alt" aria-labelledby="summary-heading">

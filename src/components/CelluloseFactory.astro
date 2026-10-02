@@ -9,7 +9,7 @@
 //
 // ── Where to edit ──────────────────────────────────────────────────────
 // - Captions/headlines: the `scenes` array markup below (search "Scene 0" … "Scene 6").
-// - Colours: the --eg / --cbh / --bgl custom properties near the top of <style>.
+// - Colours: the --cena / --cex / --bgl custom properties near the top of <style>.
 // - Chain lengths: the `data-count` attribute on each `.cf-chain` placeholder.
 ---
 
@@ -23,42 +23,42 @@
         <!-- Scene 0 — The raw material -->
         <div class="cf-scene" data-scene="0">
           <p class="cf-eyebrow">Cellulose degradation, step by step</p>
-          <h3 class="cf-headline">Cellulose. Nature's toughest chain.</h3>
+          <h3 class="cf-headline">Cellulose. A chain built to resist breaking down.</h3>
           <div class="cf-belt">
             <div class="cf-chain cf-chain--long" data-count="14" data-color="var(--fibre)"></div>
             <div class="cf-chain cf-chain--long cf-chain--ghost" data-count="14" data-color="var(--fibre)"></div>
             <div class="cf-chain cf-chain--long cf-chain--ghost2" data-count="14" data-color="var(--fibre)"></div>
           </div>
-          <p class="cf-caption">Long chains of glucose, linked end to end and packed tightly together — this is what a plant cell wall is mostly made of.</p>
+          <p class="cf-caption">Long chains of glucose, linked end to end and packed tightly together with dense hydrogen bonding — this is what a plant cell wall is mostly made of. Three different enzymes take turns pulling it apart. Meet the first.</p>
         </div>
 
-        <!-- Scene 1 — Machine 1: Endoglucanase -->
+        <!-- Scene 1 — Machine 1: Endoglucanase (CenA) -->
         <div class="cf-scene" data-scene="1">
-          <p class="cf-eyebrow">Machine 1 — Endoglucanase</p>
+          <p class="cf-eyebrow">Machine 1 — CenA (Endoglucanase)</p>
           <h3 class="cf-headline">It cuts in the middle.</h3>
           <div class="cf-belt">
-            <div class="cf-chain cf-chain--eg" data-count="14" data-color="var(--eg)"></div>
-            <div class="cf-machine cf-machine--eg">
+            <div class="cf-chain cf-chain--cena" data-count="14" data-color="var(--cena)"></div>
+            <div class="cf-machine cf-machine--cena">
               <span class="cf-machine-glow"></span>
-              <span class="cf-machine-label">EG</span>
+              <span class="cf-machine-label">CenA</span>
             </div>
           </div>
-          <p class="cf-caption">Endoglucanase cleaves random bonds inside the chain, creating new free ends for the next machine to grab.</p>
+          <p class="cf-caption">CenA, an endoglucanase, cleaves random bonds inside the chain, creating new free ends for the next machine to grab.</p>
         </div>
 
-        <!-- Scene 2 — Machine 2: Exoglucanase / CBH -->
+        <!-- Scene 2 — Machine 2: Exoglucanase (Cex) -->
         <div class="cf-scene" data-scene="2">
-          <p class="cf-eyebrow">Machine 2 — Cellobiohydrolase</p>
+          <p class="cf-eyebrow">Machine 2 — Cex (Cellobiohydrolase)</p>
           <h3 class="cf-headline">It chews from the ends.</h3>
           <div class="cf-belt">
-            <div class="cf-chain cf-chain--cbh" data-count="8" data-color="var(--eg)"></div>
-            <div class="cf-machine cf-machine--cbh">
+            <div class="cf-chain cf-chain--cex" data-count="8" data-color="var(--cena)"></div>
+            <div class="cf-machine cf-machine--cex">
               <span class="cf-machine-glow"></span>
-              <span class="cf-machine-label">CBH</span>
+              <span class="cf-machine-label">Cex</span>
             </div>
             <div class="cf-output cf-output--cellobiose"></div>
           </div>
-          <p class="cf-caption">Cellobiohydrolase latches onto a chain end and walks along it, releasing two linked glucose units — cellobiose — one pair at a time.</p>
+          <p class="cf-caption">Cex, a cellobiohydrolase, latches onto a chain end and walks along it, releasing two linked glucose units — cellobiose — one pair at a time.</p>
         </div>
 
         <!-- Scene 3 — Machine 3: β-Glucosidase -->
@@ -92,8 +92,8 @@
           <p class="cf-eyebrow">The catch</p>
           <h3 class="cf-headline">Three separate machines. A long way to travel.</h3>
           <div class="cf-map">
-            <div class="cf-map-machine cf-map-machine--eg">EG</div>
-            <div class="cf-map-machine cf-map-machine--cbh">CBH</div>
+            <div class="cf-map-machine cf-map-machine--cena">CenA</div>
+            <div class="cf-map-machine cf-map-machine--cex">Cex</div>
             <div class="cf-map-machine cf-map-machine--bgl">BGL</div>
             <svg class="cf-map-paths" viewBox="0 0 600 260" preserveAspectRatio="none" aria-hidden="true">
               <path class="cf-path cf-path--1" d="M110,60 C220,20 260,140 320,120 S460,40 500,80" />
@@ -113,8 +113,8 @@
           <div class="cf-fusion">
             <div class="cf-fusion-chain" data-count="10" data-color="var(--fibre)"></div>
             <div class="cf-fusion-machine">
-              <span class="cf-fusion-module cf-fusion-module--eg">EG</span>
-              <span class="cf-fusion-module cf-fusion-module--cbh">CBH</span>
+              <span class="cf-fusion-module cf-fusion-module--cena">CenA</span>
+              <span class="cf-fusion-module cf-fusion-module--cex">Cex</span>
               <span class="cf-fusion-module cf-fusion-module--bgl">BGL</span>
             </div>
             <div class="cf-fusion-output"></div>
@@ -188,7 +188,7 @@
     document.querySelectorAll('.cf-chain, .cf-fusion-chain').forEach(buildChain);
 
     // Small reusable pair (cellobiose: 2 hexagons) / single hexagon builders
-    function buildPair(parent: Element, color = 'var(--eg)') {
+    function buildPair(parent: Element, color = 'var(--cena)') {
       const r = 13;
       const w = r * 3.2, h = r * 2 + 6;
       const cy = h / 2;
@@ -260,21 +260,26 @@
       if (ghost1) tl.fromTo(ghost1, { x: -40, autoAlpha: 0 }, { x: 0, autoAlpha: 0.4, duration: 0.8 }, 0.05);
       if (ghost2) tl.fromTo(ghost2, { x: -120, autoAlpha: 0 }, { x: 0, autoAlpha: 0.25, duration: 0.8 }, 0.1);
 
-      // Scene 1 — endoglucanase cuts two internal bonds, chain gaps open
-      const egChain = root.querySelector('.cf-chain--eg');
-      const egMachine = root.querySelector('.cf-machine--eg');
-      if (egChain && egMachine) {
-        tl.fromTo(egMachine, { autoAlpha: 0, scale: 0.85 }, { autoAlpha: 1, scale: 1, duration: 0.3 }, 1.1);
-        tl.to(egChain.querySelectorAll('[data-bond="4"], [data-bond="9"]'), { opacity: 0, duration: 0.2 }, 1.4);
+      // Scene 1 — paced in three beats: chain settles, then the machine makes an
+      // entrance (not just a quick fade), then it cuts. Gives Scene 0 -> Scene 1
+      // room to breathe instead of popping the machine in immediately.
+      const cenaChain = root.querySelector('.cf-chain--cena');
+      const cenaMachine = root.querySelector('.cf-machine--cena');
+      if (cenaChain && cenaMachine) {
+        tl.fromTo(cenaMachine,
+          { autoAlpha: 0, scale: 0.7, x: -50 },
+          { autoAlpha: 1, scale: 1, x: 0, duration: 0.35, ease: 'back.out(1.6)' },
+          1.15);
+        tl.to(cenaChain.querySelectorAll('[data-bond="4"], [data-bond="9"]'), { opacity: 0, duration: 0.2 }, 1.55);
       }
 
-      // Scene 2 — CBH machine "walks" the chain end, pairs peel off into cellobiose output
-      const cbhMachine = root.querySelector('.cf-machine--cbh');
-      const cbhOutput = root.querySelector('.cf-output--cellobiose');
-      if (cbhMachine && cbhOutput) {
-        tl.fromTo(cbhMachine, { autoAlpha: 0, x: -20 }, { autoAlpha: 1, x: 0, duration: 0.3 }, 2.1);
+      // Scene 2 — Cex machine "walks" the chain end, pairs peel off into cellobiose output
+      const cexMachine = root.querySelector('.cf-machine--cex');
+      const cexOutput = root.querySelector('.cf-output--cellobiose');
+      if (cexMachine && cexOutput) {
+        tl.fromTo(cexMachine, { autoAlpha: 0, x: -20 }, { autoAlpha: 1, x: 0, duration: 0.3 }, 2.1);
         for (let p = 0; p < 3; p++) {
-          const pairEl = buildPair(cbhOutput, 'var(--eg)');
+          const pairEl = buildPair(cexOutput, 'var(--cena)');
           gsap.set(pairEl, { opacity: 0, y: -10 });
           tl.to(pairEl, { opacity: 1, y: 0, duration: 0.18 }, 2.35 + p * 0.18);
         }
@@ -285,7 +290,7 @@
       const bglMachine = root.querySelector('.cf-machine--bgl');
       const glucoseOutput = root.querySelector('.cf-output--glucose');
       if (pairFeed && bglMachine && glucoseOutput) {
-        const feedPair = buildPair(pairFeed, 'var(--eg)');
+        const feedPair = buildPair(pairFeed, 'var(--cena)');
         tl.fromTo(feedPair, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2 }, 3.1);
         tl.fromTo(bglMachine, { autoAlpha: 0, scale: 0.85 }, { autoAlpha: 1, scale: 1, duration: 0.25 }, 3.25);
         tl.to(feedPair, { autoAlpha: 0, duration: 0.15 }, 3.55);
@@ -353,16 +358,16 @@
   /* ── Palette: one accent per enzyme machine ─────────────────────── */
   .cf {
     --fibre: #8fa89c;
-    --eg: #4f8fe8;
-    --cbh: #e8954f;
+    --cena: #4f8fe8;
+    --cex: #e8954f;
     --bgl: #a35fe8;
     --cf-bg: var(--c-bg);
     --cf-surface: var(--c-surface);
   }
   :global([data-theme="dark"]) .cf {
     --fibre: #7a9589;
-    --eg: #6fa6f2;
-    --cbh: #f0a868;
+    --cena: #6fa6f2;
+    --cex: #f0a868;
     --bgl: #b87cf0;
   }
 
@@ -433,8 +438,8 @@
     background: var(--cf-surface);
     border: 2px solid currentColor;
   }
-  .cf-machine--eg { color: var(--eg); }
-  .cf-machine--cbh { color: var(--cbh); }
+  .cf-machine--cena { color: var(--cena); }
+  .cf-machine--cex { color: var(--cex); }
   .cf-machine--bgl { color: var(--bgl); }
   .cf-machine-glow {
     position: absolute; inset: 14px;
@@ -481,8 +486,8 @@
     background: var(--cf-surface);
     border: 2px solid currentColor;
   }
-  .cf-map-machine--eg { color: var(--eg); left: 2%; top: 10%; }
-  .cf-map-machine--cbh { color: var(--cbh); left: 46%; top: 70%; }
+  .cf-map-machine--cena { color: var(--cena); left: 2%; top: 10%; }
+  .cf-map-machine--cex { color: var(--cex); left: 46%; top: 70%; }
   .cf-map-machine--bgl { color: var(--bgl); left: 80%; top: 15%; }
   .cf-map-paths { position: absolute; inset: 0; width: 100%; height: 100%; }
   .cf-path { fill: none; stroke: var(--c-border); stroke-width: 2; stroke-dasharray: 4,5; }
@@ -510,8 +515,8 @@
     display: flex; align-items: center; justify-content: center;
     font-weight: 800; font-size: 0.75rem; color: #fff;
   }
-  .cf-fusion-module--eg { background: var(--eg); }
-  .cf-fusion-module--cbh { background: var(--cbh); }
+  .cf-fusion-module--cena { background: var(--cena); }
+  .cf-fusion-module--cex { background: var(--cex); }
   .cf-fusion-module--bgl { background: var(--bgl); }
   .cf-fusion-output { display: flex; gap: var(--sp-2); min-width: 80px; }
 

@@ -268,9 +268,24 @@
       if (cenaChain && cenaMachine) {
         tl.fromTo(cenaMachine,
           { autoAlpha: 0, scale: 0.7, x: -50 },
-          { autoAlpha: 1, scale: 1, x: 0, duration: 0.35, ease: 'back.out(1.6)' },
-          1.15);
-        tl.to(cenaChain.querySelectorAll('[data-bond="4"], [data-bond="9"]'), { opacity: 0, duration: 0.2 }, 1.55);
+          { autoAlpha: 1, scale: 1, x: 0, duration: 0.3, ease: 'back.out(1.6)' },
+          1.05);
+
+        // Cut at two internal bonds (indices 4 and 9, out of 14 hexagons), then
+        // actually separate the three resulting pieces — otherwise this just
+        // shows two thin gaps in what still reads as one continuous chain.
+        // All of this has to land before 1.75, where the crossfade into Scene 2
+        // starts, or the split reads as unfinished mid-transition.
+        const bySelector = (sel: string) => Array.from(cenaChain.querySelectorAll(sel));
+        const cutBonds = bySelector('[data-bond="4"], [data-bond="9"]');
+        const fragB = [...bySelector('[data-hex="5"],[data-hex="6"],[data-hex="7"],[data-hex="8"],[data-hex="9"]'),
+                       ...bySelector('[data-bond="5"],[data-bond="6"],[data-bond="7"],[data-bond="8"]')];
+        const fragC = [...bySelector('[data-hex="10"],[data-hex="11"],[data-hex="12"],[data-hex="13"]'),
+                       ...bySelector('[data-bond="10"],[data-bond="11"],[data-bond="12"]')];
+
+        tl.to(cutBonds, { opacity: 0, duration: 0.1 }, 1.4);
+        tl.to(fragB, { x: 14, duration: 0.2, ease: 'power2.out' }, 1.45);
+        tl.to(fragC, { x: 30, duration: 0.2, ease: 'power2.out' }, 1.45);
       }
 
       // Scene 2 — Cex machine "walks" the chain end, pairs peel off into cellobiose output

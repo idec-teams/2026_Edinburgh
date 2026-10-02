@@ -82,28 +82,29 @@
           <h3 class="cf-headline">Glucose. Ready for fermentation.</h3>
           <div class="cf-bin-wrap">
             <div class="cf-bin"></div>
-            <div class="cf-counter"><span class="cf-counter-num">0</span></div>
           </div>
           <p class="cf-caption">The smallest unit — a simple sugar that yeast and bacteria can ferment straight into fuel.</p>
         </div>
 
-        <!-- Scene 5 — The problem: three separate machines -->
+        <!-- Scene 5 — The problem: many scattered copies of each enzyme, substrate finds them by random collision -->
         <div class="cf-scene" data-scene="5">
           <p class="cf-eyebrow">The catch</p>
-          <h3 class="cf-headline">Three separate machines. A long way to travel.</h3>
+          <h3 class="cf-headline">Scattered enzymes. A random search.</h3>
           <div class="cf-map">
-            <div class="cf-map-machine cf-map-machine--cena">CenA</div>
-            <div class="cf-map-machine cf-map-machine--cex">Cex</div>
-            <div class="cf-map-machine cf-map-machine--bgl">BGL</div>
+            <div class="cf-map-machine cf-map-machine--cena" style="left:4%;top:10%">CenA</div>
+            <div class="cf-map-machine cf-map-machine--cex" style="left:40%;top:5%">Cex</div>
+            <div class="cf-map-machine cf-map-machine--bgl" style="left:76%;top:16%">BGL</div>
+            <div class="cf-map-machine cf-map-machine--cena" style="left:16%;top:64%">CenA</div>
+            <div class="cf-map-machine cf-map-machine--cex" style="left:56%;top:70%">Cex</div>
+            <div class="cf-map-machine cf-map-machine--bgl" style="left:86%;top:52%">BGL</div>
             <svg class="cf-map-paths" viewBox="0 0 600 260" preserveAspectRatio="none" aria-hidden="true">
-              <path class="cf-path cf-path--1" d="M110,60 C220,20 260,140 320,120 S460,40 500,80" />
-              <path class="cf-path cf-path--2" d="M110,200 C200,230 260,120 340,160 S470,200 500,160" />
+              <path class="cf-path cf-path--1" d="M50,60 L100,145 L70,90 L155,165 L120,70 L210,130 L180,210 L265,150 L240,70" />
+              <path class="cf-path cf-path--2" d="M540,50 L470,125 L515,195 L430,155 L465,75 L370,110 L395,215 L310,170" />
             </svg>
             <div class="cf-lost-fragment cf-lost-fragment--1"></div>
             <div class="cf-lost-fragment cf-lost-fragment--2"></div>
-            <div class="cf-pileup"></div>
           </div>
-          <p class="cf-caption">Every intermediate has to drift through the cell, find the right enzyme, and bind it — by chance. Some wander. Some pile up waiting.</p>
+          <p class="cf-caption">Many copies of each enzyme drift through the cell at once. An intermediate has to randomly collide with the right one before it can be processed — some bump into it quickly, some wander for a while first.</p>
         </div>
 
         <!-- Scene 6 — The 3-in-1 machine (the goal) -->
@@ -316,24 +317,24 @@
         tl.to(g2, { opacity: 1, x: 10, duration: 0.15 }, 3.65);
       }
 
-      // Scene 4 — glucose drops into bin, counter ticks
-      const counter = root.querySelector('.cf-counter-num');
+      // Scene 4 — glucose drops into the bin. No fabricated "yield" number here —
+      // just a handful of glucose icons landing, illustrative rather than quantitative.
       const bin = root.querySelector('.cf-bin');
-      if (counter && bin) {
-        const counterObj = { v: 0 };
+      if (bin) {
         tl.fromTo(bin, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.25 }, 4.1);
-        tl.to(counterObj, {
-          v: 42, duration: 0.6, snap: 'v',
-          onUpdate: () => { (counter as HTMLElement).textContent = String(Math.round(counterObj.v)); },
-        }, 4.2);
+        for (let g = 0; g < 5; g++) {
+          const glucoseEl = buildSingle(bin, 'var(--bgl)');
+          gsap.set(glucoseEl, { opacity: 0, y: -24 });
+          tl.to(glucoseEl, { opacity: 1, y: 0, duration: 0.15, ease: 'bounce.out' }, 4.3 + g * 0.08);
+        }
       }
 
-      // Scene 5 — zoom to factory map, fragments drift along winding paths, one pile forms
+      // Scene 5 — zoom to the factory floor, fragments wander a jagged, random-looking
+      // path between scattered copies of each enzyme before (presumably) colliding with one.
       const path1 = root.querySelector('.cf-path--1') as SVGPathElement | null;
       const path2 = root.querySelector('.cf-path--2') as SVGPathElement | null;
       const lost1 = root.querySelector('.cf-lost-fragment--1');
       const lost2 = root.querySelector('.cf-lost-fragment--2');
-      const pileup = root.querySelector('.cf-pileup');
       if (path1 && lost1) {
         const len = path1.getTotalLength();
         gsap.set(lost1, { motionPath: { path: path1, align: path1 } });
@@ -344,10 +345,6 @@
         tl.fromTo(lost2, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.1 }, 5.2);
         tl.to(lost2, { motionPath: { path: path2, align: path2, alignOrigin: [0.5, 0.5] }, duration: 0.65, ease: 'power1.inOut' }, 5.25);
       }
-      if (pileup) {
-        tl.fromTo(pileup, { scale: 0, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.3, ease: 'back.out(1.7)' }, 5.6);
-      }
-
       // Scene 6 — three machines slide together and fuse; chain flows through in one pass
       const modules = root.querySelectorAll('.cf-fusion-module');
       const fusionChain = root.querySelector('.cf-fusion-chain');
@@ -477,45 +474,37 @@
   /* ── Bin / counter (Scene 4) ──────────────────────────────────────── */
   .cf-bin-wrap { display: flex; flex-direction: column; align-items: center; gap: var(--sp-3); }
   .cf-bin {
-    width: 120px; height: 70px;
+    width: 150px; height: 80px;
     border: 3px solid var(--bgl);
     border-top: none;
     border-radius: 0 0 14px 14px;
     background: color-mix(in srgb, var(--bgl) 10%, transparent);
+    display: flex; flex-wrap: wrap; align-content: flex-end; justify-content: center;
+    gap: 2px; padding: var(--sp-2);
   }
-  .cf-counter-num {
-    font-family: var(--font-mono);
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: var(--bgl);
-  }
+  :global(.cf-bin .cf-single-svg) { height: 26px; }
 
   /* ── Factory map (Scene 5) ────────────────────────────────────────── */
   .cf-map { position: relative; width: 100%; height: 260px; }
   .cf-map-machine {
     position: absolute;
-    width: 64px; height: 64px;
-    border-radius: 14px;
+    width: 48px; height: 48px;
+    border-radius: 11px;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 0.78rem;
+    font-weight: 800; font-size: 0.65rem;
     background: var(--cf-surface);
     border: 2px solid currentColor;
+    opacity: 0.85;
   }
-  .cf-map-machine--cena { color: var(--cena); left: 2%; top: 10%; }
-  .cf-map-machine--cex { color: var(--cex); left: 46%; top: 70%; }
-  .cf-map-machine--bgl { color: var(--bgl); left: 80%; top: 15%; }
+  .cf-map-machine--cena { color: var(--cena); }
+  .cf-map-machine--cex { color: var(--cex); }
+  .cf-map-machine--bgl { color: var(--bgl); }
   .cf-map-paths { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .cf-path { fill: none; stroke: var(--c-border); stroke-width: 2; stroke-dasharray: 4,5; }
+  .cf-path { fill: none; stroke: var(--c-border); stroke-width: 1.5; stroke-dasharray: 3,4; opacity: 0.6; }
   .cf-lost-fragment, .cf-lost-fragment--2 {
     position: absolute; top: 0; left: 0;
     width: 16px; height: 16px; border-radius: 4px;
     background: var(--fibre);
-  }
-  .cf-pileup {
-    position: absolute; left: 44%; top: 42%;
-    width: 46px; height: 30px; border-radius: 8px;
-    background: color-mix(in srgb, var(--c-accent) 30%, transparent);
-    border: 2px dashed var(--c-accent);
   }
 
   /* ── Fusion machine (Scene 6) ─────────────────────────────────────── */

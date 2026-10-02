@@ -309,31 +309,34 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
     <div class="container">
       <div class="section-header">
         <p class="eyebrow">Our starting enzyme</p>
-        <h2 id="cxna-heading">CxnA: a naturally bifunctional cellulase</h2>
+        <h2 id="cxna-heading">CxnA: an engineered bifunctional cellulase</h2>
       </div>
 
       <div class="two-col">
         <div class="prose">
           <p>
-            CxnA was originally described by Duedu &amp; French at the University of Edinburgh
-            in 2016.
-            <a class="cite" href="#ref-duedu" aria-label="Reference 1: Duedu &amp; French 2016">[1]</a>
-            It was isolated from <em>Cellulomonas fimi</em>, a Gram-positive soil bacterium
-            that is one of the most efficient natural cellulose degraders known, and notable
-            for producing a sophisticated multi-enzyme cellulose-degrading system.
+            CxnA isn't a protein nature produces on its own. It was engineered by Duedu &amp;
+            French at the University of Edinburgh in 2016
+            <a class="cite" href="#ref-duedu" aria-label="Reference 1: Duedu &amp; French 2016">[1]</a>,
+            by fusing the catalytic domains of two separate cellulose-degrading enzymes naturally
+            produced by <em>Cellulomonas fimi</em> — a Gram-positive soil bacterium known for an
+            unusually effective natural cellulose-degradation system — into a single polypeptide
+            chain.
           </p>
           <p>
-            What makes CxnA unusual is that it naturally combines two distinct catalytic
-            activities — exoglucanase and endoglucanase — in a single polypeptide chain.
-            Most organisms deploy these as separate enzymes. CxnA demonstrates that the
-            architecture is achievable, and raises the question of whether the same protein
-            could be evolved to accommodate a third.
+            What makes CxnA notable is that the fusion genuinely works: the resulting protein
+            shows both exoglucanase and endoglucanase activity in one chain, something most
+            organisms only achieve by deploying two separate enzymes. This project asks whether
+            the same strategy can go one step further — not by adding a third domain, but by
+            evolving a third activity directly into one of the two domains CxnA already has.
           </p>
           <p>
-            The domain architecture of CxnA, as established by Duedu &amp; French and refined
-            in this project using AlphaFold3, comprises a GH10 catalytic domain (bearing both
-            Cex-type and CenA-type activities) and a GH1-fold domain that is the target for
-            directed evolution in Project A.
+            CxnA has exactly two domains: <strong>Cex</strong> (family GH10, exoglucanase) and
+            <strong>CenA</strong> (family GH6, endoglucanase), joined through a carbohydrate-binding
+            module (CBM). There is no third, pre-existing domain. The directed-evolution target in
+            this project is to evolve new β-glucosidase-like activity directly within Cex's own
+            active site — its fold resembles known β-glucosidases closely enough to make this a
+            plausible, if unprecedented, target.
           </p>
 
           <div class="callout mt-6">
@@ -354,14 +357,14 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <h4 class="card-label">CxnA at a glance</h4>
           <table class="info-table">
             <tbody>
-              <tr><th>Source organism</th><td><em>Cellulomonas fimi</em></td></tr>
-              <tr><th>Original reference</th><td>Duedu &amp; French, 2016 <a class="cite" href="#ref-duedu">[1]</a></td></tr>
+              <tr><th>Source organism</th><td><em>Cellulomonas fimi</em> (origin of the two fused domains)</td></tr>
+              <tr><th>Built by</th><td>Duedu &amp; French, 2016 <a class="cite" href="#ref-duedu">[1]</a> — an engineered fusion, not a natural isolate</td></tr>
               <tr><th>Institution</th><td>University of Edinburgh</td></tr>
-              <tr><th>Domain 1</th><td>GH10 (exo- and endoglucanase)</td></tr>
-              <tr><th>Domain 2</th><td>GH1-fold (catalytically inactive in WT for GH1-type activity)</td></tr>
-              <tr><th>Natural function</th><td>Bifunctional cellulose degradation</td></tr>
-              <tr><th>Crystal structure ref</th><td>1FHD (GH10/Cex, Notenboom 1998 <a class="cite" href="#ref-notenboom">[3]</a>)</td></tr>
-              <tr><th>AlphaFold3 RMSD vs 1FHD</th><td class="mono"><strong>0.293 Å</strong> (validated)</td></tr>
+              <tr><th>Domain 1</th><td>Cex — family GH10, exoglucanase</td></tr>
+              <tr><th>Domain 2</th><td>CenA — family GH6, endoglucanase</td></tr>
+              <tr><th>Joined via</th><td>Carbohydrate-binding module (CBM)</td></tr>
+              <tr><th>Crystal structure ref</th><td>1FHD (Cex, Notenboom 1998 <a class="cite" href="#ref-notenboom">[3]</a>)</td></tr>
+              <tr><th>Predicted-structure RMSD vs 1FHD</th><td class="mono"><strong>0.293 Å</strong> (validated)</td></tr>
             </tbody>
           </table>
         </div>

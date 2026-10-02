@@ -1,21 +1,22 @@
-﻿---
+---
 import BaseLayout from '../layouts/BaseLayout.astro';
 const b = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <BaseLayout
   title="Project Overview — TriCel CxnA | iDEC 2026"
-  description="Full overview of the CxnA directed evolution project: bifunctional-to-trifunctional enzyme engineering and activity enhancement, affiliated with iDEC 2026."
+  description="Plain-language overview of the CxnA directed evolution project: what cellulose breakdown requires, what CxnA already does, what we tried to make it do, and what we actually found."
 >
 
   <!-- ═══ PAGE HERO ═══ -->
   <section class="page-hero">
     <div class="container">
       <p class="eyebrow">Project Overview</p>
-      <h1>Engineering CxnA toward trifunctionality</h1>
+      <h1>One protein, trying to do the job of three machines</h1>
       <p>
-        CxnA is a natural two-in-one cellulase. We are using directed evolution to try to add
-        a third catalytic activity — and to improve the two it already has.
+        CxnA is a natural enzyme that already does two jobs most industrial processes need two
+        separate machines for. We tried to teach it a third job, and to make it better at the two
+        it already has. Here's the plain-language version of what that means and what we found.
       </p>
     </div>
   </section>
@@ -25,67 +26,182 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
     <div class="container">
       <div class="section-header">
         <p class="eyebrow">In plain language</p>
-        <h2 id="summary-heading">What are we actually doing?</h2>
+        <h2 id="summary-heading">Think of cellulose as a rope that needs to become a handful of beads</h2>
+        <p>
+          Cellulose — the material in plant cell walls, and one of the most abundant organic
+          substances on Earth — is a long, tough chain of linked sugar units. Turning it into
+          glucose (the simple sugar that can actually be fermented into biofuel) means cutting
+          that rope down, in stages, until it's just loose beads.
+        </p>
       </div>
 
-      <div class="summary-grid">
+      <!-- Comparison diagram: 3 separate machines vs CxnA as a 2-in-1 -->
+      <figure class="machine-figure">
+        <svg viewBox="0 0 950 330" xmlns="http://www.w3.org/2000/svg" class="machine-svg" role="img" aria-labelledby="machine-svg-title machine-svg-desc">
+          <title id="machine-svg-title">Comparing the usual three-machine cellulose breakdown line to CxnA's two-in-one design</title>
+          <desc id="machine-svg-desc">Row one shows cellulose passing through three separate machines — endoglucanase, exoglucanase, and beta-glucosidase — to become glucose. Row two shows CxnA already combining the first two machines into one protein, with an attempted third step shown as uncertain.</desc>
+
+          <defs>
+            <marker id="ov-arrow-mute" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="var(--c-text-faint)"/>
+            </marker>
+            <marker id="ov-arrow-primary" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="var(--c-primary)"/>
+            </marker>
+            <marker id="ov-arrow-accent" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L8,3 z" fill="var(--c-accent)"/>
+            </marker>
+          </defs>
+
+          <!-- ══ Row label 1 ══ -->
+          <text x="10" y="18" font-size="11" font-weight="700" letter-spacing="0.06em" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">THE USUAL WAY — THREE SEPARATE MACHINES</text>
+
+          <!-- Row 1: rope -->
+          <g transform="translate(15,45)" stroke="var(--c-text-faint)" stroke-width="2" fill="var(--c-text-faint)">
+            <line x1="6" y1="12" x2="78" y2="12"/>
+            <circle cx="6" cy="12" r="6"/><circle cx="20" cy="12" r="6"/><circle cx="34" cy="12" r="6"/>
+            <circle cx="48" cy="12" r="6"/><circle cx="62" cy="12" r="6"/><circle cx="76" cy="12" r="6"/>
+          </g>
+          <text x="46" y="80" text-anchor="middle" font-size="9.5" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">Cellulose</text>
+
+          <path d="M100,57 L138,57" stroke="var(--c-text-faint)" stroke-width="2" marker-end="url(#ov-arrow-mute)" fill="none"/>
+
+          <!-- Machine 1: Endoglucanase -->
+          <rect x="140" y="30" width="110" height="54" rx="8" fill="var(--c-surface)" stroke="var(--c-border)" stroke-width="1.5"/>
+          <text x="195" y="52" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--c-text)" font-family="system-ui,sans-serif">Machine 1</text>
+          <text x="195" y="67" text-anchor="middle" font-size="9" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">Endoglucanase</text>
+
+          <path d="M252,57 L290,57" stroke="var(--c-text-faint)" stroke-width="2" marker-end="url(#ov-arrow-mute)" fill="none"/>
+
+          <!-- Shorter fragments -->
+          <g transform="translate(295,45)" stroke="var(--c-text-faint)" stroke-width="2" fill="var(--c-text-faint)">
+            <line x1="6" y1="12" x2="24" y2="12"/><circle cx="6" cy="12" r="6"/><circle cx="16" cy="12" r="6"/><circle cx="26" cy="12" r="6"/>
+            <line x1="40" y1="12" x2="58" y2="12"/><circle cx="40" cy="12" r="6"/><circle cx="50" cy="12" r="6"/><circle cx="60" cy="12" r="6"/>
+          </g>
+          <text x="330" y="80" text-anchor="middle" font-size="9.5" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">Shorter fragments</text>
+
+          <path d="M378,57 L416,57" stroke="var(--c-text-faint)" stroke-width="2" marker-end="url(#ov-arrow-mute)" fill="none"/>
+
+          <!-- Machine 2: Exoglucanase -->
+          <rect x="418" y="30" width="110" height="54" rx="8" fill="var(--c-surface)" stroke="var(--c-border)" stroke-width="1.5"/>
+          <text x="473" y="52" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--c-text)" font-family="system-ui,sans-serif">Machine 2</text>
+          <text x="473" y="67" text-anchor="middle" font-size="9" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">Exoglucanase</text>
+
+          <path d="M530,57 L568,57" stroke="var(--c-text-faint)" stroke-width="2" marker-end="url(#ov-arrow-mute)" fill="none"/>
+
+          <!-- Cellobiose pairs -->
+          <g transform="translate(573,45)" stroke="var(--c-text-faint)" stroke-width="2" fill="var(--c-text-faint)">
+            <line x1="6" y1="12" x2="18" y2="12"/><circle cx="6" cy="12" r="6"/><circle cx="18" cy="12" r="6"/>
+            <line x1="34" y1="12" x2="46" y2="12"/><circle cx="34" cy="12" r="6"/><circle cx="46" cy="12" r="6"/>
+            <line x1="62" y1="12" x2="74" y2="12"/><circle cx="62" cy="12" r="6"/><circle cx="74" cy="12" r="6"/>
+          </g>
+          <text x="613" y="80" text-anchor="middle" font-size="9.5" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">Cellobiose (2-bead pairs)</text>
+
+          <path d="M656,57 L694,57" stroke="var(--c-text-faint)" stroke-width="2" marker-end="url(#ov-arrow-mute)" fill="none"/>
+
+          <!-- Machine 3: Beta-glucosidase -->
+          <rect x="696" y="30" width="118" height="54" rx="8" fill="var(--c-surface)" stroke="var(--c-border)" stroke-width="1.5"/>
+          <text x="755" y="52" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--c-text)" font-family="system-ui,sans-serif">Machine 3</text>
+          <text x="755" y="67" text-anchor="middle" font-size="9" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">β-Glucosidase</text>
+
+          <path d="M816,57 L854,57" stroke="var(--c-text-faint)" stroke-width="2" marker-end="url(#ov-arrow-mute)" fill="none"/>
+
+          <!-- Glucose beads -->
+          <g transform="translate(859,45)" fill="var(--c-text-faint)">
+            <circle cx="6" cy="12" r="6"/><circle cx="20" cy="12" r="6"/><circle cx="34" cy="12" r="6"/><circle cx="48" cy="12" r="6"/><circle cx="62" cy="12" r="6"/>
+          </g>
+          <text x="895" y="80" text-anchor="middle" font-size="9.5" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">Glucose</text>
+
+          <!-- divider -->
+          <line x1="0" y1="118" x2="950" y2="118" stroke="var(--c-border)" stroke-width="1" stroke-dasharray="3,4"/>
+
+          <!-- ══ Row label 2 ══ -->
+          <text x="10" y="148" font-size="11" font-weight="700" letter-spacing="0.06em" fill="var(--c-primary)" font-family="system-ui,sans-serif">CXNA — ALREADY A TWO-IN-ONE MACHINE</text>
+
+          <!-- Row 2: rope -->
+          <g transform="translate(15,175)" stroke="var(--c-text-faint)" stroke-width="2" fill="var(--c-text-faint)">
+            <line x1="6" y1="12" x2="78" y2="12"/>
+            <circle cx="6" cy="12" r="6"/><circle cx="20" cy="12" r="6"/><circle cx="34" cy="12" r="6"/>
+            <circle cx="48" cy="12" r="6"/><circle cx="62" cy="12" r="6"/><circle cx="76" cy="12" r="6"/>
+          </g>
+          <text x="46" y="210" text-anchor="middle" font-size="9.5" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">Cellulose</text>
+
+          <path d="M100,187 L138,187" stroke="var(--c-primary)" stroke-width="2" marker-end="url(#ov-arrow-primary)" fill="none"/>
+
+          <!-- Merged machine: CxnA does jobs 1+2 -->
+          <rect x="140" y="155" width="388" height="64" rx="10" fill="var(--c-primary-light)" stroke="var(--c-primary)" stroke-width="2"/>
+          <text x="334" y="181" text-anchor="middle" font-size="11.5" font-weight="800" fill="var(--c-secondary)" font-family="system-ui,sans-serif">CxnA</text>
+          <text x="334" y="198" text-anchor="middle" font-size="9.5" fill="var(--c-secondary)" font-family="system-ui,sans-serif">endo- + exoglucanase, already built into one protein</text>
+          <text x="334" y="212" text-anchor="middle" font-size="8.5" fill="var(--c-primary)" font-family="system-ui,sans-serif" font-weight="700">CONFIRMED — this is what CxnA does naturally</text>
+
+          <path d="M530,187 L568,187" stroke="var(--c-primary)" stroke-width="2" marker-end="url(#ov-arrow-primary)" fill="none"/>
+
+          <!-- Cellobiose pairs (same position as row 1, for direct comparison) -->
+          <g transform="translate(573,175)" stroke="var(--c-text-faint)" stroke-width="2" fill="var(--c-text-faint)">
+            <line x1="6" y1="12" x2="18" y2="12"/><circle cx="6" cy="12" r="6"/><circle cx="18" cy="12" r="6"/>
+            <line x1="34" y1="12" x2="46" y2="12"/><circle cx="34" cy="12" r="6"/><circle cx="46" cy="12" r="6"/>
+            <line x1="62" y1="12" x2="74" y2="12"/><circle cx="62" cy="12" r="6"/><circle cx="74" cy="12" r="6"/>
+          </g>
+          <text x="613" y="210" text-anchor="middle" font-size="9.5" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">Cellobiose (2-bead pairs)</text>
+
+          <path d="M656,187 L694,187" stroke="var(--c-accent)" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#ov-arrow-accent)" fill="none"/>
+
+          <!-- Attempted 3rd job -->
+          <rect x="696" y="160" width="134" height="54" rx="8" fill="var(--c-accent-light)" stroke="var(--c-accent)" stroke-width="1.5" stroke-dasharray="5,3"/>
+          <text x="763" y="182" text-anchor="middle" font-size="9.5" font-weight="700" fill="var(--c-secondary)" font-family="system-ui,sans-serif">+ β-glucosidase?</text>
+          <text x="763" y="197" text-anchor="middle" font-size="8.5" fill="var(--c-accent)" font-family="system-ui,sans-serif">what we tried to add</text>
+
+          <path d="M832,187 L870,187" stroke="var(--c-text-faint)" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#ov-arrow-mute)" fill="none"/>
+
+          <!-- Glucose beads, faded/uncertain -->
+          <g transform="translate(875,175)" fill="var(--c-text-faint)" opacity="0.55">
+            <circle cx="6" cy="12" r="6"/><circle cx="20" cy="12" r="6"/><circle cx="34" cy="12" r="6"/>
+          </g>
+          <text x="895" y="210" text-anchor="middle" font-size="9" fill="var(--c-text-faint)" font-family="system-ui,sans-serif">Glucose?</text>
+
+          <!-- Legend -->
+          <rect x="140" y="255" width="12" height="12" rx="2" fill="var(--c-primary-light)" stroke="var(--c-primary)" stroke-width="1.5"/>
+          <text x="158" y="265" font-size="9.5" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">Confirmed — CxnA already does this</text>
+          <rect x="430" y="255" width="12" height="12" rx="2" fill="var(--c-accent-light)" stroke="var(--c-accent)" stroke-width="1.5" stroke-dasharray="3,2"/>
+          <text x="448" y="265" font-size="9.5" fill="var(--c-text-muted)" font-family="system-ui,sans-serif">Attempted — see Results for what actually happened</text>
+        </svg>
+        <figcaption>
+          Normally, turning cellulose into glucose takes three separate enzymes working in sequence.
+          CxnA already combines the first two jobs in a single protein. This project tried to add the
+          third — and to make the first two faster — using directed evolution.
+        </figcaption>
+      </figure>
+
+      <div class="summary-grid mt-10">
         <div class="prose">
           <p>
-            Cellulose — the structural material in plant cell walls and one of the most abundant
-            organic substances on Earth — is made of long chains of glucose molecules. Breaking
-            those chains all the way down to glucose (usable for fermentation and biofuel production)
-            requires three different types of enzyme working together.
+            Most industrial setups use three separate enzymes for this, floating freely in
+            solution. That's inefficient — separate proteins don't always find their target at the
+            right moment, and manufacturing three proteins costs more than manufacturing one.
           </p>
           <p>
-            Most engineered systems express all three as separate proteins, which is inefficient.
-            Separate enzymes floating in solution don't always find their substrate at the right time,
-            and producing multiple proteins is more expensive than producing one.
+            <strong>CxnA</strong> is a real enzyme from the soil bacterium <em>Cellulomonas fimi</em>
+            that nature already fused into a two-in-one tool — an exoglucanase (Cex) and an
+            endoglucanase (CenA) on a single protein chain, joined by a linker. It was first
+            characterised by Duedu &amp; French at the University of Edinburgh in 2016
+            <a class="cite" href="#ref-duedu" aria-label="Reference 1: Duedu &amp; French 2016">[1]</a>.
           </p>
           <p>
-            <strong>CxnA</strong> is an existing enzyme from the soil bacterium
-            <em>Cellulomonas fimi</em> that already combines two of these activities in a single
-            protein chain — an exoglucanase and an endoglucanase — making it naturally bifunctional.
-            It was originally characterised by Duedu &amp; French at the University of Edinburgh in 2016.
-            <a class="cite" href="#ref-duedu" aria-label="Reference 1: Duedu &amp; French 2016">[1]</a>
-          </p>
-          <p>
-            This project asks: can we go further? Can we evolve CxnA to also perform the
-            third activity — beta-glucosidase, the enzyme that converts the disaccharide cellobiose
-            into two molecules of glucose — creating a fully <strong>trifunctional</strong> enzyme?
-            And separately, can we use directed evolution to improve the two activities CxnA already
-            has, making it an overall better cellulose-degrading enzyme?
+            This project asked two questions at once. <strong>Could directed evolution teach CxnA a
+            third trick</strong> — splitting cellobiose into usable glucose, the one job it's
+            missing? And <strong>could the same process make the two jobs it already does faster or
+            more robust?</strong> Both questions were tested with the same tool: scrambling CxnA's
+            DNA at random, then screening thousands of the resulting mutants for anything better.
           </p>
         </div>
 
         <aside class="summary-aside">
           <div class="card">
-            <h3 class="aside-label">The three activities of cellulose degradation</h3>
-            <ol class="activity-list">
-              <li>
-                <span class="activity-num">1</span>
-                <div>
-                  <strong>Exoglucanase</strong>
-                  <p>Attacks crystalline cellulose from chain ends, releasing the disaccharide cellobiose.</p>
-                  <span class="badge badge--confirmed">CxnA WT &mdash; confirmed</span>
-                </div>
-              </li>
-              <li>
-                <span class="activity-num">2</span>
-                <div>
-                  <strong>Endoglucanase</strong>
-                  <p>Cleaves β-1,4 glycosidic bonds within the cellulose chain, creating new accessible chain ends.</p>
-                  <span class="badge badge--confirmed">CxnA WT &mdash; confirmed</span>
-                </div>
-              </li>
-              <li>
-                <span class="activity-num">3</span>
-                <div>
-                  <strong>Beta-glucosidase</strong>
-                  <p>Converts cellobiose into two glucose molecules. The final step to usable fuel.</p>
-                  <span class="badge badge--progress">Project A target &mdash; evolving</span>
-                </div>
-              </li>
-            </ol>
+            <h3 class="aside-label">A real result, from our own plates</h3>
+            <a href={`${b}/results#wetlab-congored`} class="photo-teaser">
+              <img src={`${b}/images/results/congo-red-mutants.jpg`} alt="Real Congo red assay plate from the lab, showing clearing halos around mutant CxnA colonies" loading="lazy" />
+              <span class="photo-teaser-caption">Real plates from our lab — colonies with a clear halo still have working enzyme activity. See the full results →</span>
+            </a>
           </div>
         </aside>
       </div>
@@ -95,27 +211,27 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
         <summary>Technical framing: domain architecture and mechanistic rationale</summary>
         <div class="expand-body prose-width">
           <p>
-            CxnA contains two distinct glycoside hydrolase (GH) domains: a GH10 domain
-            (bearing both Cex-type exoglucanase and CenA-type endoglucanase activities) and
-            a GH1-fold domain that is currently catalytically inactive relative to
-            beta-glucosidase function in the wild-type protein.
+            CxnA has only two domains: <strong>Cex</strong> (glycoside hydrolase family GH10,
+            exoglucanase) and <strong>CenA</strong> (family GH6, endoglucanase), joined through a
+            carbohydrate-binding module. There is no separate third domain in the protein — the
+            goal for the missing β-glucosidase activity is to evolve it directly within Cex's
+            existing active site, which structurally resembles known β-glucosidases closely enough
+            to make this a plausible (if unprecedented) target.
           </p>
           <p>
-            GH1 family beta-glucosidases use a retaining double-displacement mechanism,
-            with two conserved glutamate residues acting as the catalytic nucleophile
-            and general acid/base. The structural analysis in this project
-            (see <a href={`${b}/results#drylab-docking`}>Results — Dry Lab</a>) identifies
-            candidate residues GLU350 and GLU404 as potential catalytic positions in the
-            GH1-fold domain of CxnA, and characterises a steric barrier involving GLN87
-            and TRP281 that may need to be overcome for cellobiose binding.
+            Structural and docking analysis (see <a href={`${b}/results#drylab-cex-targets`}>Results — Dry Lab</a>)
+            found that cellobiose can occupy Cex's active site in contact with its existing
+            catalytic residues, GLU127 and GLU233 — the same two residues Cex already uses on its
+            natural substrate. Separately, CenA's own active site (Asp595, Asp631, Asp771) was
+            analysed for mutations that might improve its existing activity
+            (see <a href={`${b}/results#drylab-cena`}>Results — CenA</a>).
           </p>
           <p>
-            There is no direct published precedent for evolving a GH10 scaffold to acquire
-            GH1-type beta-glucosidase activity.
-            <a class="cite" href="#ref-liu" aria-label="Reference 2: Liu et al. 2018">[2]</a>
-            This project tests that gap. The honest prior expectation is low; the experimental
-            and computational framing is designed to generate interpretable data regardless
-            of whether the primary evolution succeeds.
+            There is no direct published precedent for evolving a GH10-family exoglucanase toward
+            glucosidase-type activity. This project tests that gap directly, with the mutagenesis
+            carried out by error-prone PCR across the gene — random, not computationally targeted —
+            so the dry-lab predictions above informed where we expected activity to emerge, rather
+            than dictating which mutations were actually tried.
           </p>
         </div>
       </details>
@@ -126,9 +242,13 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
   <section class="section" aria-labelledby="tracks-heading">
     <div class="container">
       <div class="section-header">
-        <p class="eyebrow">Two parallel research tracks</p>
+        <p class="eyebrow">Two questions, one experiment</p>
         <h2 id="tracks-heading">Project A &amp; Project B</h2>
-        <p>Both tracks run simultaneously with shared reagents and infrastructure.</p>
+        <p>
+          Both questions were asked of the same mutant library, screened through the same three
+          assays — they differ in which result would count as a "win," not in the wet-lab pipeline
+          itself.
+        </p>
       </div>
 
       <div class="tracks-grid">
@@ -136,38 +256,38 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
         <div class="track-card track-card--a">
           <header class="track-header">
             <span class="track-label">Project A</span>
-            <span class="badge badge--progress">In Progress</span>
+            <span class="badge badge--neutral">No confirmed hit</span>
           </header>
-          <h3>Trifunctional evolution: adding a third activity</h3>
-          <p class="track-goal"><strong>Goal:</strong> Evolve beta-glucosidase (GH1-type) activity into the GH1-fold domain of CxnA.</p>
+          <h3>Trifunctional evolution: adding the missing third activity</h3>
+          <p class="track-goal"><strong>Goal:</strong> Evolve β-glucosidase-like activity into Cex's own active site, so CxnA can finish the job of turning cellobiose into glucose by itself.</p>
 
           <div class="track-section">
-            <h4>Strategy</h4>
+            <h4>How it was tested</h4>
             <ul>
-              <li>Error-prone PCR (epPCR) on the GH1-fold region of CxnA to generate a mutant library</li>
-              <li>Selection by growth on cellobiose as the sole carbon source</li>
-              <li>Screening of surviving colonies using the fluorogenic substrate 4-methylumbelliferyl-β-D-glucopyranoside (MUG)</li>
-              <li>Computational guidance from AlphaFold3 docking to target the active-site region</li>
+              <li>Error-prone PCR (epPCR) across the CxnA gene to generate random mutants</li>
+              <li>X-gluc colour screen — mutants that develop a β-glucosidase-like activity turn visibly blue</li>
+              <li>MUC fluorescence assay for a precise, quantitative activity number per mutant</li>
+              <li>Guided (not dictated) by AlphaFold-based docking of cellobiose into Cex's active site</li>
             </ul>
           </div>
 
           <div class="track-section">
             <h4>Honest framing</h4>
             <p>
-              No direct literature precedent exists for this specific evolutionary transition.
-              The project is designed to generate interpretable data at every stage — including
-              if evolution fails, characterising <em>why</em> is a result.
+              No mutant matched the positive control, and the one candidate that beat wild type
+              (CO12, 1.35× on average) falls just short of our statistical confidence threshold.
+              This is reported as a real, interpretable result — not a hidden failure.
             </p>
           </div>
 
           <div class="track-section">
             <h4>Dry lab inputs</h4>
             <p>
-              AlphaFold3 structure of the GH1 domain · Cellobiose docking poses ·
-              PLIP interaction analysis identifying GLU350, GLU404 as candidate catalytic residues ·
-              Steric barrier characterisation (GLN87/TRP281)
+              Cex structure validated against the 1FHD crystal structure · cellobiose docked next
+              to GLU127/GLU233 · conservation analysis confirming both residues are essential ·
+              computational mutation screen (FoldX + re-docking)
             </p>
-            <a href={`${b}/results#drylab-gh1`} class="track-link">View dry-lab results for Project A →</a>
+            <a href={`${b}/results#drylab-cex-targets`} class="track-link">View dry-lab results for Project A →</a>
           </div>
         </div>
 
@@ -175,38 +295,39 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
         <div class="track-card track-card--b">
           <header class="track-header">
             <span class="track-label track-label--b">Project B</span>
-            <span class="badge badge--progress">In Progress</span>
+            <span class="badge badge--neutral">No confirmed hit</span>
           </header>
           <h3>Activity enhancement: improving what CxnA already does</h3>
-          <p class="track-goal"><strong>Goal:</strong> Improve the kinetics and/or thermostability of CxnA's existing exoglucanase and endoglucanase activities.</p>
+          <p class="track-goal"><strong>Goal:</strong> Use the same mutant library to look for variants with better exo- or endoglucanase activity than wild-type CxnA.</p>
 
           <div class="track-section">
-            <h4>Strategy</h4>
+            <h4>How it was tested</h4>
             <ul>
-              <li>epPCR across the full CxnA coding sequence (or targeted to the GH10 domain)</li>
-              <li>CMC (carboxymethylcellulose) plate clearing assay for endoglucanase activity</li>
-              <li>MUC (4-methylumbelliferyl-β-D-cellobioside) assay for exoglucanase activity</li>
-              <li>Direct comparison of mutant activity to wild-type CxnA baseline</li>
+              <li>Congo red plate screen — a clearing halo means endoglucanase activity survived</li>
+              <li>MUC fluorescence assay, quantifying exoglucanase activity precisely against same-day wild-type controls</li>
+              <li>Computational candidate screen on CenA (the endoglucanase domain) independently of the random wet-lab mutants</li>
             </ul>
           </div>
 
           <div class="track-section">
             <h4>Rationale</h4>
             <p>
-              Project B provides an interpretable positive control: we are evolving activity
-              that demonstrably already exists. This ensures the selection and screening system
-              is validated even if Project A yields no active mutants.
+              Project B doubles as a sanity check on the whole pipeline: CxnA's existing activities
+              are real and measurable, so if the screens can't detect genuine known activity
+              reliably, that would call the whole method into question. They did — the assay caught
+              real signal and real noise, including two mutants (T14, T15) that had clearly lost
+              function.
             </p>
           </div>
 
           <div class="track-section">
             <h4>Dry lab inputs</h4>
             <p>
-              AlphaFold3 structure of GH10/Cex domain · Cellobiose and xylobiose docking ·
-              PLIP interaction map of GLU127, GLU233 · Tight pose convergence in GH10 supporting
-              high confidence in the binding geometry
+              CenA structure and conservation analysis · cellotetraose docked against catalytic
+              Asp595/Asp631/Asp771 · combined stability + binding mutation screen, best candidate
+              K671S
             </p>
-            <a href={`${b}/results#drylab-gh10`} class="track-link">View dry-lab results for Project B →</a>
+            <a href={`${b}/results#drylab-cena`} class="track-link">View dry-lab results for Project B →</a>
           </div>
         </div>
       </div>
@@ -226,29 +347,27 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <div class="context-icon" aria-hidden="true">🌿</div>
           <h3>Biofuel production</h3>
           <p>
-            Efficient cellulose degradation is a key bottleneck in second-generation biofuel
-            production from agricultural waste, forestry residues, and dedicated energy crops.
-            A self-contained trifunctional enzyme could reduce the enzyme loading required
-            per unit of glucose produced.
+            Enzyme cost is a major bottleneck in turning agricultural waste and energy crops into
+            fuel — one estimate puts enzyme production at around 30% of total process cost. A
+            single protein doing the job of three could cut that cost directly.
           </p>
         </div>
         <div class="context-item">
           <div class="context-icon" aria-hidden="true">♻</div>
           <h3>Biomass recycling</h3>
           <p>
-            Converting plant biomass to fermentable sugars has applications in waste
-            valorisation, paper and textile industry bioprocessing, and soil carbon cycling.
-            More efficient single-enzyme solutions lower the barrier to deployment.
+            The same chemistry underlies waste valorisation, paper and textile bioprocessing, and
+            soil carbon cycling. A cheaper, simpler enzyme system lowers the barrier to using any
+            of them at scale.
           </p>
         </div>
         <div class="context-item">
           <div class="context-icon" aria-hidden="true">🤖</div>
           <h3>Testing AI-assisted protein engineering</h3>
           <p>
-            This project explicitly examines where AlphaFold3 structural predictions and
-            computational docking can responsibly guide directed evolution — and where they
-            cannot substitute for real experimental data. The limitations are documented
-            and discussed, not hidden.
+            This project also tested, honestly, how far AlphaFold-based structural prediction can
+            responsibly guide directed evolution — and where it can't substitute for real
+            experimental data. Both the hits and the limits are documented, not hidden.
           </p>
         </div>
       </div>
@@ -283,12 +402,8 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </a>
         </div>
-        <div class="idec-logo-box" aria-hidden="true">
-          <div class="idec-placeholder-logo">
-            <span>iDEC</span>
-            <span class="idec-placeholder-sub">2025</span>
-          </div>
-          <p class="idec-logo-caption">iDEC logo/badge — add official asset here</p>
+        <div class="idec-logo-box">
+          <img src={`${b}/images/brand/idec-logo.png`} alt="iDEC — International Directed Evolution Competition logo" class="idec-logo-img" />
         </div>
       </div>
     </div>
@@ -300,13 +415,9 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
       <h2 id="refs-heading" style="margin-bottom:var(--sp-6)">References cited on this page</h2>
       <ol class="ref-list">
         <li id="ref-duedu">
-          Duedu, K.O. &amp; French, C.E. (2016). Characterization of a bifunctional cellulase
-          CxnA from <em>Cellulomonas fimi</em>. <em>Enzyme and Microbial Technology</em>.
-          University of Edinburgh.
-        </li>
-        <li id="ref-liu">
-          Liu, G. et al. (2018). Functional and structural characterization of a GH1 family
-          beta-glucosidase. <em>Biotechnology for Biofuels</em>.
+          Duedu, K.O. &amp; French, C.E. (2016). Characterization of a <em>Cellulomonas fimi</em>
+          exoglucanase/xylanase–endoglucanase gene fusion which improves microbial degradation of
+          cellulosic biomass. <em>Enzyme and Microbial Technology</em>, 93–94, 113–121.
         </li>
       </ol>
       <p class="mt-4" style="font-size:0.85rem;color:var(--c-text-muted)">
@@ -318,6 +429,27 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
 </BaseLayout>
 
 <style>
+  /* ─── Machine comparison diagram ───────────────────────────────── */
+  .machine-figure {
+    margin: 0 0 var(--sp-6);
+  }
+  .machine-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: var(--c-surface);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-lg);
+    padding: var(--sp-4);
+    box-sizing: border-box;
+  }
+  .machine-figure figcaption {
+    font-size: 0.85rem;
+    color: var(--c-text-muted);
+    margin-top: var(--sp-3);
+    max-width: var(--max-w-prose);
+  }
+
   /* ─── Summary grid ───────────────────────────────────────────── */
   .summary-grid {
     display: grid;
@@ -337,33 +469,24 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
     letter-spacing: 0.05em;
     margin-bottom: var(--sp-4);
   }
-  .activity-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-5);
+
+  /* Real-photo teaser card */
+  .photo-teaser { display: block; }
+  .photo-teaser img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--c-border);
+    display: block;
   }
-  .activity-list li {
-    display: flex;
-    gap: var(--sp-3);
-    align-items: flex-start;
-  }
-  .activity-num {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: var(--c-primary);
-    color: #fff;
-    font-weight: 700;
+  .photo-teaser-caption {
+    display: block;
     font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 2px;
+    color: var(--c-primary);
+    font-weight: 600;
+    margin-top: var(--sp-3);
+    line-height: 1.5;
   }
-  .activity-list p { font-size: 0.88rem; color: var(--c-text-muted); margin-top: var(--sp-1); max-width: none; }
-  .activity-list .badge { margin-top: var(--sp-2); }
 
   /* ─── Tracks ─────────────────────────────────────────────────── */
   .tracks-grid {
@@ -446,7 +569,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
     display: grid;
     grid-template-columns: 1fr auto;
     gap: var(--sp-10);
-    align-items: start;
+    align-items: center;
   }
   @media (max-width: 640px) { .idec-section { grid-template-columns: 1fr; } }
   .btn-idec {
@@ -466,21 +589,10 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
     text-align: center;
     min-width: 140px;
   }
-  .idec-placeholder-logo {
-    width: 120px;
-    height: 120px;
-    border-radius: var(--radius-xl);
-    background: var(--c-surface-2);
-    border: 2px dashed var(--c-border);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 1.4rem;
-    color: var(--c-text-faint);
+  .idec-logo-img {
+    width: 150px;
+    height: auto;
     margin: 0 auto;
+    display: block;
   }
-  .idec-placeholder-sub { font-size: 0.8rem; font-weight: 600; opacity: 0.6; }
-  .idec-logo-caption { font-size: 0.72rem; color: var(--c-text-faint); margin-top: var(--sp-2); }
 </style>

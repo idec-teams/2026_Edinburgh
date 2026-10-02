@@ -651,6 +651,23 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
               <p class="table-note">WT-CO vs WT-T themselves agreed to within 1.1% of each other, confirming codon optimisation alone doesn't change activity — differences above are attributable to the epPCR mutations (or to prep noise, for anything inside the shaded band).</p>
             </div>
           </details>
+
+          <div class="callout callout--warn">
+            <p class="callout-title">We also tried to run this as a MUG assay</p>
+            <p>
+              The same lysates, prepared and assayed exactly the same way, were also tested with
+              MUG — the equivalent substrate for β-glucosidase activity, which is what Project A
+              is actually trying to evolve. Every sample lit up immediately, including the
+              dead-enzyme frameshift control. The reason turned out to be simple: the bottle on
+              the shelf was the wrong substrate — a β-galactosidase substrate (MUGal), not the
+              β-glucosidase one (MUG) — and <em>E. coli</em> TOP10 carries enough background
+              β-galactosidase machinery to hydrolyse it regardless of what CxnA was doing. The
+              MUG assay was dropped once this was confirmed. It doesn't affect the MUC results
+              above — the dead frameshift control sits at under 1% signal there, so this
+              background enzyme clearly doesn't touch the cellobioside substrate. Full
+              troubleshooting: <a href={`${b}/notebook/2026-09-15-wet`}>15 September notebook entry</a>.
+            </p>
+          </div>
         </div>
       </div>
 

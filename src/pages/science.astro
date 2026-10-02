@@ -73,60 +73,89 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
         <!-- Cellulose structure diagram -->
         <div>
           <figure class="diagram-figure">
-            <svg viewBox="0 0 380 260" xmlns="http://www.w3.org/2000/svg" class="sci-svg" aria-labelledby="cellulose-svg-title">
-              <title id="cellulose-svg-title">Cellulose polymer structure: glucose units linked by β-1,4 glycosidic bonds packing into crystalline microfibrils</title>
-              <!-- Chain 1 -->
-              <g transform="translate(0,20)">
-                <rect x="20" y="60" width="52" height="36" rx="8" fill="#1a6648" opacity="0.9"/>
-                <text x="46" y="82" text-anchor="middle" font-size="10" fill="white" font-family="system-ui,sans-serif" font-weight="600">Glc</text>
-                <!-- bond -->
-                <line x1="72" y1="78" x2="95" y2="78" stroke="#7ec9a6" stroke-width="2"/>
-                <text x="83" y="72" text-anchor="middle" font-size="8" fill="#7ec9a6" font-family="system-ui,sans-serif">β-1,4</text>
-                <rect x="95" y="60" width="52" height="36" rx="8" fill="#1a6648" opacity="0.9"/>
-                <text x="121" y="82" text-anchor="middle" font-size="10" fill="white" font-family="system-ui,sans-serif" font-weight="600">Glc</text>
-                <line x1="147" y1="78" x2="170" y2="78" stroke="#7ec9a6" stroke-width="2"/>
-                <text x="158" y="72" text-anchor="middle" font-size="8" fill="#7ec9a6" font-family="system-ui,sans-serif">β-1,4</text>
-                <rect x="170" y="60" width="52" height="36" rx="8" fill="#1a6648" opacity="0.9"/>
-                <text x="196" y="82" text-anchor="middle" font-size="10" fill="white" font-family="system-ui,sans-serif" font-weight="600">Glc</text>
-                <line x1="222" y1="78" x2="245" y2="78" stroke="#7ec9a6" stroke-width="2"/>
-                <rect x="245" y="60" width="52" height="36" rx="8" fill="#1a6648" opacity="0.7"/>
-                <text x="271" y="82" text-anchor="middle" font-size="10" fill="white" font-family="system-ui,sans-serif" font-weight="600">Glc</text>
-                <text x="308" y="82" text-anchor="start" font-size="14" fill="#4aa87a" font-family="system-ui,sans-serif">···</text>
-                <!-- Chain label -->
-                <text x="10" y="52" font-size="9.5" fill="#5aaa85" font-family="system-ui,sans-serif" font-weight="600">Chain 1</text>
+            <svg viewBox="0 0 440 300" xmlns="http://www.w3.org/2000/svg" class="sci-svg lattice-svg" aria-labelledby="cellulose-svg-title">
+              <title id="cellulose-svg-title">Cellulose lattice: hexagons represent glucose units, linked in-chain by β-1,4 bonds and between chains by hydrogen bonds; one hydrogen bond is highlighted as the reason the lattice resists breaking down</title>
+              <defs>
+                <filter id="latticeGlow" x="-60%" y="-60%" width="220%" height="220%">
+                  <feGaussianBlur stdDeviation="2.4" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+
+              <g transform="translate(14,12)">
+                <!-- in-chain covalent bonds, row A -->
+                <g class="lattice-bond">
+                  <line x1="70.2" y1="78" x2="73.6" y2="78"/>
+                  <line x1="104.0" y1="78" x2="107.4" y2="78"/>
+                  <line x1="137.8" y1="78" x2="141.3" y2="78"/>
+                  <line x1="171.7" y1="78" x2="175.1" y2="78"/>
+                </g>
+                <!-- in-chain covalent bonds, row B -->
+                <g class="lattice-bond">
+                  <line x1="87.1" y1="131" x2="90.5" y2="131"/>
+                  <line x1="120.9" y1="131" x2="124.4" y2="131"/>
+                  <line x1="154.8" y1="131" x2="158.2" y2="131"/>
+                </g>
+
+                <!-- hydrogen bonds between rows: muted (the repeating lattice) -->
+                <g class="lattice-hbond">
+                  <line x1="71.9" y1="112" x2="55.0" y2="97"/>
+                  <line x1="71.9" y1="112" x2="88.8" y2="97"/>
+                  <line x1="139.6" y1="112" x2="122.6" y2="97"/>
+                  <line x1="139.6" y1="112" x2="156.5" y2="97"/>
+                  <line x1="173.4" y1="112" x2="156.5" y2="97"/>
+                  <line x1="173.4" y1="112" x2="190.3" y2="97"/>
+                </g>
+                <!-- hydrogen bonds between rows: ONE highlighted as the focal point -->
+                <g class="lattice-hbond lattice-hbond--focus" filter="url(#latticeGlow)">
+                  <line x1="105.7" y1="112" x2="88.8" y2="97"/>
+                  <line x1="105.7" y1="112" x2="122.6" y2="97"/>
+                </g>
+                <circle class="lattice-focus-dot" cx="105.7" cy="112" r="3.2" filter="url(#latticeGlow)"/>
+
+                <!-- row A hexagons (glucose units) -->
+                <g class="lattice-hex lattice-hex--a">
+                  <polygon points="71.5,68.5 71.5,87.5 55.0,97.0 38.5,87.5 38.5,68.5 55.0,59.0"/>
+                  <polygon points="105.3,68.5 105.3,87.5 88.8,97.0 72.4,87.5 72.4,68.5 88.8,59.0"/>
+                  <polygon points="139.1,68.5 139.1,87.5 122.6,97.0 106.2,87.5 106.2,68.5 122.6,59.0"/>
+                  <polygon points="172.9,68.5 172.9,87.5 156.5,97.0 140.0,87.5 140.0,68.5 156.5,59.0"/>
+                  <polygon points="206.7,68.5 206.7,87.5 190.3,97.0 173.8,87.5 173.8,68.5 190.3,59.0"/>
+                </g>
+                <!-- row B hexagons, offset (brick packing) -->
+                <g class="lattice-hex lattice-hex--b">
+                  <polygon points="88.4,121.5 88.4,140.5 71.9,150.0 55.5,140.5 55.5,121.5 71.9,112.0"/>
+                  <polygon points="122.2,121.5 122.2,140.5 105.7,150.0 89.3,140.5 89.3,121.5 105.7,112.0"/>
+                  <polygon points="156.0,121.5 156.0,140.5 139.6,150.0 123.1,140.5 123.1,121.5 139.6,112.0"/>
+                  <polygon points="189.8,121.5 189.8,140.5 173.4,150.0 156.9,140.5 156.9,121.5 173.4,112.0"/>
+                </g>
+
+                <text x="215" y="82" class="lattice-ellipsis">⋯</text>
+                <text x="198" y="135" class="lattice-ellipsis">⋯</text>
+
+                <!-- leader line from the focal hydrogen bond to its callout -->
+                <path d="M108,106 C150,85 195,90 232,98" class="lattice-leader"/>
               </g>
 
-              <!-- Chain 2 (offset) -->
-              <g transform="translate(18,80)">
-                <rect x="20" y="60" width="52" height="36" rx="8" fill="#2b5a40" opacity="0.75"/>
-                <text x="46" y="82" text-anchor="middle" font-size="10" fill="white" font-family="system-ui,sans-serif" font-weight="600">Glc</text>
-                <line x1="72" y1="78" x2="95" y2="78" stroke="#7ec9a6" stroke-width="2" opacity="0.6"/>
-                <rect x="95" y="60" width="52" height="36" rx="8" fill="#2b5a40" opacity="0.75"/>
-                <text x="121" y="82" text-anchor="middle" font-size="10" fill="white" font-family="system-ui,sans-serif" font-weight="600">Glc</text>
-                <line x1="147" y1="78" x2="170" y2="78" stroke="#7ec9a6" stroke-width="2" opacity="0.6"/>
-                <rect x="170" y="60" width="52" height="36" rx="8" fill="#2b5a40" opacity="0.75"/>
-                <text x="196" y="82" text-anchor="middle" font-size="10" fill="white" font-family="system-ui,sans-serif" font-weight="600">Glc</text>
-                <line x1="222" y1="78" x2="245" y2="78" stroke="#7ec9a6" stroke-width="2" opacity="0.6"/>
-                <rect x="245" y="60" width="52" height="36" rx="8" fill="#2b5a40" opacity="0.6"/>
-                <text x="271" y="82" text-anchor="middle" font-size="10" fill="white" font-family="system-ui,sans-serif" font-weight="600">Glc</text>
-                <text x="10" y="52" font-size="9.5" fill="#5aaa85" font-family="system-ui,sans-serif" font-weight="600">Chain 2</text>
+              <!-- Focal callout -->
+              <text x="252" y="104" class="lattice-callout-label">The one bond that matters</text>
+              <text x="252" y="124" class="lattice-callout-body">
+                <tspan x="252" dy="0">One of thousands — each one</tspan>
+                <tspan x="252" dy="13">weak alone, but together they</tspan>
+                <tspan x="252" dy="13">lock the chains into a crystal</tspan>
+                <tspan x="252" dy="13">that resists breaking down.</tspan>
+              </text>
+
+              <!-- Legend -->
+              <g transform="translate(14,242)" class="lattice-legend">
+                <polygon points="8.7,-5.0 8.7,5.0 0.0,10.0 -8.7,5.0 -8.7,-5.0 -0.0,-10.0" class="lattice-hex lattice-hex--a" transform="translate(10,10)"/>
+                <text x="32" y="14">= one glucose unit</text>
+                <line x1="0" y1="32" x2="20" y2="32" class="lattice-bond"/>
+                <text x="32" y="36">β-1,4 bond (within a chain)</text>
+                <line x1="0" y1="50" x2="20" y2="50" class="lattice-hbond"/>
+                <text x="32" y="54">hydrogen bond (between chains)</text>
               </g>
-
-              <!-- H-bond indicators between chains -->
-              <line x1="64" y1="115" x2="56" y2="140" stroke="#a8d5bc" stroke-width="1" stroke-dasharray="3,2"/>
-              <line x1="139" y1="115" x2="131" y2="140" stroke="#a8d5bc" stroke-width="1" stroke-dasharray="3,2"/>
-              <line x1="214" y1="115" x2="206" y2="140" stroke="#a8d5bc" stroke-width="1" stroke-dasharray="3,2"/>
-              <text x="25" y="132" font-size="8" fill="#a8d5bc" font-family="system-ui,sans-serif" font-style="italic">H-bonds</text>
-
-              <!-- Labels -->
-              <text x="20" y="235" font-size="9.5" fill="#7ec9a6" font-family="system-ui,sans-serif">
-                ↕ Hydrogen bonds between chains → crystalline packing
-              </text>
-              <text x="20" y="252" font-size="9.5" fill="#5aaa85" font-family="system-ui,sans-serif">
-                Each unit = glucose (C₆H₁₂O₆); β-1,4 linkage flips alternate units 180°
-              </text>
             </svg>
-            <figcaption>Cellulose polymer: alternating glucose units linked by β-1,4 glycosidic bonds. Hydrogen bonds between parallel chains create the crystalline structure that resists degradation.</figcaption>
+            <figcaption>Hexagons represent glucose units. Solid lines are the covalent β-1,4 bonds within each chain; dashed lines are the hydrogen bonds between chains — individually weak, collectively what makes the lattice resist breaking down.</figcaption>
           </figure>
         </div>
       </div>
@@ -148,7 +177,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
 
       <!-- Pathway diagram: confirmed relay (CenA -> Cex) flowing into the attempted step -->
       <figure class="pathway-figure" aria-labelledby="pathway-svg-title">
-        <svg viewBox="0 0 860 220" xmlns="http://www.w3.org/2000/svg" class="pathway-svg" aria-labelledby="pathway-svg-title">
+        <svg viewBox="0 0 860 230" xmlns="http://www.w3.org/2000/svg" class="pathway-svg" aria-labelledby="pathway-svg-title">
           <title id="pathway-svg-title">Cellulose degradation relay: CenA cleaves internal bonds, Cex releases cellobiose from chain ends, and an attempted third step would split cellobiose into glucose</title>
           <defs>
             <marker id="arrC" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
@@ -157,13 +186,28 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <marker id="arrT" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
               <path d="M0,0 L0,7 L9,3.5 z" class="flow-arrowhead flow-arrowhead--target"/>
             </marker>
+            <filter id="glucoseGlow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <radialGradient id="glucoseHalo" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="var(--c-accent)" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="var(--c-accent)" stop-opacity="0"/>
+            </radialGradient>
           </defs>
 
           <!-- Stage 1: Crystalline cellulose -->
-          <rect x="10" y="60" width="150" height="90" rx="14" class="stage-box stage-box--substrate"/>
-          <text x="85" y="98" text-anchor="middle" class="stage-title">Crystalline</text>
-          <text x="85" y="114" text-anchor="middle" class="stage-title">cellulose</text>
-          <text x="85" y="134" text-anchor="middle" class="stage-sub">tightly packed, resistant</text>
+          <rect x="10" y="55" width="150" height="100" rx="14" class="stage-box stage-box--substrate"/>
+          <g class="path-icon path-icon--muted">
+            <polygon points="78.6,67.5 78.6,74.5 72.5,78.0 66.5,74.5 66.5,67.5 72.5,64.0"/>
+            <polygon points="91.1,67.5 91.1,74.5 85.0,78.0 78.9,74.5 78.9,67.5 85.0,64.0"/>
+            <polygon points="103.5,67.5 103.5,74.5 97.5,78.0 91.4,74.5 91.4,67.5 97.5,64.0"/>
+            <polygon points="84.8,86.5 84.8,93.5 78.8,97.0 72.7,93.5 72.7,86.5 78.8,83.0"/>
+            <polygon points="97.3,86.5 97.3,93.5 91.2,97.0 85.2,93.5 85.2,86.5 91.2,83.0"/>
+          </g>
+          <text x="85" y="118" text-anchor="middle" class="stage-title">Crystalline</text>
+          <text x="85" y="134" text-anchor="middle" class="stage-title">cellulose</text>
+          <text x="85" y="148" text-anchor="middle" class="stage-sub">tightly packed, resistant</text>
 
           <!-- Arrow 1: CenA -->
           <path d="M160,105 L212,105" class="flow-arrow flow-arrow--confirmed" marker-end="url(#arrC)"/>
@@ -171,10 +215,16 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <text x="188" y="91" text-anchor="middle" class="enzyme-pill-label">CenA</text>
 
           <!-- Stage 2: fragments -->
-          <rect x="218" y="60" width="160" height="90" rx="14" class="stage-box"/>
-          <text x="298" y="98" text-anchor="middle" class="stage-title">Shorter</text>
-          <text x="298" y="114" text-anchor="middle" class="stage-title">fragments</text>
-          <text x="298" y="134" text-anchor="middle" class="stage-sub">new chain ends exposed</text>
+          <rect x="218" y="55" width="160" height="100" rx="14" class="stage-box"/>
+          <g class="path-icon path-icon--muted">
+            <line x1="285.6" y1="77" x2="292.0" y2="77" class="path-icon-bond"/>
+            <polygon points="286.5,73.0 286.5,81.0 279.6,85.0 272.7,81.0 272.7,73.0 279.6,69.0"/>
+            <polygon points="304.9,73.0 304.9,81.0 298.0,85.0 291.1,81.0 291.1,73.0 298.0,69.0"/>
+            <polygon points="334.4,73.0 334.4,81.0 327.4,85.0 320.5,81.0 320.5,73.0 327.4,69.0" class="path-icon--cut"/>
+          </g>
+          <text x="298" y="118" text-anchor="middle" class="stage-title">Shorter</text>
+          <text x="298" y="134" text-anchor="middle" class="stage-title">fragments</text>
+          <text x="298" y="148" text-anchor="middle" class="stage-sub">new chain ends exposed</text>
 
           <!-- Arrow 2: Cex -->
           <path d="M380,105 L432,105" class="flow-arrow flow-arrow--confirmed" marker-end="url(#arrC)"/>
@@ -182,24 +232,31 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <text x="408" y="91" text-anchor="middle" class="enzyme-pill-label">Cex</text>
 
           <!-- Stage 3: cellobiose -->
-          <rect x="438" y="60" width="150" height="90" rx="14" class="stage-box"/>
-          <text x="513" y="98" text-anchor="middle" class="stage-title">Cellobiose</text>
-          <text x="513" y="116" text-anchor="middle" class="stage-sub">(two linked glucose)</text>
-          <text x="513" y="132" text-anchor="middle" class="stage-sub">one step from glucose</text>
+          <rect x="438" y="55" width="150" height="100" rx="14" class="stage-box"/>
+          <g class="path-icon path-icon--primary">
+            <line x1="511.7" y1="78" x2="514.3" y2="78" class="path-icon-bond"/>
+            <polygon points="512.6,72.5 512.6,83.5 503.1,89.0 493.6,83.5 493.6,72.5 503.1,67.0"/>
+            <polygon points="532.4,72.5 532.4,83.5 522.9,89.0 513.4,83.5 513.4,72.5 522.9,67.0"/>
+          </g>
+          <text x="513" y="118" text-anchor="middle" class="stage-title">Cellobiose</text>
+          <text x="513" y="134" text-anchor="middle" class="stage-sub">(two linked glucose)</text>
+          <text x="513" y="148" text-anchor="middle" class="stage-sub">one step from glucose</text>
 
           <!-- Arrow 3: attempted step -->
           <path d="M588,105 L640,105" class="flow-arrow flow-arrow--target" marker-end="url(#arrT)"/>
           <rect x="590" y="70" width="60" height="32" rx="7" class="enzyme-pill enzyme-pill--target"/>
           <text x="620" y="90" text-anchor="middle" class="enzyme-pill-label enzyme-pill-label--target">?</text>
 
-          <!-- Stage 4: glucose (target) -->
-          <rect x="656" y="60" width="150" height="90" rx="14" class="stage-box stage-box--target"/>
-          <text x="731" y="98" text-anchor="middle" class="stage-title stage-title--target">Glucose</text>
-          <text x="731" y="116" text-anchor="middle" class="stage-sub">fermentable sugar</text>
-          <text x="731" y="132" text-anchor="middle" class="stage-sub">what we're testing for</text>
+          <!-- Stage 4: glucose (target) — the visual destination -->
+          <rect x="656" y="55" width="150" height="100" rx="14" class="stage-box stage-box--target"/>
+          <circle cx="731" cy="80" r="30" fill="url(#glucoseHalo)" class="path-icon-halo"/>
+          <polygon points="746.6,71.0 746.6,89.0 731.0,98.0 715.4,89.0 715.4,71.0 731.0,62.0"
+            class="path-icon--glow" filter="url(#glucoseGlow)"/>
+          <text x="731" y="122" text-anchor="middle" class="stage-title stage-title--target">Glucose</text>
+          <text x="731" y="138" text-anchor="middle" class="stage-sub">fermentable sugar</text>
 
           <!-- Legend -->
-          <g transform="translate(10,182)">
+          <g transform="translate(10,192)">
             <rect x="0" y="0" width="12" height="12" rx="3" class="legend-swatch legend-swatch--confirmed"/>
             <text x="18" y="10" class="stage-sub">Confirmed — CxnA already does this</text>
             <rect x="300" y="0" width="12" height="12" rx="3" class="legend-swatch legend-swatch--target"/>
@@ -538,6 +595,33 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
     padding: var(--sp-6);
   }
   .pathway-svg { max-width: 860px; margin-inline: auto; }
+
+  /* Cellulose lattice: hexagon glucose units + one highlighted hydrogen bond */
+  .lattice-hex polygon, polygon.lattice-hex { stroke-linejoin: round; }
+  .lattice-hex--a polygon { fill: var(--c-primary); fill-opacity: 0.22; stroke: var(--c-primary); stroke-width: 2; }
+  .lattice-hex--b polygon { fill: var(--c-secondary); fill-opacity: 0.22; stroke: var(--c-secondary); stroke-width: 2; }
+  polygon.lattice-hex--a { fill: var(--c-primary); fill-opacity: 0.22; stroke: var(--c-primary); stroke-width: 1.5; }
+  .lattice-bond line, line.lattice-bond { stroke: var(--c-text-muted); stroke-width: 2.5; stroke-linecap: round; }
+  .lattice-hbond line, line.lattice-hbond { stroke: var(--c-border); stroke-width: 1.3; stroke-dasharray: 3,2; }
+  .lattice-hbond--focus line { stroke: var(--c-accent); stroke-width: 2.5; stroke-dasharray: 4,2; }
+  .lattice-focus-dot { fill: var(--c-accent); }
+  .lattice-ellipsis { font-size: 16px; fill: var(--c-text-faint); font-family: var(--font-sans); }
+  .lattice-leader { fill: none; stroke: var(--c-accent); stroke-width: 1; stroke-dasharray: 2,2; opacity: 0.6; }
+  .lattice-callout-label {
+    font-size: 11.5px; font-weight: 700; fill: var(--c-accent); font-family: var(--font-sans);
+  }
+  .lattice-callout-body {
+    font-size: 10.5px; fill: var(--c-text-muted); font-family: var(--font-sans);
+  }
+  .lattice-legend text { font-size: 10px; fill: var(--c-text-muted); font-family: var(--font-sans); }
+  @media (prefers-reduced-motion: no-preference) {
+    .lattice-hbond--focus line { animation: lattice-pulse 2.4s ease-in-out infinite; }
+  }
+  @keyframes lattice-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+  }
+
   figcaption {
     font-size: 0.82rem;
     color: var(--c-text-muted);
@@ -566,6 +650,22 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
   .enzyme-pill-label--target { fill: var(--c-accent); font-size: 15px; }
   .legend-swatch--confirmed { fill: var(--c-primary); }
   .legend-swatch--target { fill: none; stroke: var(--c-accent); stroke-width: 1.5; stroke-dasharray: 3,2; }
+
+  /* Pathway stage icons: muted -> primary -> glowing gold, a visible escalation toward the goal */
+  .path-icon--muted polygon { fill: var(--c-text-faint); fill-opacity: 0.25; stroke: var(--c-text-faint); stroke-width: 1.3; stroke-linejoin: round; }
+  .path-icon--muted .path-icon--cut { opacity: 0.4; stroke-dasharray: 2,1.5; }
+  .path-icon--primary polygon { fill: var(--c-primary); fill-opacity: 0.3; stroke: var(--c-primary); stroke-width: 1.5; stroke-linejoin: round; }
+  .path-icon-bond { stroke: var(--c-text-faint); stroke-width: 1.8; stroke-linecap: round; }
+  .path-icon--primary .path-icon-bond { stroke: var(--c-primary); }
+  .path-icon--glow { fill: var(--c-accent); fill-opacity: 0.85; stroke: var(--c-accent); stroke-width: 2; stroke-linejoin: round; }
+  .path-icon-halo { animation: glucose-pulse 2.6s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .path-icon-halo { animation: none; }
+  }
+  @keyframes glucose-pulse {
+    0%, 100% { opacity: 0.7; r: 28; }
+    50% { opacity: 1; r: 34; }
+  }
 
   .flow-arrow {
     fill: none;

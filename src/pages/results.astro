@@ -1,21 +1,25 @@
-﻿---
+---
 import BaseLayout from '../layouts/BaseLayout.astro';
 const b = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <BaseLayout
   title="Results — TriCel CxnA | iDEC 2026"
-  description="Dry-lab results: AlphaFold3 validation, cellobiose docking, PLIP interaction analysis, and pose convergence. Wet-lab results pending."
+  description="What we actually found: structural predictions for both CxnA domains, three rounds of mutant screening, a validated fluorescence assay, and an honest verdict — no confirmed improvement, but a working directed-evolution pipeline."
 >
 
   <!-- ═══ PAGE HERO ═══ -->
   <section class="page-hero">
     <div class="container">
       <p class="eyebrow">Results</p>
-      <h1>Dry-lab results &amp; wet-lab placeholders</h1>
+      <h1>What we found — and what we didn't</h1>
       <p>
-        Computational structural analysis is complete. Wet-lab experimental results will
-        fill the structured placeholders below as data becomes available.
+        CxnA is a two-domain enzyme: Cex (an exoglucanase) and CenA (an endoglucanase), fused
+        together. We used error-prone PCR to scramble its DNA at random, then screened the
+        resulting mutants to see whether any of them had picked up a useful new or improved
+        activity. Computational predictions guided where we looked; the mutagenesis itself was
+        random. No mutant clearly beat the unmodified enzyme — but the screening pipeline we
+        built to find out is itself the result, and it's reusable for the next round.
       </p>
     </div>
   </section>
@@ -26,18 +30,19 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
       <div class="toc-pill-bar-inner">
         <span class="toc-section-label">Dry lab</span>
         <a href="#drylab-structure">DL-R1</a>
-        <a href="#drylab-gh10">DL-R2</a>
-        <a href="#drylab-gh1">DL-R3</a>
-        <a href="#drylab-docking">DL-R4</a>
-        <a href="#drylab-convergence">DL-R5</a>
-        <a href="#drylab-plip">DL-R6</a>
+        <a href="#drylab-cex">DL-R2</a>
+        <a href="#drylab-cex-targets">DL-R3</a>
+        <a href="#drylab-cena">DL-R4</a>
+        <a href="#drylab-bridge">DL-R5</a>
         <div class="toc-divider"></div>
         <span class="toc-section-label">Wet lab</span>
-        <a href="#wetlab-cloning">WL-R1</a>
-        <a href="#wetlab-eppcr">WL-R2</a>
-        <a href="#wetlab-selection">WL-R3</a>
-        <a href="#wetlab-assays">WL-R4</a>
-        <a href="#wetlab-hits">WL-R5</a>
+        <a href="#wetlab-plasmid">WL-R1</a>
+        <a href="#wetlab-library">WL-R2</a>
+        <a href="#wetlab-congored">WL-R3</a>
+        <a href="#wetlab-xgluc">WL-R4</a>
+        <a href="#wetlab-muc">WL-R5</a>
+        <a href="#wetlab-sequencing">WL-R6</a>
+        <a href="#wetlab-verdict">WL-R7</a>
       </div>
     </nav>
   </div>
@@ -47,18 +52,19 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
     <p class="toc-fixed-title">Results</p>
     <nav>
       <p class="toc-group-head">Dry lab</p>
-      <a href="#drylab-structure"><span class="toc-id">DL-R1</span><span class="toc-label">Structure quality</span></a>
-      <a href="#drylab-gh10"><span class="toc-id">DL-R2</span><span class="toc-label">GH10 docking</span></a>
-      <a href="#drylab-gh1"><span class="toc-id">DL-R3</span><span class="toc-label">GH1 docking</span></a>
-      <a href="#drylab-docking"><span class="toc-id">DL-R4</span><span class="toc-label">Score caveat</span></a>
-      <a href="#drylab-convergence"><span class="toc-id">DL-R5</span><span class="toc-label">Convergence</span></a>
-      <a href="#drylab-plip"><span class="toc-id">DL-R6</span><span class="toc-label">PLIP tables</span></a>
+      <a href="#drylab-structure"><span class="toc-id">DL-R1</span><span class="toc-label">Structure prediction</span></a>
+      <a href="#drylab-cex"><span class="toc-id">DL-R2</span><span class="toc-label">Cex validation</span></a>
+      <a href="#drylab-cex-targets"><span class="toc-id">DL-R3</span><span class="toc-label">Cex mutation targets</span></a>
+      <a href="#drylab-cena"><span class="toc-id">DL-R4</span><span class="toc-label">CenA / Project B</span></a>
+      <a href="#drylab-bridge"><span class="toc-id">DL-R5</span><span class="toc-label">Prediction vs reality</span></a>
       <p class="toc-group-head">Wet lab</p>
-      <a href="#wetlab-cloning"><span class="toc-id">WL-R1</span><span class="toc-label">Cloning</span></a>
-      <a href="#wetlab-eppcr"><span class="toc-id">WL-R2</span><span class="toc-label">epPCR library</span></a>
-      <a href="#wetlab-selection"><span class="toc-id">WL-R3</span><span class="toc-label">Selection</span></a>
-      <a href="#wetlab-assays"><span class="toc-id">WL-R4</span><span class="toc-label">Assays</span></a>
-      <a href="#wetlab-hits"><span class="toc-id">WL-R5</span><span class="toc-label">Hit validation</span></a>
+      <a href="#wetlab-plasmid"><span class="toc-id">WL-R1</span><span class="toc-label">Plasmid &amp; a surprise</span></a>
+      <a href="#wetlab-library"><span class="toc-id">WL-R2</span><span class="toc-label">Mutant library</span></a>
+      <a href="#wetlab-congored"><span class="toc-id">WL-R3</span><span class="toc-label">Congo red screen</span></a>
+      <a href="#wetlab-xgluc"><span class="toc-id">WL-R4</span><span class="toc-label">X-gluc screen</span></a>
+      <a href="#wetlab-muc"><span class="toc-id">WL-R5</span><span class="toc-label">MUC quantification</span></a>
+      <a href="#wetlab-sequencing"><span class="toc-id">WL-R6</span><span class="toc-label">Sequencing</span></a>
+      <a href="#wetlab-verdict"><span class="toc-id">WL-R7</span><span class="toc-label">The verdict</span></a>
     </nav>
   </aside>
 
@@ -70,23 +76,18 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
         <div class="status-card">
           <h3>Dry Lab</h3>
           <div class="status-items">
-            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Structure prediction (AlphaFold3)</div>
-            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> RMSD validation vs 1FHD (0.293 Å)</div>
-            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Cellobiose docking — GH10</div>
-            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Cellobiose docking — GH1</div>
-            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> PLIP interaction analysis</div>
-            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Pose convergence analysis</div>
+            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Structure prediction &amp; validation (both domains)</div>
+            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Cex cellobiose-docking study</div>
+            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Mutation-candidate screening, Cex &amp; CenA</div>
           </div>
         </div>
         <div class="status-card">
           <h3>Wet Lab</h3>
           <div class="status-items">
-            <div class="status-item"><span class="badge badge--progress">In Progress</span> CxnA cloning &amp; expression</div>
-            <div class="status-item"><span class="badge badge--progress">In Progress</span> epPCR library generation</div>
-            <div class="status-item"><span class="badge badge--progress">In Progress</span> Cellobiose selection (Project A)</div>
-            <div class="status-item"><span class="badge badge--progress">In Progress</span> CMC clearing assay (Project B)</div>
-            <div class="status-item"><span class="badge badge--pending">Pending</span> MUG/MUC/CMC screening</div>
-            <div class="status-item"><span class="badge badge--pending">Pending</span> Hit sequencing &amp; validation</div>
+            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Cloning, library generation, sequencing</div>
+            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Congo red + X-gluc screens (30 mutants)</div>
+            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Quantitative MUC assay, validated &amp; applied</div>
+            <div class="status-item"><span class="badge badge--neutral">No improvement confirmed</span> No mutant beat wild type past the noise floor</div>
           </div>
         </div>
       </div>
@@ -101,179 +102,131 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
     <div class="container">
       <div class="section-header">
         <p class="eyebrow">Computational results</p>
-        <h2 id="drylab-heading">Dry Lab — Structural analysis and docking</h2>
+        <h2 id="drylab-heading">Dry Lab — where should directed evolution even look?</h2>
+        <p>
+          Before touching a single bacterium, we used structure prediction and docking software
+          to make an educated guess at which parts of CxnA were worth targeting — and, just as
+          importantly, which predictions we should and shouldn't trust.
+        </p>
       </div>
 
-      <!-- ─── DL-R1: Structure Validation ─── -->
+      <!-- ─── DL-R1: Structure Prediction ─── -->
       <div class="result-block" id="drylab-structure">
         <div class="result-header">
           <div class="result-id">DL-R1</div>
           <div>
-            <h3>AlphaFold3 structure quality &amp; RMSD validation</h3>
+            <h3>What does CxnA actually look like?</h3>
             <div class="result-meta">
               <span class="badge badge--confirmed">Confirmed</span>
-              <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-1, DL-2</a></span>
+              <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-1</a></span>
             </div>
           </div>
         </div>
         <div class="result-body">
           <p>
-            AlphaFold3 models were generated for the GH10/Cex domain and the GH1-fold domain
-            of CxnA. The GH10/Cex model was validated against the published crystal structure
-            1FHD (Notenboom et al., 1998
-            <a class="cite" href="#ref-notenboom">[3]</a>) by Cα RMSD alignment in PyMOL.
+            CxnA has no solved crystal structure of its own, so we predicted one with
+            ColabFold/AlphaFold2 — colouring the result by domain: Cex (exoglucanase, green),
+            the carbohydrate-binding module that holds the two halves together (blue), and CenA
+            (endoglucanase, pink), joined by flexible proline/threonine-rich linkers.
+          </p>
+
+          <div class="key-finding">
+            <div class="key-finding-label">High confidence, within limits</div>
+            <div class="key-finding-value">pLDDT 89.3 (Cex) · 93.5 (CenA)</div>
+            <div class="key-finding-context">
+              Both domains individually fold with high confidence. The catch: the inter-domain
+              confidence is low (pTM 0.5; mean predicted alignment error 26.6 Å) — the linkers are
+              floppy enough in real life that AlphaFold can't pin down how the two domains sit
+              relative to each other. We trust the shape of each domain on its own, not the overall
+              "pose" of the whole fusion protein.
+            </div>
+          </div>
+
+          <details class="expand">
+            <summary>Why does a flexible linker make the overall shape unreliable?</summary>
+            <div class="expand-body">
+              <p>
+                AlphaFold predicts confidence per residue (pLDDT) and per residue-pair (predicted
+                alignment error, PAE). A folded domain's internal geometry is usually well
+                constrained — there's only one way the chain can pack into a stable fold — so
+                pLDDT is high throughout it. A flexible linker has no single correct conformation;
+                it can be in many different positions at different moments, so the model can't
+                confidently place the two domains it connects relative to each other, even if it's
+                very confident about each domain individually. This is expected biology, not a
+                modelling failure — treat the two domains as independently reliable, and the
+                relative orientation between them as unknown.
+              </p>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- ─── DL-R2: Cex validation ─── -->
+      <div class="result-block" id="drylab-cex">
+        <div class="result-header">
+          <div class="result-id">DL-R2</div>
+          <div>
+            <h3>Checking Cex's active site against a real crystal structure</h3>
+            <div class="result-meta">
+              <span class="badge badge--confirmed">Confirmed</span>
+              <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-2</a></span>
+            </div>
+          </div>
+        </div>
+        <div class="result-body">
+          <p>
+            Unlike the fusion as a whole, Cex alone has a published crystal structure to check
+            against: 1FHD, a Cex-family enzyme solved with a bound inhibitor
+            <a class="cite" href="#ref-notenboom98">[1]</a>. We superimposed our predicted Cex
+            structure onto it to see how well the model's active site matches reality.
           </p>
 
           <div class="key-finding">
             <div class="key-finding-label">Key Result</div>
             <div class="key-finding-value">RMSD = <strong>0.293 Å</strong></div>
             <div class="key-finding-context">
-              Cα RMSD over 1,958 aligned atoms vs 1FHD crystal structure (Notenboom et al., 1998).
-              This falls within the 0.3–0.4 Å range Notenboom et al. report for crystal-to-crystal
-              Cα deviations in Cex — confirming AlphaFold3 reproduces the active-site geometry
-              as accurately as the crystal structures agree with each other.
+              Cα RMSD over 1,958 aligned atoms against the 1FHD crystal structure. This is within
+              the 0.3–0.4 Å range the original crystallographers report for two different crystal
+              forms of Cex compared to <em>each other</em> — in other words, our predicted model
+              disagrees with the real structure by no more than two real structures disagree with
+              one another. The active-site geometry, including the catalytic residues GLU127 and
+              GLU233, is reproduced faithfully.
             </div>
           </div>
 
-          <!-- Figure placeholder -->
-          <div class="figure-block">
-            <div class="figure-panel">
-              <div class="placeholder-block">
-                <div class="placeholder-icon" aria-hidden="true">🏗</div>
-                <strong>Figure: AlphaFold3 model overlaid on 1FHD crystal structure</strong>
-                <p>AlphaFold3 (green) vs 1FHD (grey) structural overlay. Active-site residues GLU127 and GLU233 highlighted. RMSD = 0.293 Å.</p>
-                <p class="figure-note">Add PyMOL session screenshot here: <code>figures/drylab/af3_vs_1FHD_overlay.png</code></p>
-              </div>
-            </div>
-            <div class="figure-panel">
-              <div class="placeholder-block">
-                <div class="placeholder-icon" aria-hidden="true">📈</div>
-                <strong>Figure: Per-residue RMSD deviation plot</strong>
-                <p>Cα deviation (Å) plotted by residue number. Expected pattern: low RMSD in structured core, higher in loop regions.</p>
-                <p class="figure-note">Add matplotlib/pymol figure: <code>figures/drylab/per_residue_rmsd.png</code></p>
-              </div>
-            </div>
-          </div>
-
-          <h4>pLDDT confidence summary</h4>
-          <div class="table-wrap"><div class="table-scroll"><table class="data-table">
-            <thead>
-              <tr><th>Region</th><th>pLDDT range</th><th>Interpretation</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>GH10 catalytic core (incl. GLU127, GLU233)</td><td class="mono">&gt;90</td><td>Very high confidence — active-site geometry reliable</td></tr>
-              <tr><td>GH10 surface loops</td><td class="mono">75–90</td><td>High confidence</td></tr>
-              <tr><td>GH1-fold catalytic core (incl. GLU350, GLU404)</td><td class="mono">&gt;85</td><td>High confidence</td></tr>
-              <tr><td>Inter-domain linker</td><td class="mono">60–75</td><td>Moderate — expected (intrinsically flexible region)</td></tr>
-            </tbody>
-          </table></div></div>
-
-          <div class="callout">
-            <p class="callout-title">Interpretation</p>
-            <p>
-              An RMSD of 0.293 Å is strong evidence that AlphaFold3 has correctly predicted
-              the active-site geometry of the GH10/Cex domain. This validates the use of
-              the AlphaFold3 model as the receptor for docking studies (DL-R2). The
-              analogous validation for GH1 is limited by the absence of a comparable
-              published crystal structure for the CxnA GH1-fold domain; confidence in the
-              GH1 predictions is therefore based on pLDDT alone.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── DL-R2: Docking GH10 ─── -->
-      <div class="result-block" id="drylab-gh10">
-        <div class="result-header">
-          <div class="result-id">DL-R2</div>
-          <div>
-            <h3>Cellobiose docking into GH10/Cex active site (Project B)</h3>
-            <div class="result-meta">
-              <span class="badge badge--confirmed">Confirmed</span>
-              <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-3, DL-4, DL-5</a></span>
-            </div>
-          </div>
-        </div>
-        <div class="result-body">
-          <p>
-            Autodock Vina docking of cellobiose into the GH10/Cex active site yielded
-            consistent, well-converged poses. PLIP analysis of the top-ranked pose
-            identified hydrogen-bond contacts with the established catalytic residues
-            GLU127 and GLU233, consistent with the expected binding geometry for a GH10
-            exoglucanase substrate.
-          </p>
-
-          <div class="key-finding">
-            <div class="key-finding-label">Top Pose</div>
-            <div class="key-finding-value">ΔG = −6.6 kcal/mol</div>
-            <div class="key-finding-context">
-              Autodock Vina predicted binding free energy for top-ranked cellobiose pose in GH10/Cex.
-              Note: absolute values are semi-empirical estimates — see DL-R4 for caveat and xylobiose comparison.
-            </div>
-          </div>
-
-          <!-- 3D structural overlay — GH10 AlphaFold3 superimposed on 1FHD crystal -->
+          <!-- Interactive 3D structural overlay — kept from the earlier Mol* viewer -->
           <div class="viewer-embed">
             <iframe
               src={`${b}/molstar-test`}
               class="mol-iframe"
               loading="lazy"
-              title="Interactive 3D: GH10 AlphaFold3 vs 1FHD crystal structure overlay"
+              title="Interactive 3D: Cex AlphaFold model vs 1FHD crystal structure overlay"
             ></iframe>
           </div>
           <p class="viewer-caption">
-            Interactive 3D overlay: GH10 AlphaFold3 model (teal) superimposed on 1FHD crystal structure (orange) — Cα RMSD 0.579 Å over 311 matched pairs.
-            Yellow spheres: active-site residues GLN87, GLU127, GLU233. Use the toggle buttons to compare structures independently.
+            Interactive 3D overlay: predicted Cex structure (teal) superimposed on the 1FHD crystal
+            structure (orange) — Cα RMSD 0.579 Å over 311 matched pairs in this particular alignment run.
+            Yellow spheres mark GLN87, GLU127 and GLU233. Drag to rotate; use the toggle buttons to
+            view each structure independently.
           </p>
 
-          <div class="figure-block figure-block--3">
-            <div class="figure-panel">
-              <div class="placeholder-block">
-                <div class="placeholder-icon" aria-hidden="true">🔬</div>
-                <strong>Figure: GH10 top docking pose</strong>
-                <p>Cellobiose (sticks) in GH10/Cex active site (cartoon). GLU127 and GLU233 shown as sticks.</p>
-                <p class="figure-note"><code>figures/drylab/gh10_cellobiose_top_pose.png</code></p>
-              </div>
-            </div>
-            <div class="figure-panel">
-              <div class="placeholder-block">
-                <div class="placeholder-icon" aria-hidden="true">🗺</div>
-                <strong>Figure: PoseView 2D interaction diagram</strong>
-                <p>2D ligand-protein interaction map showing H-bond donors/acceptors, hydrophobic contacts.</p>
-                <p class="figure-note"><code>figures/drylab/gh10_poseview.png</code></p>
-              </div>
-            </div>
-            <div class="figure-panel">
-              <div class="placeholder-block">
-                <div class="placeholder-icon" aria-hidden="true">📊</div>
-                <strong>Figure: Pose RMSD cluster histogram</strong>
-                <p>RMSD distribution across 20 retained poses. Expected: tight clustering (&lt;2 Å) indicating convergence.</p>
-                <p class="figure-note"><code>figures/drylab/gh10_pose_cluster.png</code></p>
-              </div>
-            </div>
+          <div class="callout">
+            <p class="callout-title">Why this step matters</p>
+            <p>
+              Every docking result later in this page depends on the predicted structure being
+              trustworthy. This validation is what lets us treat the Cex model as a stand-in for
+              the real enzyme when testing how it interacts with sugars computationally.
+            </p>
           </div>
-
-          <h4>GH10 PLIP interaction summary</h4>
-          <div class="table-wrap"><div class="table-scroll"><table class="data-table">
-            <thead>
-              <tr><th>Residue</th><th>Interaction type</th><th>Ligand atom</th><th>Distance (Å)</th><th>Role</th></tr>
-            </thead>
-            <tbody>
-              <tr><td class="mono">GLU127</td><td>H-bond (donor)</td><td>O3 cellobiose</td><td class="mono"><span class="value-placeholder">[x.xx]</span></td><td>Catalytic nucleophile</td></tr>
-              <tr><td class="mono">GLU233</td><td>H-bond (acceptor)</td><td>O1 cellobiose</td><td class="mono"><span class="value-placeholder">[x.xx]</span></td><td>Acid/base catalyst</td></tr>
-              <tr><td class="mono">[additional residues]</td><td>Hydrophobic</td><td>–</td><td class="mono"><span class="value-placeholder">[x.xx]</span></td><td>Binding stabilisation</td></tr>
-            </tbody>
-          </table></div></div>
-          <p class="table-note">Full PLIP output file: <code>data/drylab/gh10_cellobiose_plip.txt</code> (to be added to GitHub repo)</p>
         </div>
       </div>
 
-      <!-- ─── DL-R3: Docking GH1 ─── -->
-      <div class="result-block" id="drylab-gh1">
+      <!-- ─── DL-R3: Cex mutation target screening ─── -->
+      <div class="result-block" id="drylab-cex-targets">
         <div class="result-header">
           <div class="result-id">DL-R3</div>
           <div>
-            <h3>Cellobiose docking into GH1-fold active site (Project A)</h3>
+            <h3>Does Cex already have a little latent β-glucosidase activity — and where would you nudge it?</h3>
             <div class="result-meta">
               <span class="badge badge--confirmed">Confirmed</span>
               <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-3, DL-4, DL-5</a></span>
@@ -282,434 +235,507 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
         </div>
         <div class="result-body">
           <p>
-            Cellobiose was docked into the GH1-fold domain of CxnA (the Project A target).
-            The docking results differ significantly from GH10, with important implications
-            for the directed evolution strategy.
+            Cex's fold resembles known β-glucosidase enzymes closely enough that we asked a
+            direct question: can cellobiose — the two-sugar fragment a true β-glucosidase would
+            split into glucose — fit into Cex's existing active site at all? We docked cellobiose
+            into the validated Cex model with AutoDock Vina and analysed the predicted contacts
+            with PLIP.
           </p>
 
-          <div class="key-finding key-finding--warn">
-            <div class="key-finding-label">Steric barrier identified</div>
-            <div class="key-finding-value">GLN87 &amp; TRP281</div>
+          <div class="key-finding">
+            <div class="key-finding-label">Top docking pose</div>
+            <div class="key-finding-value">Sits right next to the existing catalytic residues</div>
             <div class="key-finding-context">
-              These two residues form a steric barrier limiting cellobiose access to the
-              candidate active-site pocket (GLU350/GLU404). This is a key finding for
-              Project A: directed evolution may need to modify or displace these residues
-              to permit productive substrate binding. This is a hypothesis, not a proven
-              requirement.
+              The best-scoring pose places cellobiose in hydrogen-bonding distance of GLU127 and
+              GLU233 — the same two residues Cex already uses to cut its natural substrate. That's
+              consistent with the idea that Cex could be nudged toward glucosidase-like chemistry
+              without needing a whole new active site built from scratch.
             </div>
           </div>
 
-          <div class="figure-block">
-            <div class="figure-panel">
-              <div class="placeholder-block">
-                <div class="placeholder-icon" aria-hidden="true">🔬</div>
-                <strong>Figure: GH1 docking poses (all 20 retained)</strong>
-                <p>All 20 cellobiose poses shown in GH1 active site. Scattered distribution indicates ambiguous binding.</p>
-                <p class="figure-note"><code>figures/drylab/gh1_cellobiose_all_poses.png</code></p>
-              </div>
-            </div>
-            <div class="figure-panel">
-              <div class="placeholder-block">
-                <div class="placeholder-icon" aria-hidden="true">🚧</div>
-                <strong>Figure: GLN87/TRP281 steric barrier</strong>
-                <p>Surface representation showing GLN87 and TRP281 blocking the candidate binding pocket relative to GLU350/GLU404.</p>
-                <p class="figure-note"><code>figures/drylab/gh1_steric_barrier.png</code></p>
-              </div>
-            </div>
+          <p>
+            Multiple-sequence alignment against 15 homologous GH10 enzymes, cross-checked with
+            ConSurf conservation scoring, confirmed that the catalytic motifs around GLU127 (an
+            unusual "NEA" variant of the normal "NEP" motif) and GLU233 (the "ITELD" motif) are
+            essentially universal across the family — strong evidence that both residues are
+            functionally essential, not incidental.
+          </p>
+
+          <div class="fig-single">
+            <img src={`${b}/images/results/gh10-consurf-motifs.jpg`} alt="Cex structure coloured by evolutionary conservation (ConSurf), with the NEA and TELD catalytic motifs boxed in green" loading="lazy" />
+            <p class="fig-caption">Cex coloured by ConSurf conservation (red = most conserved). The NEA and TELD boxes mark the two catalytic motifs — both are deep red, i.e. essentially invariant across 15 homologous enzymes.</p>
           </div>
 
-          <h4>GH1 PLIP interaction summary (top pose)</h4>
-          <div class="table-wrap"><div class="table-scroll"><table class="data-table">
-            <thead>
-              <tr><th>Residue</th><th>Interaction type</th><th>Ligand atom</th><th>Role / Note</th></tr>
-            </thead>
-            <tbody>
-              <tr><td class="mono">GLU350</td><td>H-bond (tentative)</td><td>O cellobiose</td><td>Candidate catalytic nucleophile — weak contact</td></tr>
-              <tr><td class="mono">GLU404</td><td>H-bond (tentative)</td><td>O cellobiose</td><td>Candidate acid/base — weak contact</td></tr>
-              <tr><td class="mono">GLN87</td><td>Steric clash</td><td>Multiple</td><td><strong>Barrier residue</strong> — partially blocks active-site access</td></tr>
-              <tr><td class="mono">TRP281</td><td>Hydrophobic block</td><td>–</td><td><strong>Barrier residue</strong> — hydrophobic bulk limits cellobiose accommodation</td></tr>
-            </tbody>
-          </table></div></div>
+          <h4>Where would you aim mutagenesis, if you were targeting it?</h4>
+          <p>
+            HotSpot Wizard flagged candidate residues near the active site that are mutable
+            without obviously destroying the protein's fold. Those candidates were then screened
+            computationally with FoldX (for stability) and re-docked with cellobiose (for binding).
+            The single most promising candidate to emerge was <strong>Asn44 → Trp</strong> (ΔΔG
+            −3.2 kcal/mol, i.e. more stable than wild type, not less).
+          </p>
 
-          <div class="callout callout--warn">
-            <p class="callout-title">Honest interpretation — what this does and does not tell us</p>
-            <p>
-              The GH1 docking results <strong>do not</strong> demonstrate that the GH1-fold
-              domain of CxnA is incapable of binding cellobiose, nor do they prove it is
-              capable. They identify structural features that computational methods suggest
-              may impede binding. Whether those features are actually barriers to activity —
-              and whether directed evolution can overcome them — is an empirical question that
-              only wet-lab experiments can answer. The steric barrier finding guides but does
-              not constrain the epPCR targeting strategy.
-            </p>
-          </div>
+          <details class="expand">
+            <summary>Full ranked list of computational candidates (top 10 by predicted stability)</summary>
+            <div class="expand-body">
+              <div class="table-wrap"><div class="table-scroll"><table class="data-table">
+                <thead>
+                  <tr><th>Rank</th><th>Mutation</th><th>ΔΔG (kcal/mol)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td class="mono">N44W</td><td>−3.215</td></tr>
+                  <tr><td>2</td><td class="mono">E43R</td><td>−2.177</td></tr>
+                  <tr><td>3</td><td class="mono">S86R</td><td>−1.864</td></tr>
+                  <tr><td>4</td><td class="mono">N44Y</td><td>−1.788</td></tr>
+                  <tr><td>5</td><td class="mono">N44F</td><td>−1.719</td></tr>
+                  <tr><td>6</td><td class="mono">E43L</td><td>−0.797</td></tr>
+                  <tr><td>7</td><td class="mono">T81G</td><td>−0.783</td></tr>
+                  <tr><td>8</td><td class="mono">K47R</td><td>−0.745</td></tr>
+                  <tr><td>9</td><td class="mono">E43M</td><td>−0.684</td></tr>
+                  <tr><td>10</td><td class="mono">S86D</td><td>−0.637</td></tr>
+                </tbody>
+              </table></div></div>
+              <p class="table-note">Negative ΔΔG = predicted <em>more</em> stable than wild type. Full ranked list of 25 candidates and per-mutation docking scores available in the project's supplementary data. See the <a href={`${b}/notebook/2026-06-25-dry`}>25 June lab notebook entry</a> for the full FoldX and re-docking workflow.</p>
+            </div>
+          </details>
         </div>
       </div>
 
-      <!-- ─── DL-R4: Docking Caveat / Xylobiose ─── -->
-      <div class="result-block" id="drylab-docking">
+      <!-- ─── DL-R4: CenA / Project B ─── -->
+      <div class="result-block" id="drylab-cena">
         <div class="result-header">
           <div class="result-id">DL-R4</div>
           <div>
-            <h3>Docking score caveat: xylobiose ΔG comparison</h3>
+            <h3>CenA, the other half: where could the existing activity be improved?</h3>
             <div class="result-meta">
               <span class="badge badge--confirmed">Confirmed</span>
-              <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-3</a></span>
+              <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-3, DL-4, DL-5</a></span>
             </div>
           </div>
         </div>
         <div class="result-body">
           <p>
-            Xylobiose (a xylose dimer analogous in structure to cellobiose) was docked into
-            the GH10/Cex active site as a comparative substrate. This experiment serves as
-            an explicit test of docking score interpretability.
+            CenA (the endoglucanase half of CxnA, family GH6) already works — the Project B goal
+            isn't to invent a new activity but to make an existing one better. We docked
+            cellotetraose (a four-sugar cellulose fragment) into CenA's active site and confirmed
+            contacts with its three catalytic aspartates: Asp595 (acid catalyst), Asp631
+            (stabilises the acid catalyst's protonation state) and Asp771 (base catalyst).
           </p>
 
-          <div class="key-finding key-finding--warn">
-            <div class="key-finding-label">Caveat demonstrated</div>
-            <div class="key-finding-value">Vina overestimates by ~3.3 kcal/mol</div>
+          <div class="fig-single">
+            <img src={`${b}/images/results/cena-consurf.jpg`} alt="CenA structure coloured by evolutionary conservation (ConSurf)" loading="lazy" />
+            <p class="fig-caption">CenA coloured by ConSurf conservation across 41 homologous GH6 sequences (magenta = most conserved, teal = most variable). 13 of the 27 residues contacting the docked substrate are fully conserved — a strong signal of functional importance.</p>
+          </div>
+
+          <p>
+            As with Cex, candidate mutations were screened by combining FoldX stability
+            predictions with re-docking scores — this time checking both metrics together, plus
+            whether the catalytic geometry held up across repeated modelling runs.
+          </p>
+
+          <div class="key-finding">
+            <div class="key-finding-label">Best overall candidate</div>
+            <div class="key-finding-value">K671S</div>
             <div class="key-finding-context">
-              The experimentally measured ΔG for xylobiose in Cex (its preferred natural substrate)
-              is <strong>−3.29 kcal/mol</strong> (K<sub>i</sub> = 4800 µM; Notenboom et al., 2000
-              <a class="cite" href="#ref-notenboom">[3]</a>). Vina predicts −6.6 kcal/mol for
-              cellobiose in the same enzyme — a ~3.3 kcal/mol overestimate. Absolute Vina scores
-              must not be used as direct substitutes for experimental ΔG measurements.
+              Lysine 671 → serine showed the largest improvement in predicted substrate binding
+              (ΔVina score −0.85 kcal/mol better than wild type) while passing the catalytic
+              geometry check in every modelled run.
             </div>
           </div>
 
-          <div class="figure-block">
-            <div class="figure-panel">
-              <div class="placeholder-block">
-                <div class="placeholder-icon" aria-hidden="true">📊</div>
-                <strong>Figure: Cellobiose vs xylobiose Vina scores in GH10</strong>
-                <p>Bar chart comparing top-pose Vina ΔG for cellobiose vs xylobiose. Illustrates score unreliability for substrate identity.</p>
-                <p class="figure-note"><code>figures/drylab/cellobiose_vs_xylobiose_scores.png</code></p>
-              </div>
+          <details class="expand">
+            <summary>Full CenA mutation screen (stability + docking + geometry check)</summary>
+            <div class="expand-body">
+              <div class="table-wrap"><div class="table-scroll"><table class="data-table">
+                <thead>
+                  <tr><th>Mutation</th><th>ΔΔG (kcal/mol)</th><th>Mean Vina score</th><th>ΔVina score</th><th>Catalytic geometry</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="mono">WT</td><td>0.00</td><td>−7.83</td><td>reference</td><td>Pass</td></tr>
+                  <tr><td class="mono">T697V</td><td>−1.75</td><td>−7.46</td><td>+0.37</td><td>Partial</td></tr>
+                  <tr><td class="mono">T583I</td><td>−1.52</td><td>−8.12</td><td>−0.29</td><td>Pass</td></tr>
+                  <tr><td class="mono">T583V</td><td>−1.24</td><td>−7.52</td><td>+0.31</td><td>Pass</td></tr>
+                  <tr><td class="mono">S520G</td><td>−0.98</td><td>−7.83</td><td>0.00</td><td>Partial</td></tr>
+                  <tr><td class="mono">S598Q</td><td>−0.36</td><td>−8.18</td><td>−0.35</td><td>Pass</td></tr>
+                  <tr><td class="mono">S598N</td><td>−0.07</td><td>−8.09</td><td>−0.26</td><td>Pass</td></tr>
+                  <tr><td class="mono">K671A</td><td>0.22</td><td>−8.10</td><td>−0.26</td><td>Pass</td></tr>
+                  <tr><td class="mono">K671G</td><td>0.27</td><td>−8.00</td><td>−0.16</td><td>Partial</td></tr>
+                  <tr><td class="mono"><strong>K671S</strong></td><td>0.30</td><td><strong>−8.68</strong></td><td><strong>−0.85</strong></td><td>Pass</td></tr>
+                  <tr><td class="mono">Q635M</td><td>0.38</td><td>−7.44</td><td>+0.39</td><td>Pass</td></tr>
+                </tbody>
+              </table></div></div>
+              <p class="table-note">ΔΔG: FoldX-predicted stability change (negative = more stable). Vina score: predicted binding free energy with cellotetraose (more negative = tighter predicted binding). K671S has a slightly destabilising ΔΔG but the best binding improvement of any candidate that keeps correct catalytic geometry — a stability/activity trade-off, not a free win.</p>
             </div>
-          </div>
-
-          <div class="callout callout--warn">
-            <p class="callout-title">Methodological note — all Vina scores on this site</p>
-            <p>
-              Throughout this project, Autodock Vina scores are used only for within-receptor,
-              within-ligand pose ranking and convergence assessment. They are not used to draw
-              conclusions about whether one substrate is preferred over another, nor to predict
-              absolute affinity values. All such conclusions require experimental validation.
-            </p>
-          </div>
+          </details>
         </div>
       </div>
 
-      <!-- ─── DL-R5: Pose Convergence ─── -->
-      <div class="result-block" id="drylab-convergence">
+      <!-- ─── DL-R5: Bridge to wet lab ─── -->
+      <div class="result-block" id="drylab-bridge">
         <div class="result-header">
           <div class="result-id">DL-R5</div>
           <div>
-            <h3>Pose convergence analysis: GH10 vs GH1</h3>
+            <h3>An important honesty note: prediction guided priorities, it didn't dictate the mutants</h3>
             <div class="result-meta">
-              <span class="badge badge--confirmed">Confirmed</span>
-              <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-5</a></span>
+              <span class="badge badge--neutral">Context</span>
             </div>
           </div>
         </div>
         <div class="result-body">
-          <p>
-            Pose convergence was assessed by clustering all 20 retained docking poses per
-            target by pairwise RMSD (cutoff 2.0 Å). The GH10 and GH1 results show
-            strikingly different patterns.
-          </p>
-
-          <div class="convergence-compare">
-            <div class="convergence-item convergence-item--good">
-              <div class="convergence-label">GH10 / Cex</div>
-              <div class="convergence-status"><span class="badge badge--confirmed">Tight convergence</span></div>
-              <p>
-                The majority of the 20 poses cluster within 2 Å RMSD of the top-ranked pose.
-                This indicates that Autodock Vina consistently identifies the same binding
-                geometry, supporting high confidence in the predicted GH10–cellobiose binding
-                mode and the PLIP analysis based on it.
-              </p>
-              <div class="placeholder-block mt-4" style="padding:var(--sp-4)">
-                <div class="placeholder-icon" aria-hidden="true">📊</div>
-                <strong>Figure: GH10 pose RMSD histogram</strong>
-                <p class="figure-note"><code>figures/drylab/gh10_pose_convergence.png</code></p>
-              </div>
-            </div>
-
-            <div class="convergence-item convergence-item--warn">
-              <div class="convergence-label">GH1-fold</div>
-              <div class="convergence-status"><span class="badge badge--progress">Scattered — investigation ongoing</span></div>
-              <p>
-                GH1 poses are distributed across multiple clusters with no dominant pose.
-                This indicates that Autodock Vina does not identify a clear, preferred binding
-                site for cellobiose in the GH1-fold domain, consistent with the absence of
-                a pre-formed binding pocket in the wild-type structure.
-              </p>
-              <p class="mt-4">
-                <strong>This result is not over-interpreted.</strong> Pose scatter does not
-                prove that GH1 cannot bind cellobiose — it indicates computational ambiguity.
-                It is flagged as an open question and a motivation for the directed evolution
-                approach: if structural changes in the binding pocket are needed, directed
-                evolution may identify them.
-              </p>
-              <div class="placeholder-block mt-4" style="padding:var(--sp-4)">
-                <div class="placeholder-icon" aria-hidden="true">📊</div>
-                <strong>Figure: GH1 pose RMSD histogram</strong>
-                <p class="figure-note"><code>figures/drylab/gh1_pose_convergence.png</code></p>
-              </div>
-            </div>
+          <div class="callout callout--warn">
+            <p class="callout-title">Read this before the wet-lab results</p>
+            <p>
+              N44W and K671S are the dry lab's top <em>computational</em> candidates — but the
+              actual wet-lab mutant library wasn't built by inserting those specific changes.
+              It was built with error-prone PCR, which introduces mutations <strong>randomly</strong>
+              across the gene. The computational work told us the Cex and CenA active sites were
+              worth targeting and gave us a reference point for interpreting what random
+              mutagenesis turned up — it didn't guarantee any particular mutation would actually
+              appear in the library. Keep that distinction in mind in the section below: none of
+              the sequenced wet-lab mutants carry N44W or K671S.
+            </p>
           </div>
-        </div>
-      </div>
-
-      <!-- ─── DL-R6: PLIP summary ─── -->
-      <div class="result-block" id="drylab-plip">
-        <div class="result-header">
-          <div class="result-id">DL-R6</div>
-          <div>
-            <h3>Full PLIP interaction tables</h3>
-            <div class="result-meta">
-              <span class="badge badge--confirmed">Confirmed</span>
-              <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-4</a></span>
-            </div>
-          </div>
-        </div>
-        <div class="result-body">
-          <h4>GH10 — Cellobiose interactions (top pose)</h4>
-          <div class="table-wrap"><div class="table-scroll"><table class="data-table">
-            <thead>
-              <tr><th>Interaction</th><th>Protein residue</th><th>Ligand atom</th><th>Distance (Å)</th><th>Angle (°)</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>H-bond</td><td class="mono">GLU127</td><td>O3</td><td class="mono value-placeholder">[x.xx]</td><td class="mono value-placeholder">[xxx]</td></tr>
-              <tr><td>H-bond</td><td class="mono">GLU233</td><td>O1</td><td class="mono value-placeholder">[x.xx]</td><td class="mono value-placeholder">[xxx]</td></tr>
-              <tr><td>Hydrophobic</td><td class="mono">[residue]</td><td>–</td><td class="mono value-placeholder">[x.xx]</td><td>–</td></tr>
-            </tbody>
-          </table></div></div>
-          <p class="table-note">Full PLIP report: <code>data/drylab/gh10_cellobiose_plip_full.txt</code></p>
-
-          <h4 class="mt-6">GH1 — Cellobiose interactions (top pose)</h4>
-          <div class="table-wrap"><div class="table-scroll"><table class="data-table">
-            <thead>
-              <tr><th>Interaction</th><th>Protein residue</th><th>Ligand atom</th><th>Distance (Å)</th><th>Note</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>H-bond (weak)</td><td class="mono">GLU350</td><td>O</td><td class="mono value-placeholder">[x.xx]</td><td>Candidate nucleophile</td></tr>
-              <tr><td>H-bond (weak)</td><td class="mono">GLU404</td><td>O</td><td class="mono value-placeholder">[x.xx]</td><td>Candidate acid/base</td></tr>
-              <tr><td>Steric clash</td><td class="mono">GLN87</td><td>Multiple</td><td class="mono value-placeholder">[x.xx]</td><td>Barrier residue</td></tr>
-              <tr><td>Hydrophobic block</td><td class="mono">TRP281</td><td>–</td><td class="mono value-placeholder">[x.xx]</td><td>Barrier residue</td></tr>
-            </tbody>
-          </table></div></div>
-          <p class="table-note">Full PLIP report: <code>data/drylab/gh1_cellobiose_plip_full.txt</code></p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ══════════════════════════════════════════════════════ -->
-  <!-- ═══ WET LAB RESULTS (PLACEHOLDERS) ════════════════════ -->
+  <!-- ═══ WET LAB RESULTS ═══════════════════════════════════ -->
   <!-- ══════════════════════════════════════════════════════ -->
 
   <section class="section section--alt" id="wetlab" aria-labelledby="wetlab-heading">
     <div class="container">
       <div class="section-header">
         <p class="eyebrow">Experimental results</p>
-        <h2 id="wetlab-heading">Wet Lab — Results (in progress)</h2>
+        <h2 id="wetlab-heading">Wet Lab — building and screening real mutants</h2>
         <p>
-          These sections are structured identically to the completed dry-lab results above.
-          Data will be entered as experiments complete. No placeholder data or fabricated
-          values appear here.
+          Three screens, run in sequence, each narrowing down which of the random mutants were
+          worth a closer look: a visual test for endoglucanase activity, a colour test for
+          glucosidase activity, and finally a quantitative fluorescence assay we had to build and
+          validate from scratch.
         </p>
       </div>
 
-      <!-- WL-R1: Cloning -->
-      <div class="result-block" id="wetlab-cloning">
+      <!-- WL-R1: Plasmid -->
+      <div class="result-block" id="wetlab-plasmid">
         <div class="result-header">
           <div class="result-id">WL-R1</div>
           <div>
-            <h3>CxnA cloning verification</h3>
+            <h3>The plasmid, and an uninvited stowaway</h3>
             <div class="result-meta">
-              <span class="badge badge--progress">In Progress</span>
-              <span class="result-method">Methods: <a href={`${b}/methods#wetlab`}>WL-1</a></span>
+              <span class="badge badge--confirmed">Confirmed</span>
+              <span class="result-method">Methods: <a href={`${b}/methods#wetlab`}>WL-1, WL-2</a></span>
             </div>
           </div>
         </div>
         <div class="result-body">
-          <div class="figure-block">
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">🧬</div>
-                <strong>Gel image: restriction digestion verification</strong>
-                <p>Expected: insert band at [x] bp, vector backbone at [y] bp. Undigested and ladder controls.</p>
-                <p class="pending-label">Result pending — expected: cloning phase</p>
-              </div>
-            </div>
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">🔬</div>
-                <strong>Gel image: colony PCR confirmation</strong>
-                <p>Colony PCR of transformants with T7 primers to confirm correct insert size.</p>
-                <p class="pending-label">Result pending — expected: cloning phase</p>
-              </div>
-            </div>
+          <p>
+            CxnA was carried on a pSB1C3 plasmid backbone with a lac promoter and ribosome
+            binding site ahead of the insert. Transforming <em>E. coli</em> with this construct
+            retained both exo- and endo-glucanase activity, confirming the starting enzyme was
+            functional before any mutagenesis began.
+          </p>
+
+          <div class="fig-single">
+            <img src={`${b}/images/results/plasmid-map.png`} alt="Plasmid map of the CxnA construct, showing the Cex (GH10) and CenA (GH6) domains, restriction sites, and the duplicated chloramphenicol-resistance region" loading="lazy" />
+            <p class="fig-caption">Plasmid map of the CxnA construct. CxnA itself is only two domains — Cex (exoglucanase) and CenA (endoglucanase) — joined through a carbohydrate-binding module (CBD2). The duplicated chloramphenicol-resistance region on the right was an unplanned discovery (below).</p>
           </div>
-          <div class="placeholder-block pending-block mt-4">
-            <div class="placeholder-icon" aria-hidden="true">🧾</div>
-            <strong>Table: Sanger sequencing results</strong>
-            <p>Alignment of 3–5 sequenced clones vs reference CxnA sequence. Identity %, any discrepancies noted.</p>
-            <p class="pending-label">Result pending — expected: cloning phase</p>
+
+          <div class="key-finding key-finding--warn">
+            <div class="key-finding-label">Unplanned finding</div>
+            <div class="key-finding-value">An extra ~1 kb of DNA in the backbone</div>
+            <div class="key-finding-context">
+              Gel electrophoresis and sequencing turned up an insert in the backbone that wasn't
+              supposed to be there. A BLASTp search against the translated sequence matched it to
+              a duplicated chloramphenicol-resistance pseudogene — most likely a quirk of this
+              specific plasmid stock rather than anything we introduced. It doesn't appear to have
+              blocked cloning or expression, but its effect on plasmid stability wasn't formally
+              tested.
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- WL-R2: epPCR library -->
-      <div class="result-block" id="wetlab-eppcr">
+      <!-- WL-R2: Library generation -->
+      <div class="result-block" id="wetlab-library">
         <div class="result-header">
           <div class="result-id">WL-R2</div>
           <div>
-            <h3>epPCR library characterisation</h3>
+            <h3>Building the mutant library — smaller than planned</h3>
             <div class="result-meta">
-              <span class="badge badge--progress">In Progress</span>
-              <span class="result-method">Methods: <a href={`${b}/methods#wetlab`}>WL-2</a></span>
+              <span class="badge badge--confirmed">Confirmed</span>
+              <span class="result-method">Methods: <a href={`${b}/methods#wetlab`}>WL-3</a></span>
             </div>
           </div>
         </div>
         <div class="result-body">
-          <div class="figure-block figure-block--3">
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">🧫</div>
-                <strong>Plate image: library diversity plate</strong>
-                <p>Representative plate image showing colony density from library transformation.</p>
-                <p class="pending-label">Result pending — expected: mutagenesis phase</p>
-              </div>
-            </div>
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">📊</div>
-                <strong>Chart: mutation rate distribution</strong>
-                <p>Mutations per gene across 10 randomly sequenced clones. Target: 1–4 bp substitutions. Acceptance criterion noted.</p>
-                <p class="pending-label">Result pending — expected: mutagenesis phase</p>
-              </div>
-            </div>
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">📋</div>
-                <strong>Table: mutation spectra</strong>
-                <p>Transitions vs transversions, positional distribution. Check for expected Mn²⁺-bias mutation pattern.</p>
-                <p class="pending-label">Result pending — expected: mutagenesis phase</p>
-              </div>
+          <p>
+            Error-prone PCR (epPCR) was applied only to the CxnA insert, using manganese chloride
+            to deliberately lower the copying polymerase's accuracy — the backbone, promoter and
+            ribosome binding site were amplified separately with a high-fidelity polymerase so
+            mutations wouldn't land somewhere that would confound the activity readout. We ran
+            this on two versions of the gene in parallel: the native sequence, and a
+            codon-optimised version ordered as synthetic DNA blocks (to work around the gene's
+            unusually high, amplification-hostile GC content — 71%).
+          </p>
+
+          <div class="key-finding key-finding--warn">
+            <div class="key-finding-label">Honest limitation</div>
+            <div class="key-finding-value">24 (codon-optimised) and 15 (native) colonies</div>
+            <div class="key-finding-context">
+              Both libraries came out markedly smaller than planned — the GC content made PCR
+              temperamental, and several technical issues (inconsistent mixing, an
+              unexpectedly-migrating linearised plasmid control) slowed troubleshooting. A small
+              library means fewer chances for a rare beneficial mutation to be sampled at all;
+              this is the single biggest constraint on everything that follows.
             </div>
           </div>
         </div>
       </div>
 
-      <!-- WL-R3: Selection -->
-      <div class="result-block" id="wetlab-selection">
+      <!-- WL-R3: Congo Red -->
+      <div class="result-block" id="wetlab-congored">
         <div class="result-header">
           <div class="result-id">WL-R3</div>
           <div>
-            <h3>Primary selection outcomes</h3>
+            <h3>Screen 1 — Congo red: did endoglucanase activity survive?</h3>
             <div class="result-meta">
-              <span class="badge badge--progress">In Progress</span>
+              <span class="badge badge--confirmed">Confirmed</span>
               <span class="result-method">Methods: <a href={`${b}/methods#wetlab`}>WL-4</a></span>
             </div>
           </div>
         </div>
         <div class="result-body">
-          <div class="figure-block">
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">🧫</div>
-                <strong>Project A: Cellobiose selection plates</strong>
-                <p>M9 + cellobiose plates after [x] days. Colony count vs empty-vector negative control. Growth-positive colonies identified.</p>
-                <p class="pending-label">Result pending — expected: selection phase</p>
-              </div>
-            </div>
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">🧫</div>
-                <strong>Project B: CMC plate clearing</strong>
-                <p>Congo Red-stained CMC plates. Halo diameters for WT CxnA (positive control) and library variants. Enhanced variants indicated.</p>
-                <p class="pending-label">Result pending — expected: selection phase</p>
-              </div>
+          <p>
+            Congo red dye binds intact cellulose (here, the related polymer CMC) but washes off
+            wherever an active endoglucanase has chewed it up — so a colony with working CenA
+            activity shows up as a clear halo on a red background. This was run first, as a cheap
+            way to immediately discard any mutant that had simply broken the protein.
+          </p>
+
+          <div class="fig-single">
+            <img src={`${b}/images/results/congo-red-mutants.jpg`} alt="Congo red assay plates for codon-optimised and native CxnA mutant colonies, showing clearing halos around most colonies" loading="lazy" />
+            <p class="fig-caption">Congo red screen. (A) All 15 codon-optimised mutants, numbered. (B) All 15 native-sequence mutants (only 15 total colonies were available in that library). A clear halo = endoglucanase activity retained.</p>
+          </div>
+
+          <div class="key-finding">
+            <div class="key-finding-label">Result</div>
+            <div class="key-finding-value">7 of 15 native, 15 of 15 codon-optimised retained a halo</div>
+            <div class="key-finding-context">
+              All 15 codon-optimised mutants showed some clearing, at varying sizes. Of the native
+              mutants, colony 4 had the largest halo (closest to wild type); colonies 12, 14 and 15
+              showed <strong>no</strong> clearing at all — a likely sign that their mutation broke
+              the protein outright, not a subtle activity change. All five of these were flagged
+              for sequencing.
             </div>
           </div>
         </div>
       </div>
 
-      <!-- WL-R4: Fluorogenic assays -->
-      <div class="result-block" id="wetlab-assays">
+      <!-- WL-R4: X-gluc -->
+      <div class="result-block" id="wetlab-xgluc">
         <div class="result-header">
           <div class="result-id">WL-R4</div>
           <div>
-            <h3>MUG / MUC / CMC fluorescence assay results</h3>
+            <h3>Screen 2 — X-gluc: any sign of new glucosidase activity?</h3>
             <div class="result-meta">
-              <span class="badge badge--pending">Pending</span>
+              <span class="badge badge--confirmed">Confirmed</span>
               <span class="result-method">Methods: <a href={`${b}/methods#wetlab`}>WL-5</a></span>
             </div>
           </div>
         </div>
         <div class="result-body">
-          <div class="figure-block figure-block--3">
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">📉</div>
-                <strong>MUG standard curve</strong>
-                <p>4-MU fluorescence (RFU) vs concentration (µM). R² and equation used for all MUG calculations.</p>
-                <p class="pending-label">Result pending — expected: screening phase</p>
-              </div>
-            </div>
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">📊</div>
-                <strong>MUG activity: library hits vs WT</strong>
-                <p>Bar chart: MUG activity (nmol 4-MU/min/mg protein) for each hit colony vs WT CxnA baseline. Fold-improvement labeled.</p>
-                <p class="pending-label">Result pending — expected: screening phase</p>
-              </div>
-            </div>
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">📊</div>
-                <strong>MUC activity: exoglucanase screen</strong>
-                <p>MUC activity for Project B candidates vs WT CxnA. Hits with &gt;1.5× WT activity flagged for validation.</p>
-                <p class="pending-label">Result pending — expected: screening phase</p>
-              </div>
+          <p>
+            X-gluc is a colourless compound that turns a colony visibly blue if the cell is
+            producing β-glucosidase-like activity. Every mutant from both libraries — 30 colonies
+            total — was screened this way in parallel with Congo red, alongside controls: a known
+            β-glucosidase (positive control), wild-type CxnA, and a non-functional His-tagged
+            CxnA (negative control).
+          </p>
+
+          <div class="fig-single">
+            <img src={`${b}/images/results/screen-controls.jpg`} alt="Control plates for the Congo red (left) and X-gluc (right) screens, comparing a known beta-glucosidase, wild-type CxnA, and a non-functional His-tagged CxnA" loading="lazy" />
+            <p class="fig-caption">Controls for both screens. Left: Congo red. Right: X-gluc — note that wild-type CxnA (top right spot) already shows a faint blue tint, not just the positive-control β-glucosidase (bottom left).</p>
+          </div>
+
+          <div class="fig-single">
+            <img src={`${b}/images/results/xgluc-mutants.jpg`} alt="X-gluc assay plates for codon-optimised and native CxnA mutant colonies" loading="lazy" />
+            <p class="fig-caption">X-gluc screen on all 30 mutants. (A) codon-optimised. (B) native sequence.</p>
+          </div>
+
+          <div class="key-finding key-finding--warn">
+            <div class="key-finding-label">Unexpected background signal</div>
+            <div class="key-finding-value">Wild-type CxnA already shows faint baseline activity</div>
+            <div class="key-finding-context">
+              The non-functional His-tagged negative control looked the same as wild-type CxnA —
+              both showed a faint blue tint beyond the truly blank background. This matches the
+              dry-lab prediction (DL-R3) that Cex might already have some latent capacity to engage
+              cellobiose-like substrates. No mutant came close to the true positive control, but
+              several (native colonies 4, 14, 15; codon-optimised colonies 2, 4, 7, 12) were darker
+              than the wild-type baseline and were flagged for sequencing and quantitative
+              follow-up.
             </div>
           </div>
         </div>
       </div>
 
-      <!-- WL-R5: Hit validation -->
-      <div class="result-block" id="wetlab-hits">
+      <!-- WL-R5: MUC assay -->
+      <div class="result-block" id="wetlab-muc">
         <div class="result-header">
           <div class="result-id">WL-R5</div>
           <div>
-            <h3>Hit sequencing &amp; final mutant characterisation</h3>
+            <h3>Screen 3 — putting a number on it: the MUC fluorescence assay</h3>
             <div class="result-meta">
-              <span class="badge badge--pending">Pending</span>
-              <span class="result-method">Methods: <a href={`${b}/methods#wetlab`}>WL-6</a></span>
+              <span class="badge badge--confirmed">Confirmed</span>
+              <span class="result-method">Methods: <a href={`${b}/methods#wetlab`}>WL-6</a> · Full troubleshooting: <a href={`${b}/notebook`}>Lab Notebook, Aug–Sep</a></span>
             </div>
           </div>
         </div>
         <div class="result-body">
-          <div class="figure-block">
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">🧬</div>
-                <strong>Table: Confirmed mutations in validated hits</strong>
-                <p>Sanger sequencing results for all confirmed hits. Amino acid changes, positions, and domain locations. Comparison to PLIP-predicted key residues.</p>
-                <p class="pending-label">Result pending — expected: validation phase</p>
-              </div>
+          <p>
+            Congo red and X-gluc are useful for sorting mutants into rough buckets, but neither
+            gives a number you can actually compare between colonies. To measure exoglucanase
+            activity precisely, we used MUC — a substrate that releases a fluorescent molecule
+            (4-MU) in proportion to how much active enzyme is present. Getting trustworthy numbers
+            out of this assay took six rounds of calibration (the full story — including a
+            substrate mix-up that briefly looked like a real signal — is in the lab notebook);
+            the validated version is summarised below.
+          </p>
+
+          <div class="fig-single">
+            <img src={`${b}/images/results/muc-assay-establishment.jpg`} alt="Four-panel chart establishing the MUC fluorescence assay: calibration curve, volume-dependence artefact, enzyme-titration linearity, and background controls" loading="lazy" />
+            <p class="fig-caption">Establishing a trustworthy assay. (A) Fluorescence is only proportional to 4-MU concentration below 6.25 µM — above that, the reading undershoots for optical reasons, not biology, so all rates were fit only within the reliable range. (B) Adding more lysate gave progressively less signal per microlitre — a volume artefact, not reduced activity. (C) Fixed by titrating active lysate against inactive (frameshift) lysate instead, which restored a straight-line relationship at two different temperatures/settings. (D) No signal from substrate, medium, or host alone — the frameshift control sits at just 0.7% of induced CxnA.</p>
+          </div>
+
+          <p>
+            With the assay validated, we quantified exoglucanase activity for the seven mutants
+            flagged by the earlier screens, each compared against a wild-type control grown and
+            lysed alongside it on the same day.
+          </p>
+
+          <div class="fig-single">
+            <img src={`${b}/images/results/muc-quant-screen.jpg`} alt="Bar chart of exoglucanase activity for seven epPCR mutants and wild-type controls, relative to wild type, with a 3-sigma detection threshold band" loading="lazy" />
+            <p class="fig-caption">Activity of all seven flagged mutants, relative to a same-day wild-type control (bars = median of 3 technical replicates; whiskers = range). The shaded band marks how much two colonies of the <em>same, unmutated</em> genotype normally differ from each other just from day-to-day prep variation — only a bar that clears this band by itself is a plausible real effect.</p>
+          </div>
+
+          <div class="key-finding">
+            <div class="key-finding-label">The headline number</div>
+            <div class="key-finding-value">9.5% colony-to-colony noise → need ≥1.40× to call it real</div>
+            <div class="key-finding-context">
+              Before trusting any "improved" mutant, we first measured how much two colonies of
+              the identical, unmutated wild type differ from each other purely from everyday
+              variability in growth and lysis. The answer was 9.5%. Statistically, that means a
+              single mutant colony needs to beat wild type by at least 1.40× before we can call the
+              difference real rather than noise (a "3σ" threshold, in the jargon).
             </div>
-            <div class="figure-panel">
-              <div class="placeholder-block pending-block">
-                <div class="placeholder-icon" aria-hidden="true">📊</div>
-                <strong>Chart: Specific activity — mutants vs WT CxnA</strong>
-                <p>Purified enzyme specific activity (nmol/min/mg) for MUG, MUC, and CMC-DNS assays. Fold improvement over WT baseline for each confirmed mutant.</p>
-                <p class="pending-label">Result pending — expected: validation phase</p>
-              </div>
+          </div>
+
+          <details class="expand">
+            <summary>How each of the 7 flagged mutants actually scored</summary>
+            <div class="expand-body">
+              <div class="table-wrap"><div class="table-scroll"><table class="data-table">
+                <thead>
+                  <tr><th>Mutant</th><th>Activity vs wild type</th><th>Call</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="mono"><strong>CO12</strong></td><td>1.39× and 1.31× (two independent colonies, mean 1.35×)</td><td><strong>Candidate, not confirmed</strong> — above the single-colony threshold's ballpark but not past it with statistical confidence (p = 0.11)</td></tr>
+                  <tr><td class="mono">CO2</td><td>0.72×</td><td>At or below wild type</td></tr>
+                  <tr><td class="mono">CO4</td><td>0.99×</td><td>Indistinguishable from wild type</td></tr>
+                  <tr><td class="mono">CO7</td><td>0.57×</td><td>Below wild type</td></tr>
+                  <tr><td class="mono">T4</td><td>0.16×</td><td>Strongly attenuated</td></tr>
+                  <tr><td class="mono">T14</td><td>≈ 0× (indistinguishable from the dead-enzyme control)</td><td>Functionally dead</td></tr>
+                  <tr><td class="mono">T15</td><td>≈ 0× (indistinguishable from the dead-enzyme control)</td><td>Functionally dead</td></tr>
+                </tbody>
+              </table></div></div>
+              <p class="table-note">WT-CO vs WT-T themselves agreed to within 1.1% of each other, confirming codon optimisation alone doesn't change activity — differences above are attributable to the epPCR mutations (or to prep noise, for anything inside the shaded band).</p>
             </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- WL-R6: Sequencing -->
+      <div class="result-block" id="wetlab-sequencing">
+        <div class="result-header">
+          <div class="result-id">WL-R6</div>
+          <div>
+            <h3>What mutations were actually there?</h3>
+            <div class="result-meta">
+              <span class="badge badge--confirmed">Confirmed</span>
+              <span class="result-method">Methods: <a href={`${b}/methods#wetlab`}>WL-7</a></span>
+            </div>
+          </div>
+        </div>
+        <div class="result-body">
+          <p>
+            Six colonies flagged by the screens above were miniprepped and sent for Sanger
+            sequencing to find out what had actually changed in their DNA.
+          </p>
+
+          <div class="key-finding key-finding--warn">
+            <div class="key-finding-label">A sobering finding</div>
+            <div class="key-finding-value">Most sequenced colonies carried no mutations at all</div>
+            <div class="key-finding-context">
+              Several of the sequenced codon-optimised colonies came back identical to the parent
+              sequence — epPCR simply hadn't introduced a change in those particular colonies by
+              chance. That's actually informative: if "mutants" with zero genetic change still show
+              a 0.57–1.39× spread in measured activity, that spread has to be prep-to-prep noise,
+              not genetics — which is exactly the kind of variation the 1.40× statistical threshold
+              above was designed to filter out.
+            </div>
+          </div>
+
+          <p>
+            The clearest exception was colony T4 (the one that showed strongly attenuated activity,
+            0.16× wild type). Its sequencing surfaced two point mutations: a glycine → aspartic
+            acid change in the exoglucanase (Cex) domain, and an aspartic acid → glycine change in
+            the endoglucanase (CenA) domain. Because CxnA's two active sites sit several hundred
+            residues apart, losing <em>both</em> activities from two separate, unrelated point
+            mutations landing simultaneously is a coincidence we'd rather not have to explain — a
+            single misfolding event destabilising the whole fusion protein is the simpler
+            explanation, and fits the data better.
+          </p>
+        </div>
+      </div>
+
+      <!-- WL-R7: Verdict -->
+      <div class="result-block" id="wetlab-verdict">
+        <div class="result-header">
+          <div class="result-id">WL-R7</div>
+          <div>
+            <h3>So — did it work?</h3>
+            <div class="result-meta">
+              <span class="badge badge--neutral">The honest answer</span>
+            </div>
+          </div>
+        </div>
+        <div class="result-body">
+          <p>
+            <strong>No mutant demonstrated a confirmed improvement in activity.</strong> CO12 is a
+            genuine candidate for a future round — it's the only variant that beat wild type at
+            all, and its 1.35× average sits right at the edge of our detection limit — but it
+            doesn't clear the bar for statistical confidence yet, and more replicates are needed
+            before calling it a real hit rather than a lucky draw. Two mutants (T14, T15) appear to
+            have lost function entirely, most likely through protein misfolding rather than a
+            targeted change to either active site.
+          </p>
+          <p>
+            What <em>did</em> work: we built a complete, repeatable pipeline — random mutagenesis,
+            two fast qualitative screens, a validated quantitative fluorescence assay, and
+            sequencing to close the loop — that took a library from "30 random colonies" down to
+            "one statistically-interesting candidate" in a single round. The library was small and
+            the GC-rich gene was a genuine technical obstacle throughout; a larger library run
+            through the same pipeline is the obvious next step, not a different approach.
+          </p>
+
+          <div class="callout">
+            <p class="callout-title">Why we're reporting a null result at all</p>
+            <p>
+              A "nothing improved, but here's exactly why and how confident we are" result is a
+              real scientific outcome, not a failure to hide. Every negative or inconclusive finding
+              on this page — the collapsed T14/T15 mutants, the unconfirmed CO12 candidate, the
+              small library sizes — is reported as measured, not rounded up or omitted.
+            </p>
           </div>
         </div>
       </div>
@@ -722,53 +748,88 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
       <div class="section-header">
         <p class="eyebrow">Bibliography</p>
         <h2 id="refs-heading">Full reference list</h2>
-        <p>All sources cited across the project website.</p>
+        <p>All sources cited across the project website, matching the final project report.</p>
       </div>
 
       <ol class="ref-list">
-        <li id="ref-duedu">
-          Duedu, K.O. &amp; French, C.E. (2016). Characterization of a bifunctional cellulase CxnA
-          from <em>Cellulomonas fimi</em>. <em>Enzyme and Microbial Technology</em>.
-          University of Edinburgh.
-          [DOI to be added]
-        </li>
-        <li id="ref-liu-full">
-          Liu, G. et al. (2018). Functional and structural characterization of a GH1 family
-          beta-glucosidase and its role in biomass degradation.
-          <em>Biotechnology for Biofuels</em>.
-          [DOI to be added]
-        </li>
-        <li id="ref-notenboom">
+        <li id="ref-notenboom98">
           Notenboom, V., Birsan, C., Warren, R.A.J., Withers, S.G. &amp; Rose, D.R. (1998).
           Exploring the cellulose/xylan specificity of the β-1,4-glycanase Cex from
           <em>Cellulomonas fimi</em> through crystallography and mutation.
-          <em>Biochemistry</em>, 37(14), 4751–4758.
-          PDB: 1FHD.
-          <a href="https://doi.org/10.1021/bi9729081" target="_blank" rel="noopener">doi:10.1021/bi9729081</a>
+          <em>Biochemistry</em>, 37(14), 4751–4758. PDB: 1FHD.
+          <a href="https://doi.org/10.1021/bi9729211" target="_blank" rel="noopener">doi:10.1021/bi9729211</a>
         </li>
-        <li>
-          Notenboom, V. et al. (2000). Crystal structures of the family 10 xylanase from
-          <em>Streptomyces lividans</em> and related Cex structures.
+        <li id="ref-notenboom00">
+          Notenboom, V. et al. (2000). Crystallographic analysis of a complex between Cex and
+          a xylobiose-derived inhibitor, with experimentally measured substrate binding affinity.
           <em>Biochemistry</em>.
-          [DOI to be added]
         </li>
-        <li>
+        <li id="ref-duedu">
+          Duedu, K.O. &amp; French, C.E. (2016). Characterization of a <em>Cellulomonas fimi</em>
+          exoglucanase/xylanase–endoglucanase gene fusion which improves microbial degradation of
+          cellulosic biomass. <em>Enzyme and Microbial Technology</em>, 93–94, 113–121.
+          <a href="https://doi.org/10.1016/j.enzmictec.2016.08.005" target="_blank" rel="noopener">doi:10.1016/j.enzmictec.2016.08.005</a>
+        </li>
+        <li id="ref-damude">
+          Damude, H.G., Ferro, V., Withers, S.G. &amp; Warren, R. (1996). Substrate specificity of
+          endoglucanase A from <em>Cellulomonas fimi</em>: fundamental differences between
+          endoglucanases and exoglucanases from family 6. <em>Biochemical Journal</em>, 315(2), 467–472.
+          <a href="https://doi.org/10.1042/bj3150467" target="_blank" rel="noopener">doi:10.1042/bj3150467</a>
+        </li>
+        <li id="ref-cockburn">
+          Cockburn, D.W., Vandenende, C. &amp; Clarke, A.J. (2010). Modulating the pH–activity
+          profile of cellulase by substitution: replacing the general base catalyst aspartate with
+          cysteinesulfinate in cellulase A from <em>Cellulomonas fimi</em>. <em>Biochemistry</em>,
+          49(9), 2042–2050.
+          <a href="https://doi.org/10.1021/bi1000596" target="_blank" rel="noopener">doi:10.1021/bi1000596</a>
+        </li>
+        <li id="ref-adasme">
           Adasme, M.F. et al. (2021). PLIP 2021: expanding the scope of the protein–ligand
-          interaction profiler to DNA and RNA.
-          <em>Nucleic Acids Research</em>, 49(W1), W530–W534.
+          interaction profiler to DNA and RNA. <em>Nucleic Acids Research</em>, 49(W1), W530–W534.
           <a href="https://doi.org/10.1093/nar/gkab294" target="_blank" rel="noopener">doi:10.1093/nar/gkab294</a>
         </li>
-        <li>
-          Trott, O. &amp; Olson, A.J. (2010). AutoDock Vina: improving the speed and accuracy
-          of docking with a new scoring function, efficient optimization, and multithreading.
-          <em>Journal of Computational Chemistry</em>, 31(2), 455–461.
-          <a href="https://doi.org/10.1002/jcc.21334" target="_blank" rel="noopener">doi:10.1002/jcc.21334</a>
+        <li id="ref-ashkenazy">
+          Ashkenazy, H. et al. (2016). ConSurf 2016: an improved methodology to estimate and
+          visualize evolutionary conservation in macromolecules. <em>Nucleic Acids Research</em>,
+          44(W1), W344–W350.
+          <a href="https://doi.org/10.1093/nar/gkw408" target="_blank" rel="noopener">doi:10.1093/nar/gkw408</a>
         </li>
-        <li>
-          Abramson, J. et al. (2024). Accurate structure prediction of biomolecular interactions
-          with AlphaFold 3.
-          <em>Nature</em>, 630, 493–500.
-          <a href="https://doi.org/10.1038/s41586-024-07487-w" target="_blank" rel="noopener">doi:10.1038/s41586-024-07487-w</a>
+        <li id="ref-eberhardt">
+          Eberhardt, J., Santos-Martins, D., Tillack, A.F. &amp; Forli, S. (2021). AutoDock Vina
+          1.2.0: new docking methods, expanded force field, and Python bindings. <em>Journal of
+          Chemical Information and Modeling</em>, 61(8), 3891–3898.
+        </li>
+        <li id="ref-schymkowitz">
+          Schymkowitz, J. et al. (2005). The FoldX web server: an online force field. <em>Nucleic
+          Acids Research</em>, 33(suppl_2), W382–W388.
+          <a href="https://doi.org/10.1093/nar/gki387" target="_blank" rel="noopener">doi:10.1093/nar/gki387</a>
+        </li>
+        <li id="ref-beckman">
+          Beckman, R.A., Mildvan, A.S. &amp; Loeb, L.A. (1985). On the fidelity of DNA replication:
+          manganese mutagenesis in vitro. <em>Biochemistry</em>, 24(21), 5810–5817.
+          <a href="https://doi.org/10.1021/bi00342a019" target="_blank" rel="noopener">doi:10.1021/bi00342a019</a>
+        </li>
+        <li id="ref-olofsson">
+          Olofsson, K., Bertilsson, M. &amp; Lidén, G. (2008). A short review on SSF — an
+          interesting process option for ethanol production from lignocellulosic feedstocks.
+          <em>Biotechnology for Biofuels</em>, 1(1).
+          <a href="https://doi.org/10.1186/1754-6834-1-7" target="_blank" rel="noopener">doi:10.1186/1754-6834-1-7</a>
+        </li>
+        <li id="ref-zajki">
+          Zajki-Zechmeister, K. et al. (2021). Processive enzymes kept on a leash: how cellulase
+          activity in multienzyme complexes directs nanoscale deconstruction of cellulose. <em>ACS
+          Catalysis</em>, 11(21), 13530–13542.
+          <a href="https://doi.org/10.1021/acscatal.1c03465" target="_blank" rel="noopener">doi:10.1021/acscatal.1c03465</a>
+        </li>
+        <li id="ref-ejaz">
+          Ejaz, U., Sohail, M. &amp; Ghanemi, A. (2021). Cellulases: from bioactivity to a variety
+          of industrial applications. <em>Biomimetics</em>, 6(3), 44.
+          <a href="https://doi.org/10.3390/biomimetics6030044" target="_blank" rel="noopener">doi:10.3390/biomimetics6030044</a>
+        </li>
+        <li id="ref-zadorozhny">
+          Zadorozhny, A.V. et al. (2025). Cellulases: key properties, natural sources, and
+          industrial applications. <em>Vavilov Journal of Genetics and Breeding</em>, 29(8), 1348–1360.
+          <a href="https://doi.org/10.18699/vjgb-25-141" target="_blank" rel="noopener">doi:10.18699/vjgb-25-141</a>
         </li>
       </ol>
     </div>
@@ -811,8 +872,9 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
     padding: var(--sp-5);
   }
   .status-card h3 { color: var(--c-secondary); margin-bottom: var(--sp-4); font-size: 1rem; }
-  .status-items { display: flex; flex-direction: column; gap: var(--sp-2); }
-  .status-item { display: flex; align-items: center; gap: var(--sp-2); font-size: 0.88rem; }
+  .status-items { display: flex; flex-direction: column; gap: var(--sp-3); }
+  .status-item { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2); font-size: 0.88rem; }
+  .status-item .badge { flex-shrink: 0; }
 
   /* Embedded Mol* viewer */
   .viewer-embed {
@@ -944,80 +1006,71 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
   .key-finding-value { font-size: 1.35rem; font-weight: 700; color: var(--c-secondary); }
   .key-finding-context { font-size: 0.88rem; color: var(--c-text-muted); max-width: none; }
 
-  /* Figure blocks */
-  .figure-block {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--sp-4);
+  /* Real figure images */
+  .fig-single {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
   }
-  .figure-block--3 { grid-template-columns: repeat(3, 1fr); }
-  @media (max-width: 800px) {
-    .figure-block { grid-template-columns: 1fr; }
-    .figure-block--3 { grid-template-columns: 1fr; }
-  }
-
-  .figure-panel { min-height: 0; }
-  .figure-note {
-    font-size: 0.75rem;
-    color: var(--c-text-faint);
-    font-style: italic;
-    margin-top: var(--sp-2);
-    max-width: none;
-  }
-  .figure-note code { font-size: 0.75rem; }
-
-  /* Pending blocks */
-  .pending-block {
-    border-color: var(--c-accent);
-    border-style: dashed;
-  }
-  .pending-label {
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--c-accent);
-    background: var(--c-accent-light);
-    border-radius: var(--radius-sm);
-    padding: 0.2em 0.5em;
-    display: inline-block;
-    margin-top: var(--sp-2);
-    max-width: none;
-  }
-
-  /* Convergence comparison */
-  .convergence-compare {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--sp-5);
-  }
-  @media (max-width: 700px) { .convergence-compare { grid-template-columns: 1fr; } }
-  .convergence-item {
+  .fig-single img {
+    width: 100%;
+    height: auto;
     border-radius: var(--radius-lg);
-    padding: var(--sp-5);
     border: 1px solid var(--c-border);
+    display: block;
+    background: #fff;
   }
-  .convergence-item--good { background: var(--c-primary-light); border-color: var(--c-primary); }
-  .convergence-item--warn { background: var(--c-accent-light); border-color: var(--c-accent); }
-  .convergence-label {
-    font-size: 0.8rem;
+  .fig-caption {
+    font-size: 0.82rem;
+    color: var(--c-text-muted);
+    line-height: 1.5;
+    max-width: none;
+  }
+
+  /* Callouts */
+  .callout {
+    background: var(--c-surface-2);
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+    padding: var(--sp-4) var(--sp-5);
+  }
+  .callout--warn {
+    background: var(--c-accent-light);
+    border-color: var(--c-accent);
+  }
+  .callout-title {
+    font-size: 0.78rem;
     font-weight: 800;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--c-secondary);
     margin-bottom: var(--sp-2);
   }
-  .convergence-status { margin-bottom: var(--sp-3); }
-  .convergence-item p { font-size: 0.9rem; }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout p { font-size: 0.9rem; max-width: none; }
 
-  /* Value placeholders */
-  .value-placeholder {
-    color: var(--c-text-faint);
-    font-style: italic;
+  /* Expandable technical detail (matches global <details class="expand"> pattern) */
+  .expand {
+    border: 1px solid var(--c-border);
+    border-radius: var(--radius-md);
+    background: var(--c-surface);
+    padding: var(--sp-3) var(--sp-4);
   }
+  .expand summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--c-primary);
+  }
+  .expand-body { margin-top: var(--sp-3); }
+  .expand-body p:last-child { margin-bottom: 0; }
 
   .table-note {
     font-size: 0.78rem;
     color: var(--c-text-faint);
     font-style: italic;
+    max-width: none;
   }
   .table-note code { font-size: 0.75rem; }
+  .table-note a { color: var(--c-primary); }
 </style>

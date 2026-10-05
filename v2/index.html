@@ -176,43 +176,6 @@
       pointer-events: none;
       will-change: transform;
     }
-    .vex-inner-nav {
-      padding: 80px 24px 0;
-    }
-    @media (min-width: 768px) { .vex-inner-nav { padding: 80px 48px 0; } }
-    @media (min-width: 1024px) { .vex-inner-nav { padding: 80px 64px 0; } }
-    .vex-inner-nav nav {
-      border-radius: 12px;
-      padding: 8px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .vex-nav-logo { font-size: 1.5rem; font-weight: 600; }
-    .vex-nav-links {
-      display: none;
-      gap: 32px;
-      font-size: 0.875rem;
-      list-style: none;
-    }
-    @media (min-width: 768px) { .vex-nav-links { display: flex; } }
-    .vex-nav-links a { color: #fff; text-decoration: none; transition: color 0.2s; }
-    .vex-nav-links a:hover { color: rgba(255,255,255,0.6); }
-    .vex-nav-cta {
-      background: #fff;
-      color: #000;
-      border: none;
-      font-family: inherit;
-      font-size: 0.875rem;
-      font-weight: 500;
-      padding: 8px 24px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s;
-      text-decoration: none;
-    }
-    .vex-nav-cta:hover { background: #e5e5e5; }
-
     .vex-content {
       flex: 1;
       display: flex;
@@ -236,6 +199,7 @@
       letter-spacing: -0.04em;
       margin-bottom: 16px;
     }
+    .vex-h1 .block { display: block; }
     .vex-h1 .char {
       display: inline-block;
       opacity: 0;
@@ -515,10 +479,6 @@
     /* VexHero */
     [data-theme="light"] #vex-hero { background: #f5f5f0; }
     [data-theme="light"] #magnet-square { filter: brightness(1.08) saturate(0.85); }
-    [data-theme="light"] .vex-nav-links a { color: #111; }
-    [data-theme="light"] .vex-nav-links a:hover { color: rgba(0,0,0,0.45); }
-    [data-theme="light"] .vex-nav-cta { background: #111; color: #fff; }
-    [data-theme="light"] .vex-nav-cta:hover { background: #333; }
     [data-theme="light"] .vex-para { color: rgba(0,0,0,0.6); }
     [data-theme="light"] .btn-primary { background: #111; color: #fff; }
     [data-theme="light"] .btn-primary:hover { background: #333; }
@@ -535,19 +495,19 @@
       background: radial-gradient(ellipse at 50% 45%, rgba(245,245,240,0.1) 0%, rgba(245,245,240,0.92) 100%);
     }
     [data-theme="light"] .b3-backbone { stroke: rgba(0,0,0,0.15); }
-    [data-theme="light"] .b3-gh10-shape { fill: rgba(26,102,72,0.07); }
-    [data-theme="light"] .b3-gh10-shape.lit { filter: drop-shadow(0 0 10px rgba(26,102,72,0.5)); }
+    [data-theme="light"] .b3-cex-shape { fill: rgba(26,102,72,0.07); }
+    [data-theme="light"] .b3-cex-shape.lit { filter: drop-shadow(0 0 10px rgba(26,102,72,0.5)); }
     [data-theme="light"] .b3-cbm-shape { fill: rgba(181,114,31,0.07); }
     [data-theme="light"] .b3-cbm-shape.lit { filter: drop-shadow(0 0 8px rgba(181,114,31,0.5)); }
-    [data-theme="light"] .b3-gh1-shape { fill: rgba(26,102,72,0.07); }
-    [data-theme="light"] .b3-gh1-shape.lit { filter: drop-shadow(0 0 10px rgba(26,102,72,0.5)); }
+    [data-theme="light"] .b3-cena-shape { fill: rgba(26,102,72,0.07); }
+    [data-theme="light"] .b3-cena-shape.lit { filter: drop-shadow(0 0 10px rgba(26,102,72,0.5)); }
     [data-theme="light"] .b3-svg-label { fill: rgba(0,0,0,0.5); }
     [data-theme="light"] .b3-svg-domain-name { fill: rgba(0,0,0,0.8); }
     [data-theme="light"] .b3-svg-sublabel { fill: rgba(0,0,0,0.4); }
     [data-theme="light"] .b3-card { border-color: rgba(0,0,0,0.09); background: rgba(255,255,255,0.75); }
-    [data-theme="light"] .b3-card-gh10 { border-color: rgba(26,102,72,0.22); }
+    [data-theme="light"] .b3-card-cex { border-color: rgba(26,102,72,0.22); }
     [data-theme="light"] .b3-card-cbm  { border-color: rgba(181,114,31,0.22); }
-    [data-theme="light"] .b3-card-gh1  { border-color: rgba(26,102,72,0.22); }
+    [data-theme="light"] .b3-card-cena  { border-color: rgba(26,102,72,0.22); }
     [data-theme="light"] .b3-card p { color: rgba(0,0,0,0.55); }
     [data-theme="light"] .b3-final { color: rgba(0,0,0,0.45); }
     [data-theme="light"] .b3-final strong { color: rgba(0,0,0,0.75); }
@@ -622,11 +582,11 @@
     .b3-domain.lit {
       opacity: 1;
     }
-    .b3-gh10-shape {
+    .b3-cex-shape {
       stroke: var(--cv-primary);
       fill: rgba(61, 214, 140, 0.08);
     }
-    .b3-gh10-shape.lit {
+    .b3-cex-shape.lit {
       filter: drop-shadow(0 0 14px var(--cv-primary));
     }
     .b3-cbm-shape {
@@ -636,11 +596,11 @@
     .b3-cbm-shape.lit {
       filter: drop-shadow(0 0 10px var(--cv-accent));
     }
-    .b3-gh1-shape {
+    .b3-cena-shape {
       stroke: var(--cv-primary);
       fill: rgba(61, 214, 140, 0.08);
     }
-    .b3-gh1-shape.lit {
+    .b3-cena-shape.lit {
       filter: drop-shadow(0 0 14px var(--cv-primary));
     }
     .b3-svg-label {
@@ -693,12 +653,12 @@
       text-transform: uppercase;
       margin-bottom: 4px;
     }
-    .b3-card-gh10 { border-color: rgba(61, 214, 140, 0.25); }
-    .b3-card-gh10 .b3-card-name { color: var(--cv-primary); }
+    .b3-card-cex { border-color: rgba(61, 214, 140, 0.25); }
+    .b3-card-cex .b3-card-name { color: var(--cv-primary); }
     .b3-card-cbm  { border-color: rgba(251, 191, 36, 0.25); }
     .b3-card-cbm  .b3-card-name { color: var(--cv-accent); }
-    .b3-card-gh1  { border-color: rgba(61, 214, 140, 0.25); }
-    .b3-card-gh1  .b3-card-name { color: var(--cv-primary); }
+    .b3-card-cena  { border-color: rgba(61, 214, 140, 0.25); }
+    .b3-card-cena  .b3-card-name { color: var(--cv-primary); }
     .b3-card p {
       font-size: 0.75rem;
       color: rgba(255,255,255,0.5);
@@ -884,17 +844,17 @@
       text-decoration: none;
     }
     .b4-footer a:hover { text-decoration: underline; }
-  </style></head> <body> <!-- Palette toggle --> <div id="palette-toggle" aria-label="Colour palette"> <label>Palette</label> <div class="palette-swatches"> <button class="palette-swatch swatch-A active" data-pal="A" title="Green + Amber (design system)" aria-pressed="true"></button> <button class="palette-swatch swatch-B" data-pal="B" title="Teal + Coral (biotech variant)" aria-pressed="false"></button> </div> </div> <!-- Fixed nav overlays all sections --> <nav id="lithos-nav" aria-label="Site navigation"> <div class="nav-logo"> <svg width="22" height="22" viewBox="0 0 256 256" fill="#fff" aria-hidden="true"> <path d="M256 256L128 256L0 128L128 128ZM256 128L128 128L0 0L128 0"></path> </svg> <span>TriCel</span> </div> <div class="nav-pills"> <a href="/2026_Edinburgh/science/" class="nav-pill">Science</a> <a href="/2026_Edinburgh/methods/" class="nav-pill">Methods</a> <a href="/2026_Edinburgh/results/" class="nav-pill">Results</a> <a href="/2026_Edinburgh/notebook/" class="nav-pill">Notebook</a> <a href="/2026_Edinburgh/overview/" class="nav-pill">Team</a> </div> <div style="display:flex;align-items:center;gap:8px"> <button id="v2-theme-toggle" aria-label="Toggle colour scheme"> <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <circle cx="12" cy="12" r="5"></circle> <line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line> <line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line> <line x1="4.93" y1="4.93" x2="6.34" y2="6.34"></line><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"></line> <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"></line><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"></line> </svg> <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path> </svg> </button> <a href="/2026_Edinburgh/" class="nav-cta">iDEC 2026</a> </div> </nav> <!-- ── Section 1: VEX HERO ────────────────────── --> <section id="vex-hero" aria-label="CxnA overview"> <div id="magnet-square" aria-hidden="true"></div> <div class="vex-inner-nav"> <nav class="liquid-glass"> <div class="vex-nav-logo">CxnA</div> <ul class="vex-nav-links"> <li><a href="/2026_Edinburgh/science/">Science</a></li> <li><a href="/2026_Edinburgh/methods/">Methods</a></li> <li><a href="/2026_Edinburgh/results/">Results</a></li> <li><a href="/2026_Edinburgh/notebook/">Notebook</a></li> </ul> <a href="/2026_Edinburgh/results/" class="vex-nav-cta">Explore</a> </nav> </div> <div class="vex-content"> <div class="vex-grid"> <div> <h1 class="vex-h1" id="vex-heading" aria-label="One enzyme. Three activities."></h1> <p class="vex-para" id="vex-para">
-Engineering a trifunctional cellulase to break cellulose completely —
-            GH10, CBM, and GH1 fused into one.
-</p> <div class="vex-buttons" id="vex-buttons"> <a href="/2026_Edinburgh/science/" class="btn-primary">Read the Science</a> <a href="/2026_Edinburgh/results/" class="btn-glass liquid-glass">View Results</a> </div> </div> <div class="vex-pill-wrap" id="vex-pill"> <div class="vex-pill liquid-glass">GH10 · CBM · GH1</div> </div> </div> </div> </section> <!-- ── Section 2: LITHOS HERO ─────────────────── --> <section id="lithos-hero" aria-label="Cellulose to glucose"> <div id="lithos-base" class="hero-zoom" aria-hidden="true"></div> <canvas id="lithos-canvas" aria-hidden="true"></canvas> <div id="lithos-reveal" aria-hidden="true"></div> <div class="lithos-heading"> <h1> <span class="lithos-h-italic hero-anim hero-reveal" style="animation-delay:0.25s">Cellulose to</span> <span class="lithos-h-plain hero-anim hero-reveal" style="animation-delay:0.42s">glucose.</span> </h1> </div> <div class="lithos-bl hero-anim hero-fade" style="animation-delay:0.7s"> <p>Plant cell walls are the planet's most abundant carbon store. CxnA evolved to break them down — three enzymatic domains, one protein chain.</p> </div> <div class="lithos-br hero-anim hero-fade" style="animation-delay:0.85s"> <p>Move your cursor to reveal the living material we're engineering a future from — guided by directed evolution and structural biology.</p> <a href="/2026_Edinburgh/results/" class="btn-lithos">Explore Results</a> </div> </section> <!-- ── Section 3: BEAT 3 — Mechanism ──────────── --> <section id="beat3" aria-label="How CxnA works"> <div id="beat3-sticky"> <!-- Animated WebP fallback — always visible until canvas takes over --> <img id="b3-webp-img" src="/2026_Edinburgh/helix-spin.webp" alt="" aria-hidden="true"> <!-- Canvas receives scroll-scrubbed frames via ImageDecoder --> <canvas id="b3-webp-canvas" aria-hidden="true"></canvas> <div id="b3-mol-overlay" aria-hidden="true"></div> <div id="b3-content"> <p class="b3-eyebrow" id="b3-eyebrow" style="opacity:0">Mechanism</p> <h2 class="b3-heading" id="b3-heading" style="opacity:0;transform:translateY(20px)">
-Three enzymes.<br><em>One chain.</em> </h2> <!-- Protein domain SVG diagram --> <div class="b3-svg-wrap" id="b3-svg-wrap" style="opacity:0"> <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"> <!-- Backbone --> <line x1="40" y1="80" x2="660" y2="80" class="b3-backbone"></line> <!-- GH10 domain (left, larger) --> <rect id="b3-gh10-dom" x="40" y="32" width="220" height="96" rx="48" class="b3-domain b3-gh10-shape"></rect> <!-- Internal helix zigzag decoration --> <polyline id="b3-gh10-helix" points="70,60 90,100 110,60 130,100 150,60 170,100 190,60 210,100 230,60" stroke="rgba(61,214,140,0.35)" stroke-width="2" fill="none" opacity="0" style="transition:opacity 0.7s 0.2s"></polyline> <text x="150" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-gh10">GH10</text> <text x="150" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-gh10-sub">Endo-xylanase</text> <!-- CBM/Linker (centre, smaller) --> <rect id="b3-cbm-dom" x="290" y="50" width="120" height="60" rx="30" class="b3-domain b3-cbm-shape"></rect> <text x="350" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-cbm">CBM</text> <text x="350" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-cbm-sub">Carbohydrate-Binding</text> <!-- GH1 domain (right, larger) --> <rect id="b3-gh1-dom" x="440" y="32" width="220" height="96" rx="48" class="b3-domain b3-gh1-shape"></rect> <polyline id="b3-gh1-helix" points="470,60 490,100 510,60 530,100 550,60 570,100 590,60 610,100 630,60" stroke="rgba(61,214,140,0.35)" stroke-width="2" fill="none" opacity="0" style="transition:opacity 0.7s 0.2s"></polyline> <text x="550" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-gh1">GH1</text> <text x="550" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-gh1-sub">β-glucosidase</text> <!-- Linker connector lines (dim always visible) --> <line x1="260" y1="80" x2="290" y2="80" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="4 4"></line> <line x1="410" y1="80" x2="440" y2="80" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="4 4"></line> </svg> </div> <!-- Domain info cards --> <div class="b3-cards"> <div class="b3-card b3-card-gh10" id="b3-card-gh10"> <div class="b3-card-name">GH10</div> <p>Endo-β-1,4-xylanase. Cleaves the cellulose backbone into oligosaccharides, breaking crystalline structure.</p> </div> <div class="b3-card b3-card-cbm" id="b3-card-cbm"> <div class="b3-card-name">CBM · Linker</div> <p>Carbohydrate-Binding Module anchors CxnA to the substrate surface, increasing local enzyme concentration.</p> </div> <div class="b3-card b3-card-gh1" id="b3-card-gh1"> <div class="b3-card-name">GH1</div> <p>β-glucosidase. Completes degradation by releasing free glucose monomers — the final metabolisable product.</p> </div> </div> <p class="b3-final" id="b3-final" style="opacity:0">
-Complete cellulose-to-glucose cascade in <strong>a single protein chain</strong>.
-</p> </div><!-- /#b3-content --> </div> </section> <!-- ── Section 4: BEAT 4 — Bento grid ─────────── --> <section id="beat4" aria-label="Explore the project"> <div class="b4-container"> <p class="b4-eyebrow" id="b4-eyebrow">iDEC 2026</p> <h2 class="b4-heading" id="b4-heading">Explore the project</h2> <div class="b4-grid"> <!-- Science — large card --> <a href="/2026_Edinburgh/science/" class="b4-card b4-card--large" data-b4-delay="0"> <div> <div class="b4-card-tag">Science</div> </div> <div> <h3 class="b4-card-title">Why cellulose is the hardest problem in green chemistry — and how a trifunctional enzyme changes the equation.</h3> <div class="b4-card-arrow">→</div> </div> </a> <!-- Methods --> <a href="/2026_Edinburgh/methods/" class="b4-card" data-b4-delay="100"> <div> <div class="b4-card-tag">Methods</div> </div> <div> <h3 class="b4-card-title">Directed evolution protocol — dry-lab to wet-lab pipeline.</h3> <div class="b4-card-arrow">→</div> </div> </a> <!-- Results --> <a href="/2026_Edinburgh/results/" class="b4-card" data-b4-delay="200"> <div> <div class="b4-card-tag">Results</div> </div> <div> <h3 class="b4-card-title">Structural models, binding analysis & activity assays.</h3> <div class="b4-card-arrow">→</div> </div> </a> <!-- Notebook --> <a href="/2026_Edinburgh/notebook/" class="b4-card" data-b4-delay="300"> <div> <div class="b4-card-tag">Notebook</div> </div> <div> <h3 class="b4-card-title">Lab diary — week-by-week experimental record.</h3> <div class="b4-card-arrow">→</div> </div> </a> <!-- Overview --> <a href="/2026_Edinburgh/overview/" class="b4-card" data-b4-delay="400"> <div> <div class="b4-card-tag">Overview</div> </div> <div> <h3 class="b4-card-title">Plain-language project summary — what we built and why.</h3> <div class="b4-card-arrow">→</div> </div> </a> </div> <div class="b4-footer" id="b4-footer"> <p>Competing at iDEC 2026 ·</p> <a href="/2026_Edinburgh/">Back to home</a> </div> </div> </section> <script>
+  </style></head> <body> <!-- Palette toggle --> <div id="palette-toggle" aria-label="Colour palette"> <label>Palette</label> <div class="palette-swatches"> <button class="palette-swatch swatch-A active" data-pal="A" title="Green + Amber (design system)" aria-pressed="true"></button> <button class="palette-swatch swatch-B" data-pal="B" title="Teal + Coral (biotech variant)" aria-pressed="false"></button> </div> </div> <!-- Fixed nav overlays all sections --> <nav id="lithos-nav" aria-label="Site navigation"> <div class="nav-logo"> <svg width="22" height="22" viewBox="0 0 256 256" fill="#fff" aria-hidden="true"> <path d="M256 256L128 256L0 128L128 128ZM256 128L128 128L0 0L128 0"></path> </svg> <span>TriCel</span> </div> <div class="nav-pills"> <a href="/2026_Edinburgh/science/" class="nav-pill">Science</a> <a href="/2026_Edinburgh/methods/" class="nav-pill">Methods</a> <a href="/2026_Edinburgh/results/" class="nav-pill">Results</a> <a href="/2026_Edinburgh/notebook/" class="nav-pill">Notebook</a> <a href="/2026_Edinburgh/overview/" class="nav-pill">Team</a> </div> <div style="display:flex;align-items:center;gap:8px"> <button id="v2-theme-toggle" aria-label="Toggle colour scheme"> <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <circle cx="12" cy="12" r="5"></circle> <line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line> <line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line> <line x1="4.93" y1="4.93" x2="6.34" y2="6.34"></line><line x1="17.66" y1="17.66" x2="19.07" y2="19.07"></line> <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"></line><line x1="17.66" y1="6.34" x2="19.07" y2="4.93"></line> </svg> <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path> </svg> </button> <a href="/2026_Edinburgh/" class="nav-cta">iDEC 2026</a> </div> </nav> <!-- ── Section 1: VEX HERO ────────────────────── --> <section id="vex-hero" aria-label="CxnA overview"> <div id="magnet-square" aria-hidden="true"></div> <div class="vex-content"> <div class="vex-grid"> <div> <h1 class="vex-h1" id="vex-heading" aria-label="One enzyme. Two real activities."></h1> <p class="vex-para" id="vex-para">
+Engineering a bifunctional cellulase toward a third activity —
+            Cex (GH10) and CenA (GH6) fused into one chain.
+</p> <div class="vex-buttons" id="vex-buttons"> <a href="/2026_Edinburgh/science/" class="btn-primary">Read the Science</a> <a href="/2026_Edinburgh/results/" class="btn-glass liquid-glass">View Results</a> </div> </div> <div class="vex-pill-wrap" id="vex-pill"> <div class="vex-pill liquid-glass">Cex (GH10) · CBM · CenA (GH6)</div> </div> </div> </div> </section> <!-- ── Section 2: LITHOS HERO ─────────────────── --> <section id="lithos-hero" aria-label="Cellulose to glucose"> <div id="lithos-base" class="hero-zoom" aria-hidden="true"></div> <canvas id="lithos-canvas" aria-hidden="true"></canvas> <div id="lithos-reveal" aria-hidden="true"></div> <div class="lithos-heading"> <h1> <span class="lithos-h-italic hero-anim hero-reveal" style="animation-delay:0.25s">Cellulose to</span> <span class="lithos-h-plain hero-anim hero-reveal" style="animation-delay:0.42s">glucose.</span> </h1> </div> <div class="lithos-bl hero-anim hero-fade" style="animation-delay:0.7s"> <p>Plant cell walls are the planet's most abundant carbon store. CxnA was engineered to break them down — two real catalytic domains fused into one protein chain.</p> </div> <div class="lithos-br hero-anim hero-fade" style="animation-delay:0.85s"> <p>Move your cursor to reveal the living material we're engineering a future from — guided by directed evolution and structural biology.</p> <a href="/2026_Edinburgh/results/" class="btn-lithos">Explore Results</a> </div> </section> <!-- ── Section 3: BEAT 3 — Mechanism ──────────── --> <section id="beat3" aria-label="How CxnA works"> <div id="beat3-sticky"> <!-- Animated WebP fallback — always visible until canvas takes over --> <img id="b3-webp-img" src="/2026_Edinburgh/helix-spin.webp" alt="" aria-hidden="true"> <!-- Canvas receives scroll-scrubbed frames via ImageDecoder --> <canvas id="b3-webp-canvas" aria-hidden="true"></canvas> <div id="b3-mol-overlay" aria-hidden="true"></div> <div id="b3-content"> <p class="b3-eyebrow" id="b3-eyebrow" style="opacity:0">Mechanism</p> <h2 class="b3-heading" id="b3-heading" style="opacity:0;transform:translateY(20px)">
+Two real enzymes.<br><em>One chain.</em> </h2> <!-- Protein domain SVG diagram --> <div class="b3-svg-wrap" id="b3-svg-wrap" style="opacity:0"> <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"> <!-- Backbone --> <line x1="40" y1="80" x2="660" y2="80" class="b3-backbone"></line> <!-- Cex domain (left, larger) --> <rect id="b3-cex-dom" x="40" y="32" width="220" height="96" rx="48" class="b3-domain b3-cex-shape"></rect> <!-- Internal helix zigzag decoration --> <polyline id="b3-cex-helix" points="70,60 90,100 110,60 130,100 150,60 170,100 190,60 210,100 230,60" stroke="rgba(61,214,140,0.35)" stroke-width="2" fill="none" opacity="0" style="transition:opacity 0.7s 0.2s"></polyline> <text x="150" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-cex">Cex</text> <text x="150" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-cex-sub">GH10 · Exoglucanase</text> <!-- CBM/Linker (centre, smaller) --> <rect id="b3-cbm-dom" x="290" y="50" width="120" height="60" rx="30" class="b3-domain b3-cbm-shape"></rect> <text x="350" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-cbm">CBM</text> <text x="350" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-cbm-sub">Carbohydrate-Binding</text> <!-- CenA domain (right, larger) --> <rect id="b3-cena-dom" x="440" y="32" width="220" height="96" rx="48" class="b3-domain b3-cena-shape"></rect> <polyline id="b3-cena-helix" points="470,60 490,100 510,60 530,100 550,60 570,100 590,60 610,100 630,60" stroke="rgba(61,214,140,0.35)" stroke-width="2" fill="none" opacity="0" style="transition:opacity 0.7s 0.2s"></polyline> <text x="550" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-cena">CenA</text> <text x="550" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-cena-sub">GH6 · Endoglucanase</text> <!-- Linker connector lines (dim always visible) --> <line x1="260" y1="80" x2="290" y2="80" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="4 4"></line> <line x1="410" y1="80" x2="440" y2="80" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="4 4"></line> </svg> </div> <!-- Domain info cards --> <div class="b3-cards"> <div class="b3-card b3-card-cex" id="b3-card-cex"> <div class="b3-card-name">Cex — GH10</div> <p>Exoglucanase. Attacks crystalline cellulose from chain ends, releasing the disaccharide cellobiose.</p> </div> <div class="b3-card b3-card-cbm" id="b3-card-cbm"> <div class="b3-card-name">CBM · Linker</div> <p>Carbohydrate-Binding Module anchors CxnA to the substrate surface, increasing local enzyme concentration.</p> </div> <div class="b3-card b3-card-cena" id="b3-card-cena"> <div class="b3-card-name">CenA — GH6</div> <p>Endoglucanase. Cleaves internal bonds, creating new chain ends for Cex to attack — the two domains work in relay.</p> </div> </div> <p class="b3-final" id="b3-final" style="opacity:0">
+Two confirmed cellulose-degrading activities, fused into <strong>a single engineered protein chain</strong>.
+</p> </div><!-- /#b3-content --> </div> </section> <!-- ── Section 4: BEAT 4 — Bento grid ─────────── --> <section id="beat4" aria-label="Explore the project"> <div class="b4-container"> <p class="b4-eyebrow" id="b4-eyebrow">iDEC 2026</p> <h2 class="b4-heading" id="b4-heading">Explore the project</h2> <div class="b4-grid"> <!-- Science — large card --> <a href="/2026_Edinburgh/science/" class="b4-card b4-card--large" data-b4-delay="0"> <div> <div class="b4-card-tag">Science</div> </div> <div> <h3 class="b4-card-title">Why cellulose is the hardest problem in green chemistry — and how a bifunctional enzyme is being pushed further.</h3> <div class="b4-card-arrow">→</div> </div> </a> <!-- Methods --> <a href="/2026_Edinburgh/methods/" class="b4-card" data-b4-delay="100"> <div> <div class="b4-card-tag">Methods</div> </div> <div> <h3 class="b4-card-title">Directed evolution protocol — dry-lab to wet-lab pipeline.</h3> <div class="b4-card-arrow">→</div> </div> </a> <!-- Results --> <a href="/2026_Edinburgh/results/" class="b4-card" data-b4-delay="200"> <div> <div class="b4-card-tag">Results</div> </div> <div> <h3 class="b4-card-title">Structural models, binding analysis & activity assays.</h3> <div class="b4-card-arrow">→</div> </div> </a> <!-- Notebook --> <a href="/2026_Edinburgh/notebook/" class="b4-card" data-b4-delay="300"> <div> <div class="b4-card-tag">Notebook</div> </div> <div> <h3 class="b4-card-title">Lab diary — week-by-week experimental record.</h3> <div class="b4-card-arrow">→</div> </div> </a> <!-- Overview --> <a href="/2026_Edinburgh/overview/" class="b4-card" data-b4-delay="400"> <div> <div class="b4-card-tag">Overview</div> </div> <div> <h3 class="b4-card-title">Plain-language project summary — what we built and why.</h3> <div class="b4-card-arrow">→</div> </div> </a> </div> <div class="b4-footer" id="b4-footer"> <p>Competing at iDEC 2026 ·</p> <a href="/2026_Edinburgh/">Back to home</a> </div> </div> </section> <script>
     // ── Char-by-char heading ────────────────────────────────────
     (function() {
       var el = document.getElementById('vex-heading');
-      var text = 'One enzyme.\nThree activities.';
+      var text = 'One enzyme.\nTwo real activities.';
       var CHAR_DELAY = 30;
       var lines = text.split('\n');
       el.innerHTML = lines.map(function(line, li) {
@@ -1003,20 +963,20 @@ Complete cellulose-to-glucose cascade in <strong>a single protein chain</strong>
       var eyebrow = document.getElementById('b3-eyebrow');
       var heading = document.getElementById('b3-heading');
       var svgWrap = document.getElementById('b3-svg-wrap');
-      var gh10Dom = document.getElementById('b3-gh10-dom');
-      var gh10Helix = document.getElementById('b3-gh10-helix');
-      var labGh10 = document.getElementById('b3-lab-gh10');
-      var labGh10Sub = document.getElementById('b3-lab-gh10-sub');
+      var cexDom = document.getElementById('b3-cex-dom');
+      var cexHelix = document.getElementById('b3-cex-helix');
+      var labCex = document.getElementById('b3-lab-cex');
+      var labCexSub = document.getElementById('b3-lab-cex-sub');
       var cbmDom  = document.getElementById('b3-cbm-dom');
       var labCbm  = document.getElementById('b3-lab-cbm');
       var labCbmSub = document.getElementById('b3-lab-cbm-sub');
-      var gh1Dom  = document.getElementById('b3-gh1-dom');
-      var gh1Helix = document.getElementById('b3-gh1-helix');
-      var labGh1  = document.getElementById('b3-lab-gh1');
-      var labGh1Sub = document.getElementById('b3-lab-gh1-sub');
-      var cardGh10 = document.getElementById('b3-card-gh10');
+      var cenaDom  = document.getElementById('b3-cena-dom');
+      var cenaHelix = document.getElementById('b3-cena-helix');
+      var labCena  = document.getElementById('b3-lab-cena');
+      var labCenaSub = document.getElementById('b3-lab-cena-sub');
+      var cardCex = document.getElementById('b3-card-cex');
       var cardCbm  = document.getElementById('b3-card-cbm');
-      var cardGh1  = document.getElementById('b3-card-gh1');
+      var cardCena  = document.getElementById('b3-card-cena');
       var final    = document.getElementById('b3-final');
 
       function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
@@ -1024,7 +984,7 @@ Complete cellulose-to-glucose cascade in <strong>a single protein chain</strong>
         return o0 + (o1 - o0) * clamp((v - i0) / (i1 - i0), 0, 1);
       }
 
-      var state = { gh10: false, cbm: false, gh1: false, final: false };
+      var state = { cex: false, cbm: false, cena: false, final: false };
 
       function lit(el, on) {
         if (on) el.classList.add('lit');
@@ -1046,15 +1006,15 @@ Complete cellulose-to-glucose cascade in <strong>a single protein chain</strong>
         // SVG fades in: 0.05–0.2
         svgWrap.style.opacity = mapRange(p, 0.05, 0.2, 0, 1);
 
-        // GH10: 0.2–0.45
-        var gh10On = p >= 0.2;
-        if (gh10On !== state.gh10) {
-          state.gh10 = gh10On;
-          lit(gh10Dom, gh10On);
-          lit(labGh10, gh10On);
-          lit(labGh10Sub, gh10On);
-          lit(cardGh10, gh10On);
-          gh10Helix.style.opacity = gh10On ? '1' : '0';
+        // Cex: 0.2–0.45
+        var cexOn = p >= 0.2;
+        if (cexOn !== state.cex) {
+          state.cex = cexOn;
+          lit(cexDom, cexOn);
+          lit(labCex, cexOn);
+          lit(labCexSub, cexOn);
+          lit(cardCex, cexOn);
+          cexHelix.style.opacity = cexOn ? '1' : '0';
         }
 
         // CBM: 0.45–0.65
@@ -1067,15 +1027,15 @@ Complete cellulose-to-glucose cascade in <strong>a single protein chain</strong>
           lit(cardCbm, cbmOn);
         }
 
-        // GH1: 0.65–0.85
-        var gh1On = p >= 0.65;
-        if (gh1On !== state.gh1) {
-          state.gh1 = gh1On;
-          lit(gh1Dom, gh1On);
-          lit(labGh1, gh1On);
-          lit(labGh1Sub, gh1On);
-          lit(cardGh1, gh1On);
-          gh1Helix.style.opacity = gh1On ? '1' : '0';
+        // CenA: 0.65–0.85
+        var cenaOn = p >= 0.65;
+        if (cenaOn !== state.cena) {
+          state.cena = cenaOn;
+          lit(cenaDom, cenaOn);
+          lit(labCena, cenaOn);
+          lit(labCenaSub, cenaOn);
+          lit(cardCena, cenaOn);
+          cenaHelix.style.opacity = cenaOn ? '1' : '0';
         }
 
         // Final text: 0.85–1.0

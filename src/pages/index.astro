@@ -46,9 +46,11 @@ const evoHexes = Array.from({ length: EVO_POP }, (_, i) => i);
     <!-- ── Section 2: LITHOS HERO ─────────────────── -->
     <section id="lithos-hero" aria-label="Cellulose to glucose">
       <div id="lithos-base" class="hero-zoom" aria-hidden="true"></div>
-      <!-- Crystalline cellulose block: hover/touch it and it breaks apart into
-           falling glucose hexagons, draggable by the cursor once loose. -->
+      <!-- Crystalline cellulose block: touching a bonded pair releases it as
+           cellobiose (green); touching that pair again splits it into two
+           free glucose hexagons (gold), which can be shoved around. -->
       <canvas id="lithos-canvas" aria-hidden="true"></canvas>
+      <p class="lithos-hint" id="lithos-hint" aria-hidden="true">Try touching the cellulose ↓</p>
 
       <div class="lithos-heading">
         <h1>
@@ -62,8 +64,11 @@ const evoHexes = Array.from({ length: EVO_POP }, (_, i) => i);
       </div>
 
       <div class="lithos-br hero-anim hero-fade" style="animation-delay:0.85s">
-        <p>Move your cursor through the crystal — watch it break apart into glucose, and push the pieces around.</p>
-        <a href={`${b}/results`} class="btn-lithos">Explore Results</a>
+        <p>First touch breaks off cellobiose. Touch it again to split it into glucose — then push the pieces around.</p>
+        <div class="lithos-br-actions">
+          <a href={`${b}/results`} class="btn-lithos">Explore Results</a>
+          <button type="button" class="btn-lithos-reset liquid-glass" id="lithos-reset">↺ Reset</button>
+        </div>
       </div>
     </section>
 
@@ -554,6 +559,50 @@ const evoHexes = Array.from({ length: EVO_POP }, (_, i) => i);
   }
   .btn-lithos:hover { filter: brightness(1.1); transform: scale(1.03); text-decoration: none; }
   .btn-lithos:active { transform: scale(0.95); }
+
+  .lithos-br-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .btn-lithos-reset {
+    color: #fff;
+    border: none;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-lithos-reset:hover { filter: brightness(1.2); }
+  [data-theme="light"] .btn-lithos-reset { color: #111; }
+
+  .lithos-hint {
+    position: absolute;
+    top: 33%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.85);
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    pointer-events: none;
+    opacity: 0;
+    animation: lithosHintFade 0.6s 2s forwards, lithosHintBob 1.6s 2.6s ease-in-out infinite;
+    transition: opacity 0.5s;
+  }
+  .lithos-hint.dismissed { opacity: 0 !important; animation: none; }
+  @keyframes lithosHintFade { to { opacity: 1; } }
+  @keyframes lithosHintBob {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lithos-hint { animation: none; opacity: 1; }
+  }
 
   /* ── EVOLUTION BEAT ─────────────────────────────── */
   #evo-beat {
@@ -1089,66 +1138,92 @@ const evoHexes = Array.from({ length: EVO_POP }, (_, i) => i);
   })();
 
   // ── Lithos: crystalline cellulose breaking apart into glucose ────
-  // A tight grid of "cellulose" hexagons sits still until the cursor (or a
-  // touch) comes near one -- it pops loose, turns gold, and falls under
-  // gravity. Once loose, hexagons can be shoved around by the cursor too.
+  // Three states, matching the real relay: crystal (gray, bonded pair,
+  // still attached) -> cellobiose (green, bonded pair, free-falling --
+  // this is literally what CenA+Cex actually produce) -> glucose (gold,
+  // single hexagon -- the unconfirmed third-activity product). Touching a
+  // crystal pair releases it as cellobiose; touching that cellobiose pair
+  // again splits it into two free glucose hexagons. Anything already
+  // loose can also be shoved around by cursor/touch repulsion.
   (function() {
     const section = document.getElementById('lithos-hero');
     const canvas  = document.getElementById('lithos-canvas') as HTMLCanvasElement | null;
+    const hint    = document.getElementById('lithos-hint');
+    const resetBtn = document.getElementById('lithos-reset');
     if (!section || !canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const GRAVITY       = 0.45;
-    const FLOOR_PAD     = 28;
-    const RELEASE_RADIUS = 46;
-    const REPEL_RADIUS   = 70;
-    const REPEL_FORCE    = 7;
-    const DAMPING        = 0.55;
-    const FRICTION       = 0.82;
-    const AIR_DRAG       = 0.992;
+    const GRAVITY        = 0.45;
+    const FLOOR_PAD       = 28;
+    const RELEASE_RADIUS  = 24;
+    const REPEL_RADIUS    = 50;
+    const REPEL_FORCE     = 6;
+    const DAMPING         = 0.55;
+    const FRICTION        = 0.82;
+    const AIR_DRAG        = 0.992;
 
-    type Hex = {
-      x: number; y: number; vx: number; vy: number; r: number;
-      rot: number; vrot: number; released: boolean;
+    type Body = {
+      x: number; y: number; vx: number; vy: number;
+      rot: number; vrot: number; r: number; bondLen: number;
+      state: 'crystal' | 'cellobiose' | 'glucose';
+      releasedAt: number;
     };
+    const SPLIT_GRACE_MS = 600; // must be a separate touch, not the same hover that released it
 
-    let hexes: Hex[] = [];
+    let bodies: Body[] = [];
     let W = 0, H = 0;
     const mouse = { x: -9999, y: -9999, active: false };
+
+    function dismissHint() {
+      if (hint) hint.classList.add('dismissed');
+    }
+    function rearmHint() {
+      if (!hint) return;
+      hint.classList.remove('dismissed');
+      // force the CSS animation to restart from its declared delay
+      hint.style.animation = 'none';
+      void hint.offsetHeight;
+      hint.style.animation = '';
+    }
 
     function buildGrid() {
       W = canvas!.width  = section!.offsetWidth;
       H = canvas!.height = section!.offsetHeight;
 
-      const cols = W < 640 ? 5 : 7;
+      const mobile = W < 640;
+      const cols = mobile ? 6 : 10;
       const rows = 5;
-      const r = W < 640 ? 13 : 17;
-      const spacingX = r * 1.9;
-      const spacingY = r * 1.7;
+      const r = mobile ? 6.5 : 8;
+      const bondLen = r * 2.3;
+      const spacingX = r * 5;
+      const spacingY = r * 4.2;
       const gridW = spacingX * (cols - 1);
       const gridH = spacingY * (rows - 1);
       const startX = W / 2 - gridW / 2;
       const startY = H * 0.5 - gridH / 2;
 
-      hexes = [];
+      bodies = [];
       for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
           const offset = (row % 2) * (spacingX / 2);
-          hexes.push({
+          bodies.push({
             x: startX + col * spacingX + offset,
             y: startY + row * spacingY,
-            vx: 0, vy: 0, r,
-            rot: 0, vrot: 0,
-            released: false,
+            vx: 0, vy: 0, r, bondLen,
+            rot: (row % 2) * (Math.PI / 2), vrot: 0,
+            state: 'crystal', releasedAt: 0,
           });
         }
       }
+      if (hint) hint.style.top = (startY + gridH + 16) + 'px';
+      rearmHint();
     }
     buildGrid();
     window.addEventListener('resize', buildGrid);
+    if (resetBtn) resetBtn.addEventListener('click', buildGrid);
 
     function setMouse(clientX: number, clientY: number) {
       const rect = section!.getBoundingClientRect();
@@ -1173,63 +1248,105 @@ const evoHexes = Array.from({ length: EVO_POP }, (_, i) => i);
       ctx!.closePath();
     }
 
+    function pairHexCenters(b: Body) {
+      const dx = Math.cos(b.rot) * b.bondLen / 2, dy = Math.sin(b.rot) * b.bondLen / 2;
+      return [{ x: b.x - dx, y: b.y - dy }, { x: b.x + dx, y: b.y + dy }];
+    }
+
+    const COLORS: Record<Body['state'], { fill: string; stroke: string; bond: string }> = {
+      crystal:    { fill: 'rgba(180, 200, 190, 0.3)', stroke: 'rgba(210, 225, 218, 0.55)', bond: 'rgba(200, 215, 208, 0.35)' },
+      cellobiose: { fill: 'rgba(74, 222, 128, 0.85)',  stroke: 'rgba(170, 245, 195, 1)',    bond: 'rgba(74, 222, 128, 0.6)' },
+      glucose:    { fill: 'rgba(251, 191, 36, 0.9)',   stroke: 'rgba(255, 221, 130, 1)',    bond: '' },
+    };
+
     function tick() {
       ctx!.clearRect(0, 0, W, H);
+      const toAdd: Body[] = [];
 
-      for (const hx of hexes) {
-        if (!hx.released) {
-          // Still part of the crystal: release it if the cursor is near
+      for (const b of bodies) {
+        if (b.state === 'crystal') {
           if (mouse.active) {
-            const dx = hx.x - mouse.x, dy = hx.y - mouse.y;
+            const dx = b.x - mouse.x, dy = b.y - mouse.y;
             if (Math.hypot(dx, dy) < RELEASE_RADIUS) {
-              hx.released = true;
-              hx.vx = (Math.random() - 0.5) * 3;
-              hx.vy = -1.5 - Math.random() * 1.5;
-              hx.vrot = (Math.random() - 0.5) * 0.15;
+              b.state = 'cellobiose';
+              b.releasedAt = performance.now();
+              b.vx = (Math.random() - 0.5) * 3;
+              b.vy = -1.5 - Math.random() * 1.5;
+              b.vrot = (Math.random() - 0.5) * 0.15;
+              dismissHint();
+            }
+          }
+        } else if (b.state === 'cellobiose') {
+          if (mouse.active) {
+            const dx = b.x - mouse.x, dy = b.y - mouse.y;
+            const dist = Math.hypot(dx, dy);
+            const canSplit = performance.now() - b.releasedAt > SPLIT_GRACE_MS;
+            if (canSplit && dist < RELEASE_RADIUS) {
+              // Split into two free glucose hexagons at the pair's current positions
+              const [h1, h2] = pairHexCenters(b);
+              const kick = 1.6;
+              b.state = 'glucose';
+              b.x = h1.x; b.y = h1.y;
+              b.vx -= Math.cos(b.rot) * kick; b.vy -= Math.sin(b.rot) * kick - 1;
+              toAdd.push({
+                x: h2.x, y: h2.y,
+                vx: b.vx + Math.cos(b.rot) * kick * 2, vy: b.vy + Math.sin(b.rot) * kick * 2 - 1,
+                rot: Math.random() * Math.PI, vrot: (Math.random() - 0.5) * 0.2,
+                r: b.r, bondLen: 0, state: 'glucose', releasedAt: 0,
+              });
+            } else if (dist < REPEL_RADIUS) {
+              const f = (REPEL_RADIUS - dist) / REPEL_RADIUS * REPEL_FORCE;
+              b.vx += (dx / dist) * f; b.vy += (dy / dist) * f;
             }
           }
         } else {
-          // Mouse/touch repulsion
           if (mouse.active) {
-            const dx = hx.x - mouse.x, dy = hx.y - mouse.y;
+            const dx = b.x - mouse.x, dy = b.y - mouse.y;
             const dist = Math.hypot(dx, dy);
             if (dist < REPEL_RADIUS && dist > 0.01) {
               const f = (REPEL_RADIUS - dist) / REPEL_RADIUS * REPEL_FORCE;
-              hx.vx += (dx / dist) * f;
-              hx.vy += (dy / dist) * f;
+              b.vx += (dx / dist) * f; b.vy += (dy / dist) * f;
             }
           }
-          hx.vy += GRAVITY;
-          hx.vx *= AIR_DRAG;
-          hx.x += hx.vx;
-          hx.y += hx.vy;
-          hx.rot += hx.vrot;
+        }
 
-          const floorY = H - FLOOR_PAD - hx.r;
-          if (hx.y > floorY) {
-            hx.y = floorY;
-            hx.vy *= -DAMPING;
-            if (Math.abs(hx.vy) < 0.6) hx.vy = 0;
-            hx.vx *= FRICTION;
-            hx.vrot *= FRICTION;
+        if (b.state !== 'crystal') {
+          b.vy += GRAVITY;
+          b.vx *= AIR_DRAG;
+          b.x += b.vx;
+          b.y += b.vy;
+          b.rot += b.vrot;
+
+          const pad = b.state === 'glucose' ? b.r : b.r + b.bondLen / 2;
+          const floorY = H - FLOOR_PAD - pad;
+          if (b.y > floorY) {
+            b.y = floorY;
+            b.vy *= -DAMPING;
+            if (Math.abs(b.vy) < 0.6) b.vy = 0;
+            b.vx *= FRICTION;
+            b.vrot *= FRICTION;
           }
-          if (hx.x < hx.r) { hx.x = hx.r; hx.vx *= -DAMPING; }
-          if (hx.x > W - hx.r) { hx.x = W - hx.r; hx.vx *= -DAMPING; }
+          if (b.x < pad) { b.x = pad; b.vx *= -DAMPING; }
+          if (b.x > W - pad) { b.x = W - pad; b.vx *= -DAMPING; }
         }
 
-        hexPath(hx.x, hx.y, hx.r, hx.rot);
-        if (hx.released) {
-          ctx!.fillStyle = 'rgba(251, 191, 36, 0.9)';
-          ctx!.strokeStyle = 'rgba(255, 221, 130, 1)';
-        } else {
-          ctx!.fillStyle = 'rgba(180, 200, 190, 0.3)';
-          ctx!.strokeStyle = 'rgba(210, 225, 218, 0.55)';
-        }
+        const c = COLORS[b.state];
         ctx!.lineWidth = 1.5;
-        ctx!.fill();
-        ctx!.stroke();
+        if (b.state === 'glucose') {
+          hexPath(b.x, b.y, b.r, b.rot);
+          ctx!.fillStyle = c.fill; ctx!.strokeStyle = c.stroke;
+          ctx!.fill(); ctx!.stroke();
+        } else {
+          const [h1, h2] = pairHexCenters(b);
+          ctx!.strokeStyle = c.bond;
+          ctx!.lineWidth = 2;
+          ctx!.beginPath(); ctx!.moveTo(h1.x, h1.y); ctx!.lineTo(h2.x, h2.y); ctx!.stroke();
+          hexPath(h1.x, h1.y, b.r, b.rot); ctx!.fillStyle = c.fill; ctx!.strokeStyle = c.stroke; ctx!.lineWidth = 1.5; ctx!.fill(); ctx!.stroke();
+          hexPath(h2.x, h2.y, b.r, b.rot); ctx!.fill(); ctx!.stroke();
+        }
       }
 
+      if (toAdd.length) bodies.push(...toAdd);
       if (!reduceMotion) requestAnimationFrame(tick);
     }
     tick();

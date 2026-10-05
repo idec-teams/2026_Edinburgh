@@ -1,809 +1,1199 @@
-﻿---
+---
 import BaseLayout from '../layouts/BaseLayout.astro';
 const b = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <BaseLayout
   title="TriCel — CxnA Directed Evolution | iDEC 2026"
-  description="Engineering a trifunctional cellulose-degrading enzyme via directed evolution. An iDEC 2026 research project combining AlphaFold3 structural analysis with wet-lab molecular biology."
+  description="Engineering a bifunctional cellulose-degrading enzyme toward a third activity via directed evolution. An iDEC 2026 research project combining AlphaFold3 structural analysis with wet-lab molecular biology."
 >
+  <div class="v2-root">
 
-  <!-- ═══ HERO ═══ -->
-  <section class="hero" aria-labelledby="hero-heading">
-    <!-- Full-hero Three.js molecular canvas (absolute background layer) -->
-    <div class="hero-3d" id="hero-canvas-container" aria-hidden="true"></div>
-    <!-- Ambient particle field — populated and animated by GSAP -->
-    <svg class="hero-particles" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"></svg>
-    <div class="container hero-inner">
-      <div class="hero-text">
-        <p class="hero-eyebrow">iDEC 2026 &mdash; Directed Evolution</p>
-        <h1 id="hero-heading">
-          <span class="hero-line">One enzyme.</span>
-          <span class="hero-line">Three activities.</span>
-          <span class="hero-line"><span class="hero-accent">Cellulose to glucose.</span></span>
+    <!-- ── Section 1: VEX HERO ────────────────────── -->
+    <section id="vex-hero" aria-label="CxnA overview">
+      <div id="magnet-square" aria-hidden="true"></div>
+
+      <div class="vex-content">
+        <div class="vex-grid">
+          <div>
+            <h1 class="vex-h1" id="vex-heading" aria-label="One enzyme. Two real activities."></h1>
+            <p class="vex-para" id="vex-para">
+              Engineering a bifunctional cellulase toward a third activity —
+              Cex (GH10) and CenA (GH6) fused into one chain.
+            </p>
+            <div class="vex-buttons" id="vex-buttons">
+              <a href={`${b}/science`} class="btn-primary">Read the Science</a>
+              <a href={`${b}/results`} class="btn-glass liquid-glass">View Results</a>
+            </div>
+          </div>
+          <div class="vex-pill-wrap" id="vex-pill">
+            <div class="vex-pill liquid-glass">Cex (GH10) · CBM · CenA (GH6)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Section 2: LITHOS HERO ─────────────────── -->
+    <section id="lithos-hero" aria-label="Cellulose to glucose">
+      <div id="lithos-base" class="hero-zoom" aria-hidden="true"></div>
+      <canvas id="lithos-canvas" aria-hidden="true"></canvas>
+      <div id="lithos-reveal" aria-hidden="true"></div>
+
+      <div class="lithos-heading">
+        <h1>
+          <span class="lithos-h-italic hero-anim hero-reveal" style="animation-delay:0.25s">Cellulose to</span>
+          <span class="lithos-h-plain hero-anim hero-reveal" style="animation-delay:0.42s">glucose.</span>
         </h1>
-        <p class="hero-lead">
-          We are engineering a single protein capable of breaking down crystalline cellulose
-          all the way to usable glucose &mdash; by evolving a new catalytic activity into
-          CxnA, a naturally bifunctional cellulase from <em>Cellulomonas fimi</em>.
+      </div>
+
+      <div class="lithos-bl hero-anim hero-fade" style="animation-delay:0.7s">
+        <p>Plant cell walls are the planet's most abundant carbon store. CxnA was engineered to break them down — two real catalytic domains fused into one protein chain.</p>
+      </div>
+
+      <div class="lithos-br hero-anim hero-fade" style="animation-delay:0.85s">
+        <p>Move your cursor to reveal the living material we're engineering a future from — guided by directed evolution and structural biology.</p>
+        <a href={`${b}/results`} class="btn-lithos">Explore Results</a>
+      </div>
+    </section>
+
+    <!-- ── Section 3: BEAT 3 — Mechanism ──────────── -->
+    <section id="beat3" aria-label="How CxnA works">
+      <div id="beat3-sticky">
+        <!-- Animated WebP fallback — always visible until canvas takes over -->
+        <img id="b3-webp-img" src={`${b}/helix-spin.webp`} alt="" aria-hidden="true" />
+        <!-- Canvas receives scroll-scrubbed frames via ImageDecoder -->
+        <canvas id="b3-webp-canvas" aria-hidden="true"></canvas>
+        <div id="b3-mol-overlay" aria-hidden="true"></div>
+        <div id="b3-content">
+
+        <p class="b3-eyebrow" id="b3-eyebrow" style="opacity:0">Mechanism</p>
+
+        <h2 class="b3-heading" id="b3-heading" style="opacity:0;transform:translateY(20px)">
+          Two real enzymes.<br><em>One chain.</em>
+        </h2>
+
+        <!-- Protein domain SVG diagram -->
+        <div class="b3-svg-wrap" id="b3-svg-wrap" style="opacity:0">
+          <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Backbone -->
+            <line x1="40" y1="80" x2="660" y2="80" class="b3-backbone" />
+
+            <!-- Cex domain (left, larger) -->
+            <rect id="b3-cex-dom" x="40" y="32" width="220" height="96" rx="48"
+                  class="b3-domain b3-cex-shape" />
+            <!-- Internal helix zigzag decoration -->
+            <polyline id="b3-cex-helix" points="70,60 90,100 110,60 130,100 150,60 170,100 190,60 210,100 230,60"
+                      stroke="rgba(61,214,140,0.35)" stroke-width="2" fill="none" opacity="0"
+                      style="transition:opacity 0.7s 0.2s" />
+            <text x="150" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-cex">Cex</text>
+            <text x="150" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-cex-sub">GH10 · Exoglucanase</text>
+
+            <!-- CBM/Linker (centre, smaller) -->
+            <rect id="b3-cbm-dom" x="290" y="50" width="120" height="60" rx="30"
+                  class="b3-domain b3-cbm-shape" />
+            <text x="350" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-cbm">CBM</text>
+            <text x="350" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-cbm-sub">Carbohydrate-Binding</text>
+
+            <!-- CenA domain (right, larger) -->
+            <rect id="b3-cena-dom" x="440" y="32" width="220" height="96" rx="48"
+                  class="b3-domain b3-cena-shape" />
+            <polyline id="b3-cena-helix" points="470,60 490,100 510,60 530,100 550,60 570,100 590,60 610,100 630,60"
+                      stroke="rgba(61,214,140,0.35)" stroke-width="2" fill="none" opacity="0"
+                      style="transition:opacity 0.7s 0.2s" />
+            <text x="550" y="24" text-anchor="middle" class="b3-svg-label b3-svg-domain-name" id="b3-lab-cena">CenA</text>
+            <text x="550" y="152" text-anchor="middle" class="b3-svg-label b3-svg-sublabel" id="b3-lab-cena-sub">GH6 · Endoglucanase</text>
+
+            <!-- Linker connector lines (dim always visible) -->
+            <line x1="260" y1="80" x2="290" y2="80" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="4 4"/>
+            <line x1="410" y1="80" x2="440" y2="80" stroke="rgba(255,255,255,0.12)" stroke-width="2" stroke-dasharray="4 4"/>
+          </svg>
+        </div>
+
+        <!-- Domain info cards -->
+        <div class="b3-cards">
+          <div class="b3-card b3-card-cex" id="b3-card-cex">
+            <div class="b3-card-name">Cex — GH10</div>
+            <p>Exoglucanase. Attacks crystalline cellulose from chain ends, releasing the disaccharide cellobiose.</p>
+          </div>
+          <div class="b3-card b3-card-cbm" id="b3-card-cbm">
+            <div class="b3-card-name">CBM · Linker</div>
+            <p>Carbohydrate-Binding Module anchors CxnA to the substrate surface, increasing local enzyme concentration.</p>
+          </div>
+          <div class="b3-card b3-card-cena" id="b3-card-cena">
+            <div class="b3-card-name">CenA — GH6</div>
+            <p>Endoglucanase. Cleaves internal bonds, creating new chain ends for Cex to attack — the two domains work in relay.</p>
+          </div>
+        </div>
+
+        <p class="b3-final" id="b3-final" style="opacity:0">
+          Two confirmed cellulose-degrading activities, fused into <strong>a single engineered protein chain</strong>.
         </p>
-        <div class="hero-actions">
-          <a href={`${b}/overview`} class="btn btn-primary">Project Overview</a>
-          <a href={`${b}/results`} class="btn btn-secondary">View Results</a>
-        </div>
-        <a
-          href="https://idec.io"
-          target="_blank"
-          rel="noopener"
-          class="idec-badge mt-6"
-          aria-label="iDEC — International Directed Evolution Competition (opens in new tab)"
-        >
-          <span class="idec-dot" aria-hidden="true"></span>
-          Affiliated with iDEC
-          <span class="idec-badge-note">International Directed Evolution Competition</span>
-        </a>
+
+        </div><!-- /#b3-content -->
       </div>
+    </section>
 
-      <!-- right column empty — molecule fills the right half from behind -->
-    </div>
-  </section>
+    <!-- ── Section 4: BEAT 4 — Bento grid ─────────── -->
+    <section id="beat4" aria-label="Explore the project">
+      <div class="b4-container">
+        <p class="b4-eyebrow" id="b4-eyebrow">iDEC 2026</p>
+        <h2 class="b4-heading" id="b4-heading">Explore the project</h2>
 
-  <!-- ═══ PROJECT A / B OVERVIEW ═══ -->
-  <section class="section section--alt" aria-labelledby="projects-heading">
-    <div class="container">
-      <div class="section-header">
-        <p class="eyebrow">Two parallel tracks</p>
-        <h2 id="projects-heading">What this project is doing</h2>
-        <p>
-          CxnA already does two things. We want to give it a third — and make those first two better.
-        </p>
-      </div>
+        <div class="b4-grid">
+          <!-- Science — large card -->
+          <a href={`${b}/science`} class="b4-card b4-card--large" data-b4-delay="0">
+            <div>
+              <div class="b4-card-tag">Science</div>
+            </div>
+            <div>
+              <h3 class="b4-card-title">Why cellulose is the hardest problem in green chemistry — and how a bifunctional enzyme is being pushed further.</h3>
+              <div class="b4-card-arrow">→</div>
+            </div>
+          </a>
 
-      <div class="grid-2">
-        <div class="card card--accent project-card">
-          <div class="project-label">Project A</div>
-          <h3>Trifunctional evolution</h3>
-          <p class="mt-4">
-            Using directed evolution to introduce <strong>beta-glucosidase activity</strong>
-            into the GH1 domain of CxnA. If successful, the resulting enzyme would convert
-            cellulose all the way to glucose in a single protein, without requiring a
-            separate beta-glucosidase.
-          </p>
-          <p class="mt-4">
-            No direct precedent exists in the literature for evolving a GH10 scaffold toward
-            GH1-type activity. This project tests that gap directly.
-          </p>
-          <div class="project-tags mt-6">
-            <span class="badge badge--progress">In Progress</span>
-            <span class="tag">epPCR</span>
-            <span class="tag">MUG selection</span>
-            <span class="tag">GH1 docking</span>
-          </div>
+          <!-- Methods -->
+          <a href={`${b}/methods`} class="b4-card" data-b4-delay="100">
+            <div>
+              <div class="b4-card-tag">Methods</div>
+            </div>
+            <div>
+              <h3 class="b4-card-title">Directed evolution protocol — dry-lab to wet-lab pipeline.</h3>
+              <div class="b4-card-arrow">→</div>
+            </div>
+          </a>
+
+          <!-- Results -->
+          <a href={`${b}/results`} class="b4-card" data-b4-delay="200">
+            <div>
+              <div class="b4-card-tag">Results</div>
+            </div>
+            <div>
+              <h3 class="b4-card-title">Structural models, binding analysis &amp; activity assays.</h3>
+              <div class="b4-card-arrow">→</div>
+            </div>
+          </a>
+
+          <!-- Notebook -->
+          <a href={`${b}/notebook`} class="b4-card" data-b4-delay="300">
+            <div>
+              <div class="b4-card-tag">Notebook</div>
+            </div>
+            <div>
+              <h3 class="b4-card-title">Lab diary — week-by-week experimental record.</h3>
+              <div class="b4-card-arrow">→</div>
+            </div>
+          </a>
+
+          <!-- Overview -->
+          <a href={`${b}/overview`} class="b4-card" data-b4-delay="400">
+            <div>
+              <div class="b4-card-tag">Overview</div>
+            </div>
+            <div>
+              <h3 class="b4-card-title">Plain-language project summary — what we built and why.</h3>
+              <div class="b4-card-arrow">→</div>
+            </div>
+          </a>
         </div>
 
-        <div class="card card--accent project-card">
-          <div class="project-label">Project B</div>
-          <h3>Activity enhancement</h3>
-          <p class="mt-4">
-            Using directed evolution to improve CxnA's <strong>existing exoglucanase and
-            endoglucanase activities</strong> — making it a more efficient cellulose-degrading
-            enzyme overall, regardless of whether Project A succeeds.
-          </p>
-          <p class="mt-4">
-            Guided by the AlphaFold3 structural analysis and PLIP interaction maps to target
-            residues most likely to influence substrate binding and catalytic efficiency.
-          </p>
-          <div class="project-tags mt-6">
-            <span class="badge badge--progress">In Progress</span>
-            <span class="tag">epPCR</span>
-            <span class="tag">CMC assay</span>
-            <span class="tag">GH10 docking</span>
-          </div>
+        <div class="b4-footer" id="b4-footer">
+          <p>Competing at iDEC 2026 · Affiliated with the International Directed Evolution Competition</p>
         </div>
       </div>
+    </section>
 
-      <!-- Why it matters -->
-      <div class="callout mt-8">
-        <p class="callout-title">Why this matters</p>
-        <p>
-          Cellulose is the most abundant organic material on Earth. Converting it to glucose
-          efficiently — without expensive multi-enzyme cocktails — could make biofuel production
-          and biomass recycling significantly cheaper and more practical. This project also tests
-          how far AI-assisted structural prediction can responsibly guide directed evolution, and
-          where it cannot substitute for real experimental data.
-        </p>
-      </div>
-
-      <!-- CxnA domain schematic (annotated, dark-card figure) -->
-      <figure class="enzyme-figure mt-8" aria-label="CxnA three-domain enzyme architecture">
-        <figcaption class="enzyme-fig-caption">CxnA enzyme &mdash; domain architecture &amp; substrate flow</figcaption>
-        <svg viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg" class="enzyme-svg">
-          <defs>
-            <linearGradient id="chainGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" style="stop-color:#2d9c6e"/>
-              <stop offset="60%" style="stop-color:#1a6648"/>
-              <stop offset="100%" style="stop-color:#c9862a"/>
-            </linearGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="2" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
-          </defs>
-
-          <!-- Substrate labels top -->
-          <text x="90" y="28" text-anchor="middle" font-size="11" fill="#7ec9a6" font-family="system-ui,sans-serif" font-weight="600">CRYSTALLINE</text>
-          <text x="90" y="42" text-anchor="middle" font-size="11" fill="#7ec9a6" font-family="system-ui,sans-serif" font-weight="600">CELLULOSE</text>
-          <text x="250" y="28" text-anchor="middle" font-size="11" fill="#7ec9a6" font-family="system-ui,sans-serif" font-weight="600">AMORPHOUS</text>
-          <text x="250" y="42" text-anchor="middle" font-size="11" fill="#7ec9a6" font-family="system-ui,sans-serif" font-weight="600">CELLULOSE &amp; CELLOBIOSE</text>
-          <text x="415" y="28" text-anchor="middle" font-size="11" fill="#f0a830" font-family="system-ui,sans-serif" font-weight="600">GLUCOSE</text>
-          <text x="415" y="42" text-anchor="middle" font-size="11" fill="#f0a830" font-family="system-ui,sans-serif" font-weight="600">(USABLE FUEL)</text>
-
-          <!-- Arrow connectors between domains -->
-          <path d="M150,160 L178,160" stroke="#4aa87a" stroke-width="2" marker-end="url(#arrowGreen)" fill="none"/>
-          <path class="evolving-arrow" d="M315,160 L343,160" stroke="#c9862a" stroke-width="2.5" stroke-dasharray="5,3" marker-end="url(#arrowAmber)" fill="none"/>
-          <text x="329" y="150" text-anchor="middle" font-size="9.5" fill="#c9862a" font-family="system-ui,sans-serif" font-style="italic">evolving →</text>
-
-          <defs>
-            <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-              <path d="M0,0 L0,6 L8,3 z" fill="#4aa87a"/>
-            </marker>
-            <marker id="arrowAmber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-              <path d="M0,0 L0,6 L8,3 z" fill="#c9862a"/>
-            </marker>
-          </defs>
-
-          <!-- GH10 / Exoglucanase domain -->
-          <rect x="20" y="120" width="130" height="80" rx="12" fill="#1a6648" filter="url(#glow)"/>
-          <text x="85" y="152" text-anchor="middle" font-size="13" fill="white" font-family="system-ui,sans-serif" font-weight="700">GH10 / Cex</text>
-          <text x="85" y="169" text-anchor="middle" font-size="10.5" fill="#a8d5bc" font-family="system-ui,sans-serif">Exoglucanase</text>
-          <text x="85" y="185" text-anchor="middle" font-size="9.5" fill="#7ec9a6" font-family="system-ui,sans-serif">attacks chain ends</text>
-          <text x="85" y="212" text-anchor="middle" font-size="9" fill="#5aaa85" font-family="system-ui,sans-serif">EXISTING ACTIVITY</text>
-
-          <!-- GH10 / Endoglucanase domain -->
-          <rect x="178" y="120" width="137" height="80" rx="12" fill="#1a6648" filter="url(#glow)"/>
-          <text x="247" y="152" text-anchor="middle" font-size="13" fill="white" font-family="system-ui,sans-serif" font-weight="700">GH10 / CenA</text>
-          <text x="247" y="169" text-anchor="middle" font-size="10.5" fill="#a8d5bc" font-family="system-ui,sans-serif">Endoglucanase</text>
-          <text x="247" y="185" text-anchor="middle" font-size="9.5" fill="#7ec9a6" font-family="system-ui,sans-serif">internal chain cleavage</text>
-          <text x="247" y="212" text-anchor="middle" font-size="9" fill="#5aaa85" font-family="system-ui,sans-serif">EXISTING ACTIVITY</text>
-
-          <!-- GH1 / Beta-glucosidase domain (the evolving target) -->
-          <rect class="gh1-border" x="343" y="112" width="140" height="96" rx="12" fill="#8a5a12" stroke="#c9862a" stroke-width="2.5" stroke-dasharray="6,3"/>
-          <text x="413" y="147" text-anchor="middle" font-size="13" fill="white" font-family="system-ui,sans-serif" font-weight="700">GH1 domain</text>
-          <text x="413" y="164" text-anchor="middle" font-size="10.5" fill="#f0c070" font-family="system-ui,sans-serif">&beta;-glucosidase</text>
-          <text x="413" y="181" text-anchor="middle" font-size="9.5" fill="#f0c070" font-family="system-ui,sans-serif">cellobiose &rarr; glucose</text>
-          <text x="413" y="200" text-anchor="middle" font-size="9" fill="#c9862a" font-family="system-ui,sans-serif">TARGET (Project A)</text>
-
-          <!-- Linker region -->
-          <rect x="148" y="150" width="32" height="20" rx="4" fill="#0d4a32"/>
-          <text x="164" y="163" text-anchor="middle" font-size="8" fill="#4aa87a" font-family="system-ui,sans-serif">linker</text>
-
-          <!-- Protein chain line underneath -->
-          <path d="M20,230 Q250,255 480,230" stroke="url(#chainGrad)" stroke-width="3" fill="none" opacity="0.4"/>
-          <text x="250" y="250" text-anchor="middle" font-size="10" fill="#7ec9a6" font-family="system-ui,sans-serif" font-style="italic">single polypeptide chain (CxnA)</text>
-
-          <!-- Legend -->
-          <rect x="20" y="270" width="12" height="12" rx="2" fill="#1a6648"/>
-          <text x="37" y="281" font-size="9.5" fill="#a8d5bc" font-family="system-ui,sans-serif">Existing activity (CxnA WT)</text>
-          <rect x="200" y="270" width="12" height="12" rx="2" fill="none" stroke="#c9862a" stroke-width="2" stroke-dasharray="4,2"/>
-          <text x="217" y="281" font-size="9.5" fill="#f0c070" font-family="system-ui,sans-serif">Evolved target &mdash; Project A</text>
-        </svg>
-      </figure>
-    </div>
-  </section>
-
-  <!-- ═══ APPROACH OVERVIEW ═══ -->
-  <section class="section" aria-labelledby="approach-heading">
-    <div class="container">
-      <div class="section-header">
-        <p class="eyebrow">How we're doing it</p>
-        <h2 id="approach-heading">Dry lab + wet lab, in parallel</h2>
-      </div>
-
-      <div class="grid-3">
-        <div class="approach-card">
-          <div class="approach-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-          </div>
-          <h3>Structural prediction</h3>
-          <p>AlphaFold3 models of the GH10 and GH1 domains, validated against the 1FHD crystal structure (RMSD 0.293 Å).</p>
-          <a href={`${b}/results#drylab-structure`} class="approach-link">See validation results →</a>
-        </div>
-        <div class="approach-card">
-          <div class="approach-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><path d="M20.2 20.2c2.04-2.03.02-7.36-4.5-11.9-4.54-4.52-9.87-6.54-11.9-4.5-2.04 2.03-.02 7.36 4.5 11.9 4.54 4.52 9.87 6.54 11.9 4.5z"/><path d="M15.7 15.7c4.52-4.54 6.54-9.87 4.5-11.9-2.03-2.04-7.36-.02-11.9 4.5-4.52 4.54-6.54 9.87-4.5 11.9 2.03 2.04 7.36.02 11.9-4.5z"/></svg>
-          </div>
-          <h3>Molecular docking</h3>
-          <p>Autodock Vina docking of cellobiose into both active sites, with PLIP interaction analysis of key catalytic residues.</p>
-          <a href={`${b}/results#drylab-docking`} class="approach-link">See docking results →</a>
-        </div>
-        <div class="approach-card">
-          <div class="approach-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-          </div>
-          <h3>Directed evolution</h3>
-          <p>Error-prone PCR mutagenesis libraries screened by growth on selective media and fluorogenic enzyme assays.</p>
-          <a href={`${b}/methods#wetlab`} class="approach-link">See methods →</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ NAV CARDS ═══ -->
-  <section class="section section--alt" aria-labelledby="nav-heading">
-    <div class="container">
-      <h2 id="nav-heading" class="sr-only">Site sections</h2>
-      <div class="nav-cards">
-        <a href={`${b}/science`} class="nav-card">
-          <span class="nav-card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          </span>
-          <h3>The Science</h3>
-          <p>Cellulose degradation biology, CxnA's origin, directed evolution, and key literature.</p>
-        </a>
-        <a href={`${b}/methods`} class="nav-card">
-          <span class="nav-card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31L5.72 18.5A2 2 0 0 0 7.59 21h8.82a2 2 0 0 0 1.87-2.5L14 9.31V2"/><line x1="8.5" y1="2" x2="15.5" y2="2"/><line x1="7" y1="16" x2="17" y2="16"/></svg>
-          </span>
-          <h3>Methods</h3>
-          <p>Full dry-lab and wet-lab protocols — AlphaFold3, Autodock Vina, cloning, epPCR, assays.</p>
-        </a>
-        <a href={`${b}/results`} class="nav-card">
-          <span class="nav-card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
-          </span>
-          <h3>Results</h3>
-          <p>Dry-lab structural and docking results, plus structured placeholders for incoming wet-lab data.</p>
-        </a>
-        <a href={`${b}/overview`} class="nav-card">
-          <span class="nav-card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-          </span>
-          <h3>Full Overview</h3>
-          <p>The complete project context, both tracks explained side by side, and iDEC affiliation details.</p>
-        </a>
-        <a href={`${b}/notebook`} class="nav-card">
-          <span class="nav-card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
-          </span>
-          <h3>Lab Notebook</h3>
-          <p>Dated wet-lab and dry-lab entries — protocols, observations, and computational analyses as they happened.</p>
-        </a>
-      </div>
-    </div>
-  </section>
-
+  </div>
 </BaseLayout>
 
 <style>
-  /* ─── Hero ───────────────────────────────────────────────────── */
-  .hero {
-    background: linear-gradient(145deg, #152e24 0%, #1a4a35 50%, #1f5a42 100%);
-    padding-block: 4rem 3rem;
-    overflow: hidden;
-    position: relative;
+  /* ── Root wrapper. No overflow-x here: it would establish a new
+     containing block and break position:sticky in #beat3-sticky. Each
+     section clips its own overflow (rotated square / scaled photo) instead. */
+  .v2-root {
+    letter-spacing: -0.02em;
+    background: var(--c-bg);
+    color: #fff;
   }
-  .hero-particles {
+  :global([data-theme="light"] .v2-root) { color: #111; }
+
+  /* ── Liquid-glass utility ───────────────────────── */
+  .liquid-glass {
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .liquid-glass::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.4px;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 20%,
+      rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%,
+      rgba(255,255,255,0.1) 80%, rgba(255,255,255,0.3) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  :global([data-theme="light"] .liquid-glass ) { background: rgba(255,255,255,0.65); box-shadow: inset 0 1px 1px rgba(0,0,0,0.06); }
+  :global([data-theme="light"] .liquid-glass::before) {
+    background: linear-gradient(180deg,
+      rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.02) 20%,
+      transparent 40%, transparent 60%,
+      rgba(0,0,0,0.02) 80%, rgba(0,0,0,0.08) 100%);
+  }
+
+  /* ── VEX HERO ───────────────────────────────────── */
+  #vex-hero {
+    position: relative;
+    min-height: 100dvh;
+    background: var(--c-bg);
+    overflow: hidden;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+  }
+  #magnet-square {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: min(600px, 90vw);
+    height: min(600px, 90vw);
+    margin-top: calc(min(600px, 90vw) / -2);
+    margin-left: calc(min(600px, 90vw) / -2);
+    background:
+      linear-gradient(rgba(0,0,12,0.28), rgba(0,0,12,0.28)),
+      url('https://images.unsplash.com/photo-1714844437236-de8ef1c7286f?w=1200&q=80') center/cover;
+    border-radius: 16px;
+    transform: rotate(9deg);
+    pointer-events: none;
+    will-change: transform;
+  }
+  .vex-content {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 24px 48px;
+  }
+  @media (min-width: 768px) { .vex-content { padding: 0 48px 64px; } }
+  @media (min-width: 1024px) { .vex-content { padding: 0 64px 64px; } }
+  .vex-grid {
+    width: 100%;
+    display: grid;
+    gap: 32px;
+  }
+  @media (min-width: 1024px) {
+    .vex-grid { grid-template-columns: 1fr 1fr; align-items: end; }
+  }
+  .vex-h1 {
+    color: inherit;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    margin-bottom: 16px;
+  }
+  .vex-h1 :global(.block) { display: block; }
+  .vex-h1 :global(.char) {
+    display: inline-block;
+    opacity: 0;
+    transform: translateX(-18px);
+    transition: opacity 500ms, transform 500ms;
+  }
+  .vex-h1.animated :global(.char) { opacity: 1; transform: translateX(0); }
+
+  .vex-para {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 20px;
+    max-width: 40ch;
+    opacity: 0;
+    transition: opacity 1s;
+  }
+  @media (min-width: 768px) { .vex-para { font-size: 1.125rem; } }
+  .vex-para.visible { opacity: 1; }
+  :global([data-theme="light"] .vex-para ) { color: rgba(0,0,0,0.6); }
+
+  .vex-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    opacity: 0;
+    transition: opacity 1s;
+  }
+  .vex-buttons.visible { opacity: 1; }
+  .btn-primary {
+    background: #fff;
+    color: #000;
+    border: none;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 12px 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: #e5e5e5; text-decoration: none; }
+  :global([data-theme="light"] .btn-primary ) { background: #111; color: #fff; }
+  :global([data-theme="light"] .btn-primary:hover ) { background: #333; }
+  .btn-glass {
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 12px 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+    transition: background 0.2s, color 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-glass:hover { background: #fff; color: #000; text-decoration: none; }
+  :global([data-theme="light"] .btn-glass ) { border-color: rgba(0,0,0,0.18); color: #111; background: rgba(255,255,255,0.55); }
+  :global([data-theme="light"] .btn-glass:hover ) { background: #111; color: #fff; }
+
+  .vex-pill-wrap {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    opacity: 0;
+    transition: opacity 1s;
+  }
+  @media (min-width: 1024px) { .vex-pill-wrap { justify-content: flex-end; } }
+  .vex-pill-wrap.visible { opacity: 1; }
+  .vex-pill {
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-size: 1.25rem;
+    font-weight: 300;
+  }
+  @media (min-width: 768px) { .vex-pill { font-size: 1.5rem; } }
+  :global([data-theme="light"] .vex-pill ) { border-color: rgba(0,0,0,0.15); color: #111; }
+  :global([data-theme="light"] #vex-hero ) { background: var(--c-bg); }
+  :global([data-theme="light"] #magnet-square ) { filter: brightness(1.08) saturate(0.85); }
+
+  /* ── LITHOS HERO ────────────────────────────────── */
+  #lithos-hero {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    background: #000;
+    overflow: hidden;
+    scroll-snap-align: start;
+  }
+  #lithos-base {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1657573100558-c15355cc9c49?w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  #lithos-reveal {
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1709651808265-977ed7ef78c6?w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    z-index: 3;
+    pointer-events: none;
+  }
+  #lithos-canvas { position: absolute; inset: 0; display: none; }
+
+  .lithos-heading {
+    position: absolute;
+    top: 14%;
+    left: 0; right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .lithos-heading h1 {
+    color: #fff;
+    line-height: 0.95;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .lithos-h-italic {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(3rem, 10vw, 6rem);
+    letter-spacing: -0.05em;
+    display: block;
+  }
+  .lithos-h-plain {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(3rem, 10vw, 6rem);
+    letter-spacing: -0.08em;
+    display: block;
+    margin-top: -4px;
+  }
+
+  .lithos-bl {
+    position: absolute;
+    bottom: 56px;
+    left: 40px;
+    max-width: 260px;
+    z-index: 5;
+    display: none;
+  }
+  @media (min-width: 640px) { .lithos-bl { display: block; } }
+  .lithos-bl p {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+  }
+
+  .lithos-br {
+    position: absolute;
+    bottom: 40px;
+    right: 20px;
+    left: 20px;
+    max-width: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    z-index: 5;
+  }
+  @media (min-width: 640px) {
+    .lithos-br { left: auto; right: 56px; bottom: 96px; }
+  }
+  .lithos-br p {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+  }
+  .btn-lithos {
+    background: var(--c-accent);
+    color: #000;
+    border: none;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s, filter 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-lithos:hover { filter: brightness(1.1); transform: scale(1.03); text-decoration: none; }
+  .btn-lithos:active { transform: scale(0.95); }
+
+  /* ── Keyframe animations ────────────────────────── */
+  @keyframes heroReveal {
+    0%   { opacity: 0; transform: translateY(28px); filter: blur(12px); }
+    100% { opacity: 1; transform: translateY(0);    filter: blur(0); }
+  }
+  @keyframes heroFadeUp {
+    0%   { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes heroZoom {
+    0%   { transform: scale(1.12); }
+    100% { transform: scale(1); }
+  }
+
+  .hero-anim {
+    opacity: 0;
+    animation-fill-mode: forwards;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hero-reveal { animation-name: heroReveal; animation-duration: 1.1s; }
+  .hero-fade   { animation-name: heroFadeUp; animation-duration: 1s; }
+  .hero-zoom   { animation: heroZoom 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-anim, .hero-zoom { animation: none; opacity: 1; }
+    .vex-h1 :global(.char) { opacity: 1; transform: none; }
+  }
+
+  /* ── BEAT 3: Mechanism ──────────────────────────── */
+  #beat3 {
+    height: 300vh;
+    scroll-snap-align: start;
+  }
+  #beat3-sticky {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    overflow: hidden;
+    background: var(--c-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+  :global([data-theme="light"] #beat3-sticky ) { background: var(--c-bg); }
+  .b3-eyebrow {
+    font-size: 0.6875rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--c-primary);
+    margin-bottom: 20px;
+    transition: opacity 0.8s, transform 0.8s;
+  }
+  .b3-heading {
+    color: inherit;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    text-align: center;
+    line-height: 1.08;
+    margin-bottom: 52px;
+    transition: opacity 0.8s, transform 0.8s;
+  }
+  .b3-heading em {
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--c-primary);
+  }
+
+  /* SVG protein domain diagram */
+  .b3-svg-wrap {
+    width: min(700px, 90vw);
+    margin-bottom: 32px;
+    transition: opacity 0.8s;
+  }
+  .b3-backbone {
+    stroke: rgba(255,255,255,0.15);
+    stroke-width: 3;
+    fill: none;
+  }
+  :global([data-theme="light"] .b3-backbone ) { stroke: rgba(0,0,0,0.15); }
+  .b3-domain {
+    fill: none;
+    stroke-width: 2.5;
+    opacity: 0;
+    transition: opacity 0.7s, filter 0.7s;
+    filter: drop-shadow(0 0 0px transparent);
+  }
+  .b3-domain.lit {
+    opacity: 1;
+  }
+  .b3-cex-shape {
+    stroke: var(--c-primary);
+    fill: rgba(61, 214, 140, 0.08);
+  }
+  .b3-cex-shape.lit {
+    filter: drop-shadow(0 0 14px var(--c-primary));
+  }
+  :global([data-theme="light"] .b3-cex-shape ) { fill: rgba(26,102,72,0.07); }
+  :global([data-theme="light"] .b3-cex-shape.lit ) { filter: drop-shadow(0 0 10px rgba(26,102,72,0.5)); }
+  .b3-cbm-shape {
+    stroke: var(--c-accent);
+    fill: rgba(251, 191, 36, 0.08);
+  }
+  .b3-cbm-shape.lit {
+    filter: drop-shadow(0 0 10px var(--c-accent));
+  }
+  :global([data-theme="light"] .b3-cbm-shape ) { fill: rgba(181,114,31,0.07); }
+  :global([data-theme="light"] .b3-cbm-shape.lit ) { filter: drop-shadow(0 0 8px rgba(181,114,31,0.5)); }
+  .b3-cena-shape {
+    stroke: var(--c-primary);
+    fill: rgba(61, 214, 140, 0.08);
+  }
+  .b3-cena-shape.lit {
+    filter: drop-shadow(0 0 14px var(--c-primary));
+  }
+  :global([data-theme="light"] .b3-cena-shape ) { fill: rgba(26,102,72,0.07); }
+  :global([data-theme="light"] .b3-cena-shape.lit ) { filter: drop-shadow(0 0 10px rgba(26,102,72,0.5)); }
+  .b3-svg-label {
+    fill: rgba(255,255,255,0.5);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.7s;
+  }
+  :global([data-theme="light"] .b3-svg-label ) { fill: rgba(0,0,0,0.5); }
+  .b3-svg-label.lit { opacity: 1; }
+  .b3-svg-sublabel {
+    fill: rgba(255,255,255,0.28);
+    font-family: var(--font-sans);
+    font-size: 8px;
+  }
+  :global([data-theme="light"] .b3-svg-sublabel ) { fill: rgba(0,0,0,0.4); }
+  .b3-svg-domain-name {
+    fill: rgba(255,255,255,0.85);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  :global([data-theme="light"] .b3-svg-domain-name ) { fill: rgba(0,0,0,0.8); }
+
+  /* Domain info cards below svg */
+  .b3-cards {
+    display: flex;
+    gap: 16px;
+    width: min(700px, 90vw);
+    transition: opacity 0.8s;
+  }
+  .b3-card {
+    flex: 1;
+    padding: 14px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.08);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  :global([data-theme="light"] .b3-card ) { border-color: rgba(0,0,0,0.09); background: rgba(255,255,255,0.75); }
+  .b3-card.lit {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .b3-card-name {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .b3-card-cex { border-color: rgba(61, 214, 140, 0.25); }
+  .b3-card-cex .b3-card-name { color: var(--c-primary); }
+  :global([data-theme="light"] .b3-card-cex ) { border-color: rgba(26,102,72,0.22); }
+  .b3-card-cbm  { border-color: rgba(251, 191, 36, 0.25); }
+  .b3-card-cbm  .b3-card-name { color: var(--c-accent); }
+  :global([data-theme="light"] .b3-card-cbm  ) { border-color: rgba(181,114,31,0.22); }
+  .b3-card-cena  { border-color: rgba(61, 214, 140, 0.25); }
+  .b3-card-cena  .b3-card-name { color: var(--c-primary); }
+  :global([data-theme="light"] .b3-card-cena  ) { border-color: rgba(26,102,72,0.22); }
+  .b3-card p {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+  :global([data-theme="light"] .b3-card p ) { color: rgba(0,0,0,0.55); }
+
+  .b3-final {
+    margin-top: 28px;
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.02em;
+    text-align: center;
+    transition: opacity 0.8s;
+  }
+  .b3-final strong { color: rgba(255,255,255,0.75); }
+  :global([data-theme="light"] .b3-final ) { color: rgba(0,0,0,0.45); }
+  :global([data-theme="light"] .b3-final strong ) { color: rgba(0,0,0,0.75); }
+
+  /* ── Beat 3 WebP scroll-scrub background ────────── */
+  #b3-webp-img,
+  #b3-webp-canvas {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover;
     pointer-events: none;
     z-index: 0;
+  }
+  #b3-webp-img {
+    opacity: 0.55;
+    transition: opacity 0.4s ease;
+  }
+  :global([data-theme="light"] #b3-webp-img ) { opacity: 0.18; transition: none; }
+  #b3-webp-canvas {
     opacity: 0;
+    transition: opacity 0.4s ease;
   }
-  .hero-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--sp-10);
-    align-items: center;
-    position: relative;
-    z-index: 1;
-  }
-  @media (max-width: 860px) {
-    .hero-inner { grid-template-columns: 1fr; }
-    .hero-3d    { display: none; }  /* hide canvas on mobile — text-only hero */
-  }
-
-  .hero-eyebrow {
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: #7ec9a6;
-    margin-bottom: var(--sp-4);
-  }
-  h1 { color: #ffffff; line-height: 1.1; font-size: clamp(2rem, 4.5vw, 3rem); }
-  .hero-accent {
-    background: linear-gradient(90deg, #7ec9a6 0%, #3dd68c 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero-lead {
-    color: rgba(232,244,238,0.82);
-    font-size: 1.1rem;
-    line-height: 1.7;
-    margin-top: var(--sp-5);
-    max-width: 52ch;
-  }
-  .hero-actions {
-    display: flex;
-    gap: var(--sp-3);
-    margin-top: var(--sp-6);
-    flex-wrap: wrap;
-  }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-2);
-    padding: var(--sp-3) var(--sp-5);
-    border-radius: var(--radius-md);
-    font-weight: 600;
-    font-size: 0.92rem;
-    transition: all 0.18s;
-    text-decoration: none;
-  }
-  .btn-primary {
-    background: var(--c-primary);
-    color: #fff;
-    border: 2px solid var(--c-primary);
-  }
-  .btn-primary:hover { background: var(--c-primary-hover); border-color: var(--c-primary-hover); text-decoration: none; }
-  .btn-secondary {
-    background: transparent;
-    color: #e8f4ee;
-    border: 2px solid rgba(232,244,238,0.35);
-  }
-  .btn-secondary:hover { border-color: #7ec9a6; color: #7ec9a6; text-decoration: none; }
-
-  .idec-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--sp-2);
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: rgba(232,244,238,0.7);
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: var(--radius-md);
-    padding: var(--sp-2) var(--sp-3);
-    text-decoration: none;
-    transition: all 0.18s;
-  }
-  .idec-badge:hover { border-color: #7ec9a6; color: #7ec9a6; text-decoration: none; }
-  .idec-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: #7ec9a6;
-    flex-shrink: 0;
-  }
-  .idec-badge-note {
-    font-weight: 400;
-    font-size: 0.76em;
-    opacity: 0.75;
-  }
-
-  /* ─── Three.js full-hero canvas (absolute background) ──────── */
-  .hero-3d {
+  :global([data-theme="light"] #b3-webp-canvas ) { opacity: 0.18; }
+  #b3-mol-overlay {
     position: absolute;
     inset: 0;
-    z-index: 0;
-    opacity: 0;
+    background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.82) 100%);
+    z-index: 1;
+    pointer-events: none;
   }
-  .hero-3d canvas { display: block; }
-
-  /* ─── Enzyme schematic figure (project section) ─────────────── */
-  .enzyme-figure {
-    background: linear-gradient(135deg, #152e24 0%, #1a4a35 100%);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-5) var(--sp-5) var(--sp-4);
-    overflow: hidden;
-    margin: 0;
+  :global([data-theme="light"] #b3-mol-overlay) {
+    background: radial-gradient(ellipse at 50% 45%, rgba(245,245,240,0.1) 0%, rgba(245,245,240,0.92) 100%);
   }
-  .enzyme-fig-caption {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #7ec9a6;
-    margin-bottom: var(--sp-3);
-  }
-  .enzyme-svg { width: 100%; display: block; }
-
-  /* ─── Project cards ─────────────────────────────────────────── */
-  .project-label {
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--c-primary);
-    background: var(--c-primary-light);
-    border-radius: var(--radius-sm);
-    padding: 0.15em 0.5em;
-    display: inline-block;
-    margin-bottom: var(--sp-3);
-  }
-  .project-card h3 { color: var(--c-secondary); }
-  .project-tags {
+  #b3-content {
+    position: relative;
+    z-index: 2;
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--sp-2);
+    flex-direction: column;
     align-items: center;
-  }
-  .tag {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: var(--c-text-muted);
-    background: var(--c-surface-2);
-    border: 1px solid var(--c-border);
-    border-radius: var(--radius-sm);
-    padding: 0.15em 0.55em;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 20px;
   }
 
-  /* ─── Approach cards ────────────────────────────────────────── */
-  .approach-card {
-    background: var(--c-surface);
-    border: 1px solid var(--c-border);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-6);
+  /* ── BEAT 4: Bento grid ─────────────────────────── */
+  #beat4 {
+    background: var(--c-bg);
+    scroll-snap-align: start;
+    padding: 80px 20px;
   }
-  .approach-icon {
-    width: 32px;
-    height: 32px;
-    color: var(--c-primary);
-    margin-bottom: var(--sp-3);
-  }
-  .approach-icon svg { width: 100%; height: 100%; }
-  .approach-card h3 { color: var(--c-secondary); margin-bottom: var(--sp-2); }
-  .approach-card p { font-size: 0.92rem; color: var(--c-text-muted); }
-  .approach-link {
-    display: inline-block;
-    margin-top: var(--sp-4);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--c-primary);
-  }
+  @media (min-width: 768px) { #beat4 { padding: 100px 48px; } }
+  @media (min-width: 1024px) { #beat4 { padding: 120px 64px; } }
 
-  /* ─── Nav cards ─────────────────────────────────────────────── */
-  .nav-cards {
+  .b4-container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .b4-eyebrow {
+    font-size: 0.6875rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--c-accent);
+    margin-bottom: 16px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .b4-eyebrow.visible { opacity: 1; transform: translateY(0); }
+  .b4-heading {
+    color: inherit;
+    font-size: clamp(2rem, 4.5vw, 3rem);
+    font-weight: 400;
+    letter-spacing: -0.04em;
+    margin-bottom: 48px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s 0.1s, transform 0.7s 0.1s;
+  }
+  .b4-heading.visible { opacity: 1; transform: translateY(0); }
+
+  .b4-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: var(--sp-4);
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
-  .nav-card {
-    background: var(--c-surface);
-    border: 1px solid var(--c-border);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-6);
+  @media (min-width: 640px) {
+    .b4-grid {
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: auto auto auto;
+    }
+    .b4-card--large { grid-column: 1 / 3; }
+  }
+  @media (min-width: 1024px) {
+    .b4-grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+    }
+    .b4-card--large {
+      grid-column: 1 / 2;
+      grid-row: 1 / 3;
+    }
+  }
+
+  .b4-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 28px 28px 24px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
     text-decoration: none;
-    color: var(--c-text);
-    transition: all 0.2s;
-    display: block;
+    color: #fff;
+    min-height: 160px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s,
+                background 0.2s, border-color 0.2s;
   }
-  .nav-card:hover {
-    border-color: var(--c-primary);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+  :global([data-theme="light"] .b4-card ) { border-color: rgba(0,0,0,0.09); background: rgba(255,255,255,0.7); }
+  .b4-card--large { min-height: 280px; }
+  .b4-card.visible { opacity: 1; transform: translateY(0); }
+  .b4-card:hover {
+    background: rgba(255,255,255,0.055);
+    border-color: rgba(255,255,255,0.16);
     text-decoration: none;
   }
-  .nav-card-icon {
-    display: block;
-    width: 28px;
-    height: 28px;
+  :global([data-theme="light"] .b4-card:hover ) { background: rgba(255,255,255,0.95); border-color: rgba(0,0,0,0.18); }
+  .b4-card-tag {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     color: var(--c-primary);
-    margin-bottom: var(--sp-3);
+    margin-bottom: 12px;
   }
-  .nav-card-icon svg { width: 100%; height: 100%; }
-  .nav-card h3 { color: var(--c-secondary); font-size: 1.05rem; margin-bottom: var(--sp-2); }
-  .nav-card p { font-size: 0.88rem; color: var(--c-text-muted); max-width: none; }
+  .b4-card-title {
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: -0.02em;
+    color: rgba(255,255,255,0.85);
+    margin-top: auto;
+  }
+  :global([data-theme="light"] .b4-card-title ) { color: rgba(0,0,0,0.8); }
+  .b4-card--large .b4-card-title {
+    font-size: 1.25rem;
+  }
+  .b4-card-arrow {
+    margin-top: 20px;
+    color: rgba(255,255,255,0.3);
+    font-size: 1.125rem;
+    transition: color 0.2s, transform 0.2s;
+  }
+  :global([data-theme="light"] .b4-card-arrow ) { color: rgba(0,0,0,0.28); }
+  .b4-card:hover .b4-card-arrow {
+    color: rgba(255,255,255,0.7);
+    transform: translateX(4px);
+  }
+  :global([data-theme="light"] .b4-card:hover .b4-card-arrow ) { color: rgba(0,0,0,0.65); }
 
-  /* ─── Hero elements — GSAP sets opacity/transform; layout only ── */
-  .hero-line    { display: block; opacity: 0; text-shadow: 0 2px 16px rgba(0,0,0,0.7); }
-  .hero-eyebrow { opacity: 0; }
-  .hero-lead    { text-shadow: 0 1px 10px rgba(0,0,0,0.6); }
-  .hero-actions { position: relative; }
-
-  /* ─── SVG diagram animations (enzyme schematic — project section) */
-  @keyframes flow-arrow {
-    to { stroke-dashoffset: -8; }
+  .b4-footer {
+    margin-top: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.7s 0.6s, transform 0.7s 0.6s;
   }
-  @keyframes march-border {
-    to { stroke-dashoffset: -9; }
+  .b4-footer.visible { opacity: 1; transform: translateY(0); }
+  .b4-footer p {
+    font-size: 0.875rem;
+    color: rgba(255,255,255,0.4);
   }
-  .evolving-arrow { animation: flow-arrow 1s linear infinite; }
-  .gh1-border     { animation: march-border 4s linear infinite; }
-
-  /* ─── prefers-reduced-motion ──────────────────────────────────── */
-  @media (prefers-reduced-motion: reduce) {
-    .hero-line, .hero-eyebrow      { opacity: 1; }
-    .hero-3d                       { display: none; }
-    .hero-inner                    { grid-template-columns: 1fr; }
-    .evolving-arrow, .gh1-border   { animation: none; }
-  }
-
-  /* ─── Utility ───────────────────────────────────────────────── */
-  .sr-only {
-    position: absolute; width: 1px; height: 1px;
-    padding: 0; margin: -1px; overflow: hidden;
-    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-  }
+  :global([data-theme="light"] .b4-footer p ) { color: rgba(0,0,0,0.4); }
 </style>
 
 <script>
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  gsap.registerPlugin(ScrollTrigger);
+  // ── Char-by-char heading ────────────────────────────────────
+  (function() {
+    const el = document.getElementById('vex-heading');
+    if (!el) return;
+    const text = 'One enzyme.\nTwo real activities.';
+    const CHAR_DELAY = 30;
+    const lines = text.split('\n');
+    el.innerHTML = lines.map(function(line, li) {
+      return '<span class="block">' +
+        line.split('').map(function(ch, ci) {
+          const delay = (li * line.length * CHAR_DELAY) + (ci * CHAR_DELAY);
+          return '<span class="char" style="transition-delay:' + delay + 'ms">' +
+            (ch === ' ' ? '&nbsp;' : ch) + '</span>';
+        }).join('') +
+        '</span>';
+    }).join('');
+    setTimeout(function() { el.classList.add('animated'); }, 200);
+  })();
 
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  // ── Staggered fade-ins (Beat 1) ─────────────────────────────
+  (function() {
+    const items = [
+      { el: document.getElementById('vex-para'),    delay: 800  },
+      { el: document.getElementById('vex-buttons'), delay: 1200 },
+      { el: document.getElementById('vex-pill'),    delay: 1400 },
+    ];
+    items.forEach(function(item) {
+      if (!item.el) return;
+      setTimeout(function() { item.el.classList.add('visible'); }, item.delay);
+    });
+  })();
 
-    // ── Ambient particle field ─────────────────────────────────────
-    const particleSvg = document.querySelector('.hero-particles');
-    if (particleSvg) {
-      const GREENS = ['#7ec9a6', '#4aa87a', '#3dd68c', '#a8d5bc', '#2d9c6e'];
-      const AMBERS = ['#c9862a', '#f0a830', '#d4973a'];
-      const rand   = gsap.utils.random;
-
-      for (let i = 0; i < 38; i++) {
-        const isProduct = i < 9;
-        const palette   = isProduct ? AMBERS : GREENS;
-        const color     = palette[Math.floor(Math.random() * palette.length)];
-        const r         = rand(isProduct ? 1.5 : 1.5, isProduct ? 3.5 : 5);
-
-        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        circle.setAttribute('r',    String(r));
-        circle.setAttribute('cx',   String(rand(0, 1000)));
-        circle.setAttribute('cy',   String(rand(0, 600)));
-        circle.setAttribute('fill', color);
-        particleSvg.appendChild(circle);
-
-        gsap.set(circle, { opacity: rand(0.1, 0.42) });
-        gsap.to(circle, {
-          x: rand(-55, 55), y: rand(-38, 38), opacity: rand(0.05, 0.38),
-          duration: rand(5, 14), repeat: -1, yoyo: true,
-          ease: 'sine.inOut', delay: rand(0, 7),
-        });
+  // ── Magnetic square ─────────────────────────────────────────
+  (function() {
+    const sq = document.getElementById('magnet-square');
+    if (!sq) return;
+    let near = false;
+    const STRENGTH = 20, PAD = 100;
+    window.addEventListener('mousemove', function(e) {
+      const r = sq.getBoundingClientRect();
+      const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+      const isNear = Math.abs(e.clientX - cx) < r.width / 2 + PAD &&
+                   Math.abs(e.clientY - cy) < r.height / 2 + PAD;
+      if (isNear) {
+        near = true;
+        sq.style.transition = 'transform 0.3s ease-out';
+        sq.style.transform = 'rotate(9deg) translate3d(' +
+          ((e.clientX - cx) / STRENGTH) + 'px,' +
+          ((e.clientY - cy) / STRENGTH) + 'px,0)';
+      } else if (near) {
+        near = false;
+        sq.style.transition = 'transform 0.6s ease-in-out';
+        sq.style.transform = 'rotate(9deg) translate3d(0,0,0)';
       }
+    });
+  })();
+
+  // ── Lithos spotlight ────────────────────────────────────────
+  (function() {
+    const section  = document.getElementById('lithos-hero');
+    const canvas   = document.getElementById('lithos-canvas') as HTMLCanvasElement | null;
+    const reveal   = document.getElementById('lithos-reveal') as HTMLElement | null;
+    if (!section || !canvas || !reveal) return;
+    const RADIUS   = 260;
+    const mouse    = { x: -999, y: -999 };
+    const smooth   = { x: -999, y: -999 };
+
+    function resize() {
+      canvas!.width  = section!.offsetWidth;
+      canvas!.height = section!.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    window.addEventListener('mousemove', function(e) {
+      const r = section!.getBoundingClientRect();
+      mouse.x = e.clientX - r.left;
+      mouse.y = e.clientY - r.top;
+    });
+
+    function tick() {
+      smooth.x += (mouse.x - smooth.x) * 0.1;
+      smooth.y += (mouse.y - smooth.y) * 0.1;
+
+      const ctx = canvas!.getContext('2d')!;
+      ctx.clearRect(0, 0, canvas!.width, canvas!.height);
+
+      const g = ctx.createRadialGradient(smooth.x, smooth.y, 0, smooth.x, smooth.y, RADIUS);
+      g.addColorStop(0,    'rgba(255,255,255,1)');
+      g.addColorStop(0.4,  'rgba(255,255,255,1)');
+      g.addColorStop(0.6,  'rgba(255,255,255,0.75)');
+      g.addColorStop(0.75, 'rgba(255,255,255,0.4)');
+      g.addColorStop(0.88, 'rgba(255,255,255,0.12)');
+      g.addColorStop(1,    'rgba(255,255,255,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(smooth.x, smooth.y, RADIUS, 0, Math.PI * 2);
+      ctx.fill();
+
+      const url = canvas!.toDataURL();
+      reveal!.style.maskImage        = 'url(' + url + ')';
+      (reveal!.style as any).webkitMaskImage = 'url(' + url + ')';
+      reveal!.style.maskSize         = '100% 100%';
+      (reveal!.style as any).webkitMaskSize  = '100% 100%';
+
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  // ── Beat 3: scroll-driven domain reveal ─────────────────────
+  (function() {
+    const section = document.getElementById('beat3');
+    const eyebrow = document.getElementById('b3-eyebrow');
+    const heading = document.getElementById('b3-heading');
+    const svgWrap = document.getElementById('b3-svg-wrap');
+    const cexDom = document.getElementById('b3-cex-dom');
+    const cexHelix = document.getElementById('b3-cex-helix') as unknown as SVGElement;
+    const labCex = document.getElementById('b3-lab-cex');
+    const labCexSub = document.getElementById('b3-lab-cex-sub');
+    const cbmDom  = document.getElementById('b3-cbm-dom');
+    const labCbm  = document.getElementById('b3-lab-cbm');
+    const labCbmSub = document.getElementById('b3-lab-cbm-sub');
+    const cenaDom  = document.getElementById('b3-cena-dom');
+    const cenaHelix = document.getElementById('b3-cena-helix') as unknown as SVGElement;
+    const labCena  = document.getElementById('b3-lab-cena');
+    const labCenaSub = document.getElementById('b3-lab-cena-sub');
+    const cardCex = document.getElementById('b3-card-cex');
+    const cardCbm  = document.getElementById('b3-card-cbm');
+    const cardCena  = document.getElementById('b3-card-cena');
+    const final    = document.getElementById('b3-final');
+    if (!section || !eyebrow || !heading || !svgWrap || !final) return;
+
+    function clamp(v: number, a: number, b: number) { return Math.max(a, Math.min(b, v)); }
+    function mapRange(v: number, i0: number, i1: number, o0: number, o1: number) {
+      return o0 + (o1 - o0) * clamp((v - i0) / (i1 - i0), 0, 1);
     }
 
-    // y-offset initial state (opacity is set via CSS)
-    gsap.set('.hero-line',    { y: 14 });
-    gsap.set('.hero-eyebrow', { y: 8 });
+    const state = { cex: false, cbm: false, cena: false };
 
-    // ── Hero entrance timeline ─────────────────────────────────────
-    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-    tl
-      .to('.hero-line',      { opacity: 1, y: 0, duration: 0.55, stagger: 0.12 })
-      .to('.hero-eyebrow',   { opacity: 1, y: 0, duration: 0.4 },              '-=0.2')
-      .to('.hero-3d',        { opacity: 1, duration: 0.9, ease: 'power1.in' }, '-=0.1')
-      .to('.hero-particles', { opacity: 1, duration: 2.2, ease: 'power1.in' }, '-=0.5');
-  }
-</script>
-
-<script>
-  import * as THREE from 'three';
-
-  const el = document.getElementById('hero-canvas-container') as HTMLElement | null;
-
-  if (
-    !el ||
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
-    window.innerWidth <= 860
-  ) {
-    // nothing
-  } else {
-    initMolecule(el);
-  }
-
-  function initMolecule(container: HTMLElement): void {
-    const W = container.clientWidth  || 800;
-    const H = container.clientHeight || 460;
-
-    // ── Scene ──────────────────────────────────────────────────────
-    const scene  = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(55, W / H, 0.1, 100);
-    camera.position.z = 8;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(W, H);
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    renderer.setClearColor(0x000000, 0);
-    container.appendChild(renderer.domElement);
-
-    // ── Lighting ───────────────────────────────────────────────────
-    scene.add(new THREE.AmbientLight(0xffffff, 0.18));
-
-    // Sky-blue key light (illuminates GH10 from upper-left)
-    const gLight = new THREE.PointLight(0x7dd3fc, 3.5, 28);
-    gLight.position.set(-2, 5, 8);
-    scene.add(gLight);
-
-    // Amber fill light (illuminates GH1 from lower-right)
-    const aLight = new THREE.PointLight(0xfbbf24, 3.0, 24);
-    aLight.position.set(11, -3, 7);
-    scene.add(aLight);
-
-    // White top fill
-    const fLight = new THREE.PointLight(0xffffff, 1.0, 32);
-    fLight.position.set(4, 9, 10);
-    scene.add(fLight);
-
-    // ── Mouse-following lamp — the interactive "circle of influence" ──
-    // Projects cursor world-space position on z=0, illuminates nearby spheres
-    const mouseLamp = new THREE.PointLight(0xffffff, 0, 10, 1.5);
-    scene.add(mouseLamp);
-
-    // ── Shared geometry + dummy ────────────────────────────────────
-    const geo   = new THREE.SphereGeometry(1, 9, 7);
-    const dummy = new THREE.Object3D();
-
-    // ── Sphere cluster — surface-biased random packing ─────────────
-    type Sp = { x: number; y: number; z: number; r: number };
-
-    function cluster(cx: number, cy: number, cz: number, radius: number, n: number): Sp[] {
-      const out: Sp[] = [];
-      while (out.length < n) {
-        const theta = Math.random() * Math.PI * 2;
-        const phi   = Math.acos(2 * Math.random() - 1);
-        const r     = radius * (0.38 + 0.62 * Math.cbrt(Math.random())); // bias toward surface
-        out.push({
-          x: cx + r * Math.sin(phi) * Math.cos(theta),
-          y: cy + r * Math.sin(phi) * Math.sin(theta),
-          z: cz + r * Math.cos(phi) * 0.78,  // slightly flattened in z
-          r: 0.13 + Math.random() * 0.22,    // larger spheres for hero-scale visibility
-        });
-      }
-      return out;
+    function lit(el: Element | null, on: boolean) {
+      if (!el) return;
+      if (on) el.classList.add('lit');
+      else    el.classList.remove('lit');
     }
 
-    // Centres: GH10 (sky-blue, left) — GH1 (amber, right — the evolving target)
-    const GH10_C = [-2.5, 0.5, 0] as const;
-    const GH1_C  = [ 2.5, -0.5, 0] as const;
+    function tick() {
+      const rect = section!.getBoundingClientRect();
+      const totalScroll = section!.offsetHeight - window.innerHeight;
+      const p = clamp(-rect.top / totalScroll, 0, 1);
 
-    const gh10All = cluster(GH10_C[0], GH10_C[1], GH10_C[2], 2.4, 180);
-    const gh1All  = cluster(GH1_C[0],  GH1_C[1],  GH1_C[2],  2.2, 160);
+      // Eyebrow + heading: 0–0.15
+      const headOp = mapRange(p, 0, 0.12, 0, 1);
+      (eyebrow as HTMLElement).style.opacity = String(headOp);
+      (eyebrow as HTMLElement).style.transform = 'translateY(' + mapRange(p, 0, 0.12, 16, 0) + 'px)';
+      (heading as HTMLElement).style.opacity = String(headOp);
+      (heading as HTMLElement).style.transform = 'translateY(' + mapRange(p, 0, 0.12, 20, 0) + 'px)';
 
-    // Linker — quadratic bezier arc
-    const linker: Sp[] = Array.from({ length: 32 }, (_, i) => {
-      const t = i / 31, mt = 1 - t;
-      return {
-        x: mt*mt * GH10_C[0] + 2*mt*t * 0   + t*t * GH1_C[0],
-        y: mt*mt * GH10_C[1] + 2*mt*t * 1.0 + t*t * GH1_C[1],
-        z: mt*mt * GH10_C[2] + 2*mt*t * 0.4 + t*t * GH1_C[2],
-        r: 0.08 + Math.random() * 0.06,
-      };
-    });
+      // SVG fades in: 0.05–0.2
+      (svgWrap as HTMLElement).style.opacity = String(mapRange(p, 0.05, 0.2, 0, 1));
 
-    // Active-site spheres: rightmost GH10 / leftmost GH1 (the evolving pocket)
-    const topNIdx = (arr: Sp[], sign: 1 | -1, n: number): Set<number> =>
-      new Set(arr.map((s, i) => ({ i, v: s.x * sign }))
-        .sort((a, b) => b.v - a.v).slice(0, n).map(e => e.i));
+      // Cex: 0.2–0.45
+      const cexOn = p >= 0.2;
+      if (cexOn !== state.cex) {
+        state.cex = cexOn;
+        lit(cexDom, cexOn);
+        lit(labCex, cexOn);
+        lit(labCexSub, cexOn);
+        lit(cardCex, cexOn);
+        if (cexHelix) cexHelix.style.opacity = cexOn ? '1' : '0';
+      }
 
-    const gh10AIdx = topNIdx(gh10All, 1, 9);
-    const gh1AIdx  = topNIdx(gh1All, -1, 9);
+      // CBM: 0.45–0.65
+      const cbmOn = p >= 0.45;
+      if (cbmOn !== state.cbm) {
+        state.cbm = cbmOn;
+        lit(cbmDom, cbmOn);
+        lit(labCbm, cbmOn);
+        lit(labCbmSub, cbmOn);
+        lit(cardCbm, cbmOn);
+      }
 
-    const gh10Reg = gh10All.filter((_, i) => !gh10AIdx.has(i));
-    const gh10Act = gh10All.filter((_, i) =>  gh10AIdx.has(i));
-    const gh1Reg  = gh1All.filter( (_, i) => !gh1AIdx.has(i));
-    const gh1Act  = gh1All.filter( (_, i) =>  gh1AIdx.has(i));
+      // CenA: 0.65–0.85
+      const cenaOn = p >= 0.65;
+      if (cenaOn !== state.cena) {
+        state.cena = cenaOn;
+        lit(cenaDom, cenaOn);
+        lit(labCena, cenaOn);
+        lit(labCenaSub, cenaOn);
+        lit(cardCena, cenaOn);
+        if (cenaHelix) cenaHelix.style.opacity = cenaOn ? '1' : '0';
+      }
 
-    // ── Materials — sky-blue / amber: high contrast on dark green ──
-    const mGH10  = new THREE.MeshPhongMaterial({ color: 0x7dd3fc, emissive: 0x0c3a52, shininess: 80 });
-    const mGH1   = new THREE.MeshPhongMaterial({ color: 0xfbbf24, emissive: 0x7c3800, shininess: 80 });
-    const mLink  = new THREE.MeshPhongMaterial({
-      color: 0xd0f0ff, emissive: 0x224466, shininess: 25, transparent: true, opacity: 0.42,
-    });
-    const mGH10A = new THREE.MeshPhongMaterial({
-      color: 0xbae6fd, emissive: 0x7dd3fc, emissiveIntensity: 0.7, shininess: 140,
-    });
-    const mGH1A  = new THREE.MeshPhongMaterial({
-      color: 0xfde68a, emissive: 0xfbbf24, emissiveIntensity: 0.9, shininess: 140,
-    });
+      // Final text: 0.85–1.0
+      (final as HTMLElement).style.opacity = String(mapRange(p, 0.85, 1.0, 0, 1));
 
-    // ── Build InstancedMeshes (one draw call per material) ─────────
-    function buildMesh(spheres: Sp[], mat: THREE.MeshPhongMaterial): THREE.InstancedMesh {
-      const m = new THREE.InstancedMesh(geo, mat, spheres.length);
-      m.frustumCulled = false;
-      spheres.forEach((s, i) => {
-        dummy.position.set(s.x, s.y, s.z);
-        dummy.scale.setScalar(s.r);
-        dummy.updateMatrix();
-        m.setMatrixAt(i, dummy.matrix);
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  })();
+
+  // ── Beat 4: stagger reveal on scroll ───────────────────────
+  (function() {
+    const eyebrow = document.getElementById('b4-eyebrow');
+    const heading = document.getElementById('b4-heading');
+    const footer  = document.getElementById('b4-footer');
+    const cards   = document.querySelectorAll('.b4-card');
+    const beat4   = document.getElementById('beat4');
+    if (!eyebrow || !heading || !footer || !beat4) return;
+
+    const io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        const el = entry.target as HTMLElement;
+        const delay = parseInt(el.dataset.b4Delay || '0', 10);
+        setTimeout(function() { el.classList.add('visible'); }, delay);
+        io.unobserve(el);
       });
-      m.instanceMatrix.needsUpdate = true;
-      return m;
-    }
+    }, { threshold: 0.15 });
 
-    const meshGH10  = buildMesh(gh10Reg, mGH10);
-    const meshGH1   = buildMesh(gh1Reg,  mGH1);
-    const meshLink  = buildMesh(linker,  mLink);
-    const meshGH10A = buildMesh(gh10Act, mGH10A);
-    const meshGH1A  = buildMesh(gh1Act,  mGH1A);
-
-    const group = new THREE.Group();
-    group.add(meshGH10, meshGH1, meshLink, meshGH10A, meshGH1A);
-    // Shift molecule into right ~60% of the hero; text sits in the left half
-    group.position.x = 3.5;
-    scene.add(group);
-
-    // ── Mouse tracking (NDC) ───────────────────────────────────────
-    // Listen on the hero section so .hero-inner (z-index:1) doesn't
-    // block events — events on siblings bubble up to the parent section.
-    const mouse = new THREE.Vector2(9999, 9999);
-    const heroSection = container.closest('section') ?? container;
-    heroSection.addEventListener('mousemove', e => {
-      const rect = container.getBoundingClientRect();
-      mouse.set(
-        ((e.clientX - rect.left) / rect.width)  *  2 - 1,
-        ((e.clientY - rect.top)  / rect.height) * -2 + 1,
-      );
-    });
-    heroSection.addEventListener('mouseleave', () => mouse.set(9999, 9999));
-
-    // Pre-allocated — avoid per-frame GC pressure
-    const _ray        = new THREE.Vector3();
-    const _mouseWorld = new THREE.Vector3();
-
-    // ── Animation loop ─────────────────────────────────────────────
-    const clock = new THREE.Clock();
-    let raf = 0;
-
-    function tick(): void {
-      raf = requestAnimationFrame(tick);
-      const t = clock.getElapsedTime();
-
-      // Slow auto-rotation + gentle wobble
-      group.rotation.y = t * 0.065;
-      group.rotation.x = Math.sin(t * 0.035) * 0.07;
-
-      // ── Mouse lamp: project NDC cursor → world space (z = 0 plane) ──
-      // Creates a smooth sphere of influence: nearest spheres light up,
-      // periphery fades naturally via the PointLight's distance falloff
-      if (mouse.x < 100) {
-        _ray.set(mouse.x, mouse.y, 0.5).unproject(camera).sub(camera.position).normalize();
-        const tHit = -camera.position.z / _ray.z;
-        _mouseWorld.copy(camera.position).addScaledVector(_ray, tHit);
-        mouseLamp.position.copy(_mouseWorld);
-        mouseLamp.intensity = 8;
-      } else {
-        mouseLamp.intensity = 0;
-      }
-
-      // ── Active-site emissive pulse ─────────────────────────────
-      const p1 = 0.5 + 0.5 * Math.sin(t * 1.3);
-      const p2 = 0.5 + 0.5 * Math.sin(t * 1.9 + 0.7); // GH1 faster — it's the evolving target
-      mGH10A.emissiveIntensity = 0.35 + p1 * 0.85;
-      mGH1A.emissiveIntensity  = 0.5  + p2 * 1.1;
-
-      // GH1 active-site scale-pulse (marks the evolving pocket)
-      const sc = 1 + p2 * 0.08;
-      gh1Act.forEach((s, i) => {
-        dummy.position.set(s.x, s.y, s.z);
-        dummy.scale.setScalar(s.r * sc);
-        dummy.updateMatrix();
-        meshGH1A.setMatrixAt(i, dummy.matrix);
+    const headerIo = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        eyebrow!.classList.add('visible');
+        heading!.classList.add('visible');
+        footer!.classList.add('visible');
+        headerIo.disconnect();
       });
-      meshGH1A.instanceMatrix.needsUpdate = true;
+    }, { threshold: 0.2 });
 
-      renderer.render(scene, camera);
+    headerIo.observe(beat4);
+    cards.forEach(function(card) { io.observe(card); });
+  })();
+
+  // ── Beat 3: scroll-scrubbed WebP background ─────────────────
+  (function() {
+    const WEBP_URL = import.meta.env.BASE_URL.replace(/\/$/, '') + '/helix-spin.webp';
+    const section = document.getElementById('beat3');
+    const imgEl   = document.getElementById('b3-webp-img') as HTMLImageElement | null;
+    const canvas  = document.getElementById('b3-webp-canvas') as HTMLCanvasElement | null;
+    if (!canvas || !section || !imgEl) return;
+
+    const ctx = canvas.getContext('2d')!;
+    let frames: ImageBitmap[] = [];
+    let scrubReady = false;
+
+    function clampF(v: number, a: number, b: number) { return Math.max(a, Math.min(b, v)); }
+
+    function resize() {
+      canvas!.width  = window.innerWidth;
+      canvas!.height = window.innerHeight;
     }
-    tick();
+    resize();
+    window.addEventListener('resize', resize);
 
-    // ── Resize observer ────────────────────────────────────────────
-    const ro = new ResizeObserver(() => {
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-      if (!w || !h) return;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
-    });
-    ro.observe(container);
+    function drawCover(frame: ImageBitmap) {
+      const cw = canvas!.width, ch = canvas!.height;
+      const fW = frame.width,  fH = frame.height;
+      const ca = cw / ch, fa = fW / fH;
+      let sx = 0, sy = 0, sw = fW, sh = fH;
+      if (ca > fa) { sh = fW / ca; sy = (fH - sh) / 2; }
+      else         { sw = fH * ca; sx = (fW - sw) / 2; }
+      ctx.drawImage(frame, sx, sy, sw, sh, 0, 0, cw, ch);
+    }
 
-    // ── Cleanup on Astro view transitions ─────────────────────────
-    document.addEventListener('astro:before-swap', () => {
-      cancelAnimationFrame(raf);
-      renderer.dispose();
-      ro.disconnect();
-    }, { once: true });
-  }
+    function decodeAll(decoder: any, total: number, idx: number, bitmaps: ImageBitmap[], done: (b: ImageBitmap[]) => void) {
+      if (idx >= total) { done(bitmaps); return; }
+      decoder.decode({ frameIndex: idx })
+        .then(function(result: any) {
+          return createImageBitmap(result.image).then(function(bmp: ImageBitmap) {
+            result.image.close();
+            bitmaps.push(bmp);
+            decodeAll(decoder, total, idx + 1, bitmaps, done);
+          });
+        })
+        .catch(function() { done(bitmaps); });
+    }
+
+    if (typeof (window as any).ImageDecoder !== 'undefined') {
+      fetch(WEBP_URL)
+        .then(function(r) { return r.arrayBuffer(); })
+        .then(function(buf) {
+          const dec = new (window as any).ImageDecoder({ data: buf, type: 'image/webp' });
+          return dec.tracks.ready.then(function() {
+            const track = dec.tracks.selectedTrack;
+            const total = (track && track.frameCount) || 0;
+            if (total <= 1) { dec.close(); return; }
+            decodeAll(dec, total, 0, [], function(bitmaps) {
+              if (bitmaps.length > 1) {
+                frames = bitmaps;
+                scrubReady = true;
+                canvas!.style.opacity = '0.55';
+                imgEl!.style.opacity  = '0';
+              }
+              dec.close();
+            });
+          });
+        })
+        .catch(function(e) { console.warn('[Beat3 WebP]', e); });
+    }
+
+    let lastIdx = -1;
+    function tickWebp() {
+      if (scrubReady && frames.length > 0) {
+        const rect = section!.getBoundingClientRect();
+        const totalScroll = section!.offsetHeight - window.innerHeight;
+        const p   = clampF(-rect.top / totalScroll, 0, 1);
+        const idx = clampF(Math.round(p * (frames.length - 1)), 0, frames.length - 1);
+        if (idx !== lastIdx) {
+          ctx.clearRect(0, 0, canvas!.width, canvas!.height);
+          if (frames[idx]) drawCover(frames[idx]);
+          lastIdx = idx;
+        }
+      }
+      requestAnimationFrame(tickWebp);
+    }
+    tickWebp();
+  })();
 </script>

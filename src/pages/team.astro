@@ -1,0 +1,119 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+const b = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+// Placeholder roster — name/major still pending for everyone. Four photos
+// are in; add the other two to public/images/team/ and point photoSrc at
+// them the same way once available.
+const team = [
+  { name: null, major: null, photoSrc: `${b}/images/team/member-1.jpg` },
+  { name: null, major: null, photoSrc: `${b}/images/team/member-2.jpg` },
+  { name: null, major: null, photoSrc: `${b}/images/team/member-3.jpg` },
+  { name: null, major: null, photoSrc: `${b}/images/team/member-4.webp` },
+  { name: null, major: null, photoSrc: null },
+  { name: null, major: null, photoSrc: null },
+];
+
+const supervisors = [
+  { name: null, major: null, photoSrc: null },
+  { name: null, major: null, photoSrc: null },
+];
+---
+
+<BaseLayout
+  title="Team — TriCel CxnA | iDEC 2026"
+  description="The people behind the CxnA directed evolution project — iDEC 2026, University of Edinburgh."
+>
+
+  <!-- ═══ PAGE HERO ═══ -->
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">Team</p>
+      <h1>The people behind this project</h1>
+      <p>
+        iDEC 2026, University of Edinburgh.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="team-grid">
+        {team.map((member) => (
+          <div class="team-card card">
+            {member.photoSrc ? (
+              <img src={member.photoSrc} alt={member.name ?? 'Team member'} class="team-photo" />
+            ) : (
+              <div class="team-photo team-photo--placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7"/></svg>
+              </div>
+            )}
+            <h3 class="team-name">{member.name ?? 'Name pending'}</h3>
+            <p class="team-major">{member.major ?? 'Role / major pending'}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section-header">
+        <p class="eyebrow">Supervision</p>
+        <h2>Supervisors</h2>
+      </div>
+      <div class="team-grid team-grid--supervisors">
+        {supervisors.map((member) => (
+          <div class="team-card card">
+            {member.photoSrc ? (
+              <img src={member.photoSrc} alt={member.name ?? 'Supervisor'} class="team-photo" />
+            ) : (
+              <div class="team-photo team-photo--placeholder" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.5-7 8-7s8 3 8 7"/></svg>
+              </div>
+            )}
+            <h3 class="team-name">{member.name ?? 'Name pending'}</h3>
+            <p class="team-major">{member.major ?? 'Role pending'}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--sp-6);
+  }
+  .team-grid--supervisors {
+    max-width: 440px;
+    margin-inline: auto;
+  }
+  .team-card {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .team-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: var(--sp-4);
+  }
+  .team-photo--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--c-surface-2);
+    border: 2px dashed var(--c-border);
+    color: var(--c-text-faint);
+  }
+  .team-photo--placeholder svg { width: 44px; height: 44px; }
+  .team-name { color: var(--c-secondary); font-size: 1.05rem; margin-bottom: var(--sp-1); }
+  .team-major { font-size: 0.88rem; color: var(--c-text-muted); max-width: none; }
+</style>

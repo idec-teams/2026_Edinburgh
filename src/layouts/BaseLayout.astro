@@ -70,6 +70,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
             <li><a href={`${b}/methods`}>Methods</a></li>
             <li><a href={`${b}/results`}>Results</a></li>
             <li><a href={`${b}/notebook`}>Notebook</a></li>
+            <li><a href={`${b}/team`}>Team</a></li>
             <li class="nav-divider"></li>
             <li>
               <a href="https://idec.io" target="_blank" rel="noopener" class="nav-idec">
@@ -174,6 +175,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
     <footer class="site-footer">
       <div class="container footer-inner">
+        <div class="footer-logos">
+          <a href="https://idec.io" target="_blank" rel="noopener" class="footer-logo-chip" aria-label="iDEC — International Directed Evolution Competition">
+            <img src={`${b}/images/brand/idec-logo.png`} alt="iDEC logo" />
+          </a>
+          <a href="https://www.ed.ac.uk" target="_blank" rel="noopener" class="footer-logo-chip" aria-label="The University of Edinburgh">
+            <img src={`${b}/images/brand/edinburgh-logo.png`} alt="The University of Edinburgh logo" />
+          </a>
+        </div>
         <div class="footer-brand">
           <span class="logo-icon" aria-hidden="true">⬡</span>
           <span><strong>TriCel</strong> — CxnA Directed Evolution Project</span>
@@ -184,13 +193,14 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         </p>
         <p class="footer-note">
           All data, methods, and lab notebook entries are published here as the complete public record of this project.
-          Source code and raw data: <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>.
+          Source code and raw data: <a href="https://github.com/idec-teams/2026_Edinburgh" target="_blank" rel="noopener">GitHub</a>.
         </p>
         <nav class="footer-nav" aria-label="Footer navigation">
           <a href={`${b}/overview`}>Overview</a>
           <a href={`${b}/science`}>Science</a>
           <a href={`${b}/methods`}>Methods</a>
           <a href={`${b}/results`}>Results</a>
+          <a href={`${b}/team`}>Team</a>
         </nav>
       </div>
     </footer>
@@ -377,6 +387,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     display: grid;
     gap: var(--sp-4);
   }
+  .footer-logos {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-4);
+    flex-wrap: wrap;
+  }
+  .footer-logo-chip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: var(--radius-md);
+    padding: var(--sp-2) var(--sp-3);
+    line-height: 0;
+    transition: transform 0.15s;
+  }
+  .footer-logo-chip:hover { transform: translateY(-1px); text-decoration: none; }
+  .footer-logo-chip img { height: 36px; width: auto; display: block; }
   .footer-brand {
     display: flex;
     align-items: center;

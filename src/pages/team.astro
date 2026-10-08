@@ -2,14 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 const b = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-// Alexander Gottel (#5) has no photo yet — add it to public/images/team/
-// and point photoSrc at it the same way as the others once available.
 const team = [
   { name: 'Chloe Muller', major: 'Wet lab', photoSrc: `${b}/images/team/member-1.jpg` },
   { name: 'Emma Gregson', major: 'Wet lab', photoSrc: `${b}/images/team/member-2.jpg` },
   { name: 'Ester Tulloch', major: 'Wet lab · Team lead', photoSrc: `${b}/images/team/member-3.jpg` },
   { name: 'Chester Chan', major: 'Wet lab & dry lab', photoSrc: `${b}/images/team/member-4.webp` },
-  { name: 'Alexander Gottel', major: 'Wet lab & dry lab', photoSrc: null },
+  { name: 'Alexander Gottel', major: 'Wet lab & dry lab', photoSrc: `${b}/images/team/member-5.jpg` },
   { name: 'Tank Li', major: 'Wet lab & dry lab', photoSrc: `${b}/images/team/member-6.jpg` },
 ];
 

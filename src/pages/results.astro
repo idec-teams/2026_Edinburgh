@@ -5,7 +5,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 <BaseLayout
   title="Results — TriCel CxnA | iDEC 2026"
-  description="What we actually found: structural predictions for both CxnA domains, three rounds of mutant screening, a validated fluorescence assay, and an honest verdict — no confirmed improvement, but a working directed-evolution pipeline."
+  description="What we actually found: structural predictions for both CxnA domains, three sequential mutant screens, a validated fluorescence assay, and an honest verdict — no confirmed improvement, but a working directed-evolution pipeline."
 >
 
   <!-- ═══ PAGE HERO ═══ -->
@@ -76,9 +76,9 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
         <div class="status-card">
           <h3>Dry Lab</h3>
           <div class="status-items">
-            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Structure prediction &amp; validation (both domains)</div>
-            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Cex cellobiose-docking study</div>
-            <div class="status-item"><span class="badge badge--confirmed">Confirmed</span> Mutation-candidate screening, Cex &amp; CenA</div>
+            <div class="status-item"><span class="badge badge--progress">Predicted</span> Structure prediction &amp; validation (both domains)</div>
+            <div class="status-item"><span class="badge badge--progress">Predicted</span> Cex cellobiose-docking study</div>
+            <div class="status-item"><span class="badge badge--progress">Predicted</span> Mutation-candidate screening, Cex &amp; CenA</div>
           </div>
         </div>
         <div class="status-card">
@@ -117,7 +117,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <div>
             <h3>What does CxnA actually look like?</h3>
             <div class="result-meta">
-              <span class="badge badge--confirmed">Confirmed</span>
+              <span class="badge badge--progress">Predicted</span>
               <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-1</a></span>
             </div>
           </div>
@@ -134,9 +134,10 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <div class="key-finding-label">High confidence, within limits</div>
             <div class="key-finding-value">pLDDT 89.3 (Cex) · 93.5 (CenA)</div>
             <div class="key-finding-context">
-              Both domains individually fold with high confidence. The catch: the inter-domain
-              confidence is low (pTM 0.5; mean predicted alignment error 26.6 Å) — the linkers are
-              floppy enough in real life that AlphaFold can't pin down how the two domains sit
+              Both domains individually fold with high confidence. The catch: the model's global
+              pTM is only 0.5, and the mean predicted alignment error between the two domains is
+              26.6 Å — the linkers are floppy enough in real life that AlphaFold can't pin down how
+              the two domains sit
               relative to each other. We trust the shape of each domain on its own, not the overall
               "pose" of the whole fusion protein.
             </div>
@@ -168,7 +169,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <div>
             <h3>Checking Cex's active site against a real crystal structure</h3>
             <div class="result-meta">
-              <span class="badge badge--confirmed">Confirmed</span>
+              <span class="badge badge--progress">Completed (computational)</span>
               <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-2</a></span>
             </div>
           </div>
@@ -177,7 +178,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <p>
             Unlike the fusion as a whole, Cex alone has a published crystal structure to check
             against: 1FHD, a Cex-family enzyme solved with a bound inhibitor
-            <a class="cite" href="#ref-notenboom98">[1]</a>. We superimposed our predicted Cex
+            <a class="cite" href="#ref-notenboom00">[2]</a>. We superimposed our predicted Cex
             structure onto it to see how well the model's active site matches reality.
           </p>
 
@@ -185,12 +186,14 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <div class="key-finding-label">Key Result</div>
             <div class="key-finding-value">RMSD = <strong>0.293 Å</strong></div>
             <div class="key-finding-context">
-              Cα RMSD over 1,958 aligned atoms against the 1FHD crystal structure. This is within
-              the 0.3–0.4 Å range the original crystallographers report for two different crystal
-              forms of Cex compared to <em>each other</em> — in other words, our predicted model
-              disagrees with the real structure by no more than two real structures disagree with
-              one another. The active-site geometry, including the catalytic residues GLU127 and
-              GLU233, is reproduced faithfully.
+              PyMOL <code>align</code> (iterative outlier rejection) over 1,958 matched atoms
+              against the 1FHD crystal structure — the converged, best-fitting core rather than a
+              pure Cα figure (1,958 exceeds this domain's actual Cα count). A separate, full-domain
+              Cα-only superposition, run live in the interactive viewer below, gives 0.579 Å over
+              311 pairs; the two numbers measure different things and aren't directly comparable to
+              each other, or to the crystallographers' own crystal-form comparison, which used yet
+              another alignment definition. Either way, the active-site geometry, including the
+              catalytic residues GLU127 and GLU233, is reproduced faithfully.
             </div>
           </div>
 
@@ -228,7 +231,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <div>
             <h3>Does Cex already have a little latent β-glucosidase activity — and where would you nudge it?</h3>
             <div class="result-meta">
-              <span class="badge badge--confirmed">Confirmed</span>
+              <span class="badge badge--progress">Predicted</span>
               <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-3, DL-4, DL-5</a></span>
             </div>
           </div>
@@ -271,8 +274,9 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             HotSpot Wizard flagged candidate residues near the active site that are mutable
             without obviously destroying the protein's fold. Those candidates were then screened
             computationally with FoldX (for stability) and re-docked with cellobiose (for binding).
-            The single most promising candidate to emerge was <strong>Asn44 → Trp</strong> (ΔΔG
-            −3.2 kcal/mol, i.e. more stable than wild type, not less).
+            The most stabilising candidate to emerge was <strong>Asn44 → Trp</strong> (ΔΔG −3.2
+            kcal/mol, i.e. predicted more stable than wild type). Stability is not activity, so
+            this ranks candidates by tolerability rather than by predicted gain in function.
           </p>
 
           <details class="expand">
@@ -308,7 +312,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <div>
             <h3>CenA, the other half: where could the existing activity be improved?</h3>
             <div class="result-meta">
-              <span class="badge badge--confirmed">Confirmed</span>
+              <span class="badge badge--progress">Predicted</span>
               <span class="result-method">Methods: <a href={`${b}/methods#drylab`}>DL-3, DL-4, DL-5</a></span>
             </div>
           </div>
@@ -318,8 +322,10 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             CenA (the endoglucanase half of CxnA, family GH6) already works — the Project B goal
             isn't to invent a new activity but to make an existing one better. We docked
             cellotetraose (a four-sugar cellulose fragment) into CenA's active site and confirmed
-            contacts with its three catalytic aspartates: Asp595 (acid catalyst), Asp631
-            (stabilises the acid catalyst's protonation state) and Asp771 (base catalyst).
+            contacts with four catalytic aspartates: Asp595 (a stabiliser that fine-tunes the pKa
+            environment around the catalytic acid, not itself required for catalysis), Asp631
+            (acid catalyst), Asp666 (a secondary, pKa-adjusting partner to Asp631), and Asp771
+            (base catalyst).
           </p>
 
           <div class="fig-single">
@@ -439,7 +445,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
 
           <div class="fig-single">
             <img src={`${b}/images/results/plasmid-map.png`} alt="Plasmid map of the CxnA construct, showing the Cex (GH10) and CenA (GH6) domains, restriction sites, and the duplicated chloramphenicol-resistance region" loading="lazy" />
-            <p class="fig-caption">Plasmid map of the CxnA construct. CxnA itself is only two domains — Cex (exoglucanase) and CenA (endoglucanase) — joined through a carbohydrate-binding module (CBD2). The duplicated chloramphenicol-resistance region on the right was an unplanned discovery (below).</p>
+            <p class="fig-caption">Plasmid map of the CxnA construct. CxnA itself is only two domains — Cex (exoglucanase) and CenA (endoglucanase) — joined through a carbohydrate-binding module (CBM). The duplicated chloramphenicol-resistance region on the right was an unplanned discovery (below).</p>
           </div>
 
           <div class="key-finding key-finding--warn">
@@ -447,11 +453,10 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <div class="key-finding-value">An extra ~1 kb of DNA in the backbone</div>
             <div class="key-finding-context">
               Gel electrophoresis and sequencing turned up an insert in the backbone that wasn't
-              supposed to be there. A BLASTp search against the translated sequence matched it to
-              a duplicated chloramphenicol-resistance pseudogene — most likely a quirk of this
-              specific plasmid stock rather than anything we introduced. It doesn't appear to have
-              blocked cloning or expression, but its effect on plasmid stability wasn't formally
-              tested.
+              supposed to be there. A BLASTp search against the translated sequence suggested it
+              may be a duplicated chloramphenicol-resistance pseudogene; confirming its identity
+              would need further sequencing. It doesn't appear to have blocked cloning or
+              expression, but its effect on plasmid stability wasn't formally tested.
             </div>
           </div>
         </div>
@@ -491,6 +496,11 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
               this is the single biggest constraint on everything that follows.
             </div>
           </div>
+
+          <p>
+            24 codon-optimised and 15 native-sequence colonies were recovered. Fifteen of the 24
+            codon-optimised colonies were picked forward, giving the 30 mutants screened below.
+          </p>
         </div>
       </div>
 
@@ -524,10 +534,12 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <div class="key-finding-value">7 of 15 native, 15 of 15 codon-optimised retained a halo</div>
             <div class="key-finding-context">
               All 15 codon-optimised mutants showed some clearing, at varying sizes. Of the native
-              mutants, colony 4 had the largest halo (closest to wild type); colonies 12, 14 and 15
-              showed <strong>no</strong> clearing at all — a likely sign that their mutation broke
-              the protein outright, not a subtle activity change. All five of these were flagged
-              for sequencing.
+              mutants, colony 4 (T4) had the largest halo (closest to wild type); colonies 12, 14
+              and 15 showed <strong>no</strong> clearing at all — a likely sign that their mutation
+              broke the protein outright, not a subtle activity change. Three of these four — T4,
+              T14 and T15 — were carried through to the quantitative assay and on to sequencing;
+              native colony 12 was excluded at that stage for plate-capacity reasons (see below)
+              and was not sequenced.
             </div>
           </div>
         </div>
@@ -568,13 +580,14 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <div class="key-finding-label">Unexpected background signal</div>
             <div class="key-finding-value">Wild-type CxnA already shows faint baseline activity</div>
             <div class="key-finding-context">
-              The non-functional His-tagged negative control looked the same as wild-type CxnA —
-              both showed a faint blue tint beyond the truly blank background. This matches the
-              dry-lab prediction (DL-R3) that Cex might already have some latent capacity to engage
-              cellobiose-like substrates. No mutant came close to the true positive control, but
-              several (native colonies 4, 14, 15; codon-optimised colonies 2, 4, 7, 12) were darker
-              than the wild-type baseline and were flagged for sequencing and quantitative
-              follow-up.
+              His-tagged CxnA, which produces no functional protein, stained as deeply as
+              wild-type CxnA. The faint blue common to both therefore reflects background
+              β-glucosidase-like activity in the host, not activity of CxnA — so this control
+              does not support the dry-lab prediction in DL-R3, and mutants were scored against
+              the host baseline rather than against the His-CxnA control. No mutant approached
+              the positive control. Several colonies (native 4, 14, 15; codon-optimised 2, 4, 7,
+              12) were darker than that host baseline and were flagged for sequencing and
+              quantitative follow-up.
             </div>
           </div>
         </div>
@@ -611,7 +624,13 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <p>
             With the assay validated, we quantified exoglucanase activity for the seven mutants
             flagged by the earlier screens, each compared against a wild-type control grown and
-            lysed alongside it on the same day.
+            lysed alongside it on the same day. Seven variants were carried forward to the
+            quantitative assay, limited by the capacity of a single 96-well plate once controls,
+            blanks and standards were accommodated. The selection deliberately spanned both
+            extremes of the Congo red screen — variants with the largest halos and variants with
+            no clearing at all — rather than sampling only the apparent improvers. Native colony
+            12, which also showed no clearing, was not carried forward for this reason; T14 and
+            T15 represent that class.
           </p>
 
           <div class="fig-single">
@@ -623,9 +642,11 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <div class="key-finding-label">The headline number</div>
             <div class="key-finding-value">9.5% colony-to-colony noise → need ≥1.40× to call it real</div>
             <div class="key-finding-context">
-              Before trusting any "improved" mutant, we first measured how much two colonies of
-              the identical, unmutated wild type differ from each other purely from everyday
-              variability in growth and lysis. The answer was 9.5%. Statistically, that means a
+              Before trusting any "improved" mutant, we first measured how much two independent
+              colonies of the same genotype differ from each other purely from everyday
+              variability in growth and lysis — measured from two independent colonies each of
+              the wild type and of CO12, prepared and assayed alongside one another. The answer
+              was 9.5%. Statistically, that means a
               single mutant colony needs to beat wild type by at least 1.40× before we can call the
               difference real rather than noise (a "3σ" threshold, in the jargon).
             </div>
@@ -639,7 +660,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
                   <tr><th>Mutant</th><th>Activity vs wild type</th><th>Call</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td class="mono"><strong>CO12</strong></td><td>1.39× and 1.31× (two independent colonies, mean 1.35×)</td><td><strong>Candidate, not confirmed</strong> — above the single-colony threshold's ballpark but not past it with statistical confidence (p = 0.11)</td></tr>
+                  <tr><td class="mono"><strong>CO12</strong></td><td>1.39× and 1.31× (two independent colonies, mean 1.35×)</td><td><strong>Flagged here, not a candidate</strong> — sequencing (below) found it to be an unmutated parental isolate, so this reading reflects colony-to-colony noise rather than a real effect</td></tr>
                   <tr><td class="mono">CO2</td><td>0.72×</td><td>At or below wild type</td></tr>
                   <tr><td class="mono">CO4</td><td>0.99×</td><td>Indistinguishable from wild type</td></tr>
                   <tr><td class="mono">CO7</td><td>0.57×</td><td>Below wild type</td></tr>
@@ -648,24 +669,25 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
                   <tr><td class="mono">T15</td><td>≈ 0× (indistinguishable from the dead-enzyme control)</td><td>Functionally dead</td></tr>
                 </tbody>
               </table></div></div>
-              <p class="table-note">WT-CO vs WT-T themselves agreed to within 1.1% of each other, confirming codon optimisation alone doesn't change activity — differences above are attributable to the epPCR mutations (or to prep noise, for anything inside the shaded band).</p>
+              <p class="table-note">WT-CO vs WT-T themselves agreed to within 1.1% of each other, confirming codon optimisation alone doesn't change activity — differences above are attributable to the epPCR mutations (or to prep noise, for anything inside the shaded band). CO7 and T4 figures are from freshly prepared lysate; a separate stored-pellet preparation of both was excluded after its lysate was found to have settled before reading (A₂₈₀ 0.7 at the meniscus vs. 3–4 after mixing), which would have inflated the reading.</p>
             </div>
           </details>
 
           <div class="callout callout--warn">
             <p class="callout-title">We also tried to run this as a MUG assay</p>
             <p>
-              The same lysates, prepared and assayed exactly the same way, were also tested with
-              MUG — the equivalent substrate for β-glucosidase activity, which is what Project A
-              is actually trying to evolve. Every sample lit up immediately, including the
-              dead-enzyme frameshift control. The reason turned out to be simple: the bottle on
-              the shelf was the wrong substrate — a β-galactosidase substrate (MUGal), not the
-              β-glucosidase one (MUG) — and <em>E. coli</em> TOP10 carries enough background
-              β-galactosidase machinery to hydrolyse it regardless of what CxnA was doing. The
-              MUG assay was dropped once this was confirmed. It doesn't affect the MUC results
-              above — the dead frameshift control sits at under 1% signal there, so this
-              background enzyme clearly doesn't touch the cellobioside substrate. Full
-              troubleshooting: <a href={`${b}/notebook/2026-09-15-wet`}>15 September notebook entry</a>.
+              The same lysates were also assayed with what was intended to be MUG, the
+              β-glucosidase substrate this project was trying to evolve activity toward. Every
+              sample lit up immediately, including the dead-enzyme frameshift control. A
+              controlled follow-up — substrate and lysate dilution series, boiled lysate, cultures
+              grown without IPTG, and cell-free medium in place of lysate — diagnosed the cause:
+              the substrate in hand was MUGal, a β-galactosidase substrate, not MUG. TOP10 carries
+              the <em>lacZ</em>ΔM15 deletion and the plasmid supplies the <em>lacZ</em>α fragment
+              that complements it, reconstituting host β-galactosidase, which hydrolyses MUGal
+              regardless of what CxnA is doing. The assay was discontinued once this was
+              confirmed. It does not affect the MUC results above: the frameshift control sits
+              below 1% of induced signal there, so this background enzyme does not touch the
+              cellobioside substrate. Full troubleshooting: <a href={`${b}/notebook/2026-09-15-wet`}>15 September notebook entry</a>.
             </p>
           </div>
         </div>
@@ -685,33 +707,57 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
         </div>
         <div class="result-body">
           <p>
-            Six colonies flagged by the screens above were miniprepped and sent for Sanger
-            sequencing to find out what had actually changed in their DNA.
+            Eight samples were sent for Sanger sequencing (MRC PPU DNA Sequencing and Services):
+            the seven variants carried through the quantitative screen, plus the unmutated
+            codon-optimised construct as a parental reference. Plasmid DNA was isolated by
+            miniprep (Qiagen) and quantified on a NanoDrop 2000 (Table 2).
+          </p>
+          <p>
+            All four codon-optimised variants — CO2, CO4, CO7 and CO12 — returned the parent
+            sequence with no mutations detected. Sequencing failed for T14 and T15, so neither of
+            the two dead variants can be characterised genetically. Of the seven variants, only T4
+            returned usable evidence of a mutation: a single point substitution in each domain,
+            changing residue 14 from GGC to GAC (glycine → aspartic acid) in the exoglucanase
+            domain, and residue 614 from aspartic acid to glycine in the endoglucanase domain.
+            Changes flagged elsewhere in the chromatograms were consistent with signal decay
+            rather than real substitutions.
+          </p>
+          <p>
+            Read-length limits left an unsequenced gap in the middle of every read. The gap spans
+            the carbohydrate-binding module in all samples and extends into the Cex or CenA coding
+            sequence in some, and its extent differs from sample to sample — so coverage is not
+            uniform, and a mutation falling inside the gap would not have been detected.
           </p>
 
           <div class="key-finding key-finding--warn">
-            <div class="key-finding-label">A sobering finding</div>
-            <div class="key-finding-value">Most sequenced colonies carried no mutations at all</div>
+            <div class="key-finding-label">What the parental-sequence result means</div>
+            <div class="key-finding-value">CO12 is not a candidate</div>
             <div class="key-finding-context">
-              Several of the sequenced codon-optimised colonies came back identical to the parent
-              sequence — epPCR simply hadn't introduced a change in those particular colonies by
-              chance. That's actually informative: if "mutants" with zero genetic change still show
-              a 0.57–1.39× spread in measured activity, that spread has to be prep-to-prep noise,
-              not genetics — which is exactly the kind of variation the 1.40× statistical threshold
-              above was designed to filter out.
+              That makes those four measurements more useful than failed candidates: they are a
+              direct read-out of how much the assay and the preparation vary between colonies
+              that are genetically identical. Their activities spanned 0.57× to 1.39× of wild
+              type. CO12's 1.39× — the highest single value anywhere in the screen — is the top of
+              that range, and its 1.35× average sits inside it. CO12 is therefore not a candidate
+              for a further round; it is indistinguishable from an unmutated isolate.
+              <br/><br/>
+              It also shows the 1.40× threshold rests on too small a sample. That figure came from
+              a 9.5% CV measured between two colonies each of two genotypes. These four
+              independently picked isolates, grown and assayed in the same preparation, span
+              0.57× to 1.39× — roughly four times wider — and the lowest of them falls outside the
+              ±3σ interval the 9.5% figure implies. Both estimates rest on a handful of
+              observations, but the wider one is measured across the comparison the screen
+              actually makes: different picked colonies, not replicate colonies of one clone. On
+              that basis a real improvement would need to be considerably larger than 1.4× before
+              a single-colony measurement could resolve it.
+              <br/><br/>
+              Coverage is incomplete, so "no mutations detected" is not the same as "no
+              mutations" — see above for where the unsequenced gap falls. Taken as a bound rather
+              than a proof: over the regions that were read these four isolates are identical to
+              the parent, and the simplest reading of a 0.57–1.39× spread among them is
+              preparation and colony variation rather than four separate mutations that all
+              happened to land in the unread gap.
             </div>
           </div>
-
-          <p>
-            The clearest exception was colony T4 (the one that showed strongly attenuated activity,
-            0.16× wild type). Its sequencing surfaced two point mutations: a glycine → aspartic
-            acid change in the exoglucanase (Cex) domain, and an aspartic acid → glycine change in
-            the endoglucanase (CenA) domain. Because CxnA's two active sites sit several hundred
-            residues apart, losing <em>both</em> activities from two separate, unrelated point
-            mutations landing simultaneously is a coincidence we'd rather not have to explain — a
-            single misfolding event destabilising the whole fusion protein is the simpler
-            explanation, and fits the data better.
-          </p>
         </div>
       </div>
 
@@ -728,21 +774,37 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
         </div>
         <div class="result-body">
           <p>
-            <strong>No mutant demonstrated a confirmed improvement in activity.</strong> CO12 is a
-            genuine candidate for a future round — it's the only variant that beat wild type at
-            all, and its 1.35× average sits right at the edge of our detection limit — but it
-            doesn't clear the bar for statistical confidence yet, and more replicates are needed
-            before calling it a real hit rather than a lucky draw. Two mutants (T14, T15) appear to
-            have lost function entirely, most likely through protein misfolding rather than a
-            targeted change to either active site.
+            <strong>No mutant demonstrated a confirmed improvement in activity.</strong> CO12, the
+            only variant to read above wild type, returned the parent sequence — placing its
+            1.35× average inside the range spanned by genetically identical isolates, so it is not
+            a candidate for a further round. The screen's useful output is a quantified noise
+            floor rather than a hit: variation between preparations is wide enough that a real
+            improvement would have to be considerably larger than 1.4× before a single-colony
+            measurement could resolve it. Two variants, T14 and T15, lost function entirely;
+            sequencing failed for both, so the explanation rests on phenotype — simultaneous loss
+            of two activities whose active sites lie several hundred residues apart is more easily
+            explained by loss of the full-length protein than by two independent active-site
+            mutations.
           </p>
           <p>
             What <em>did</em> work: we built a complete, repeatable pipeline — random mutagenesis,
             two fast qualitative screens, a validated quantitative fluorescence assay, and
-            sequencing to close the loop — that took a library from "30 random colonies" down to
-            "one statistically-interesting candidate" in a single round. The library was small and
-            the GC-rich gene was a genuine technical obstacle throughout; a larger library run
-            through the same pipeline is the obvious next step, not a different approach.
+            sequencing to close the loop — that took a library from 30 random colonies to a
+            quantified detection limit and one genetically characterised loss-of-function variant,
+            in a single round. The library was small and the GC-rich gene was a genuine technical
+            obstacle throughout; a larger library run through the same pipeline is the obvious
+            next step, not a different approach.
+          </p>
+          <p>
+            Two observations point the same way about the codon-optimised library. All four of its
+            variants that were sequenced returned the parent sequence, and all 15 of its colonies
+            retained a Congo red halo — against 7 of 15 for the native-sequence library. The
+            simplest reading is that error-prone PCR introduced few or no mutations into the
+            codon-optimised construct, consistent with the gBlock-and-Gibson route reconstituting
+            parental sequence, and that the native library is where this project's real variants
+            are: T4, with a substitution in each domain, and T14 and T15, both of which lost
+            function entirely. Only four of the 15 codon-optimised colonies were sequenced, so this
+            is the most parsimonious explanation rather than an established one.
           </p>
 
           <div class="callout">
@@ -750,8 +812,9 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <p>
               A "nothing improved, but here's exactly why and how confident we are" result is a
               real scientific outcome, not a failure to hide. Every negative or inconclusive finding
-              on this page — the collapsed T14/T15 mutants, the unconfirmed CO12 candidate, the
-              small library sizes — is reported as measured, not rounded up or omitted.
+              on this page — the T14/T15 loss-of-function variants, CO12 turning out to be a
+              parental isolate rather than a hit, the small library sizes — is reported as
+              measured, not rounded up or omitted.
             </p>
           </div>
         </div>
@@ -773,13 +836,15 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           Notenboom, V., Birsan, C., Warren, R.A.J., Withers, S.G. &amp; Rose, D.R. (1998).
           Exploring the cellulose/xylan specificity of the β-1,4-glycanase Cex from
           <em>Cellulomonas fimi</em> through crystallography and mutation.
-          <em>Biochemistry</em>, 37(14), 4751–4758. PDB: 1FHD.
+          <em>Biochemistry</em>, 37(14), 4751–4758.
           <a href="https://doi.org/10.1021/bi9729211" target="_blank" rel="noopener">doi:10.1021/bi9729211</a>
         </li>
         <li id="ref-notenboom00">
-          Notenboom, V. et al. (2000). Crystallographic analysis of a complex between Cex and
-          a xylobiose-derived inhibitor, with experimentally measured substrate binding affinity.
-          <em>Biochemistry</em>.
+          Notenboom, V., Williams, S.J., Hoos, R., Withers, S.G. &amp; Rose, D.R. (2000).
+          Detailed structural analysis of glycosidase/inhibitor interactions: complexes of Cex
+          from <em>Cellulomonas fimi</em> with xylobiose-derived aza-sugars.
+          <em>Biochemistry</em>, 39(37), 11553–11563. PDB: 1FHD.
+          <a href="https://doi.org/10.1021/bi0010625" target="_blank" rel="noopener">doi:10.1021/bi0010625</a>
         </li>
         <li id="ref-duedu">
           Duedu, K.O. &amp; French, C.E. (2016). Characterization of a <em>Cellulomonas fimi</em>

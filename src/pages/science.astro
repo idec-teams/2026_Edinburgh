@@ -60,11 +60,11 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
                 its mechanical strength.
               </p>
               <p>
-                Animals lack the enzymes (cellulases) to break β-1,4 bonds — which is why
-                cows, termites, and other cellulose-eating animals rely on gut microbes that
-                do produce cellulases. Fungi and bacteria such as <em>Cellulomonas fimi</em>
-                (the source organism of CxnA) are among the most efficient natural cellulose
-                degraders known.
+                Most animals cannot make cellulases, which is why cows and many other
+                herbivores depend on gut microbes to break β-1,4 bonds for them; a few, such as
+                termites, produce endogenous cellulases of their own alongside their symbionts.
+                Fungi and bacteria such as <em>Cellulomonas fimi</em> (the source organism of
+                CxnA) are among the most efficient natural cellulose degraders known.
               </p>
             </div>
           </details>
@@ -277,20 +277,24 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <h3>Exoglucanase</h3>
           <p class="enzyme-status"><span class="badge badge--confirmed">Confirmed in CxnA</span></p>
           <p>
-            Attacks crystalline cellulose from chain ends, processively releasing the
-            disaccharide cellobiose. Particularly important for initiating degradation of the
-            crystalline fraction.
+            A dual-specificity exoglucanase/xylanase: attacks cellulose and xylan from chain
+            ends, releasing the disaccharide cellobiose.
           </p>
           <details class="expand mt-4">
             <summary>Structural and mechanistic detail</summary>
             <div class="expand-body">
               <p>
-                Cex uses a retaining double-displacement mechanism, with two conserved
-                glutamate residues — GLU233 as nucleophile and GLU127 as acid/base — coordinating
+                Cex employs a retaining double-displacement mechanism, with two conserved
+                glutamates — GLU233 as nucleophile and GLU127 as acid/base — coordinating
                 catalysis.
                 <a class="cite" href="#ref-notenboom" aria-label="Reference 3: Notenboom et al. 1998">[3]</a>
-                Its active-site tunnel topology enables processive movement along the cellulose
-                chain, explaining its preference for crystalline rather than amorphous substrate.
+                It sits in an open (β/α)₈ cleft characteristic of family GH10, and is a
+                dual-specificity enzyme: in <em>Cellulomonas fimi</em> it acts on xylan as well as
+                on cellulose, and is readily assayed on soluble aryl glycosides such as
+                4-methylumbelliferyl cellobioside. This dual specificity is why the available
+                crystal structures of Cex are complexes with xylobiose-derived ligands, and it is
+                part of why the active site was considered a plausible starting point for coaxing
+                out glucosidase-like chemistry.
               </p>
             </div>
           </details>
@@ -313,11 +317,15 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <summary>Structural and mechanistic detail</summary>
             <div class="expand-body">
               <p>
-                CenA's catalytic triad — Asp595 (acid catalyst), Asp631 (modulates the acid
-                catalyst's protonation state), and Asp771 (base catalyst) — sits in an open
-                active-site cleft rather than a tunnel, consistent with binding internal
-                positions on a chain rather than only chain ends.
-                <a class="cite" href="#ref-damude" aria-label="Reference 4: Damude et al. 1996 / Cockburn et al. 2010">[4]</a>
+                Unlike Cex's retaining mechanism, family GH6 enzymes like CenA are inverting.
+                CenA's catalytic residues — Asp595 (a stabiliser that fine-tunes the pKa
+                environment around the catalytic acid, not itself required for catalysis on its
+                own), Asp631 (acid catalyst), Asp666 (a secondary, pKa-adjusting partner to
+                Asp631), and Asp771, generally assigned as the catalytic base, though the
+                identity of the base in family GH6 has been debated — sit in an open active-site
+                cleft rather than a tunnel, consistent with binding internal positions on a chain
+                rather than only chain ends.
+                <a class="cite" href="#ref-damude" aria-label="Reference 4: Damude et al. 1996">[4]</a><a class="cite" href="#ref-cockburn" aria-label="Reference 5: Cockburn et al. 2010">[5]</a>
                 CxnA fuses Cex and CenA into a single polypeptide, which is the starting point
                 for this project.
                 <a class="cite" href="#ref-duedu" aria-label="Reference 1: Duedu &amp; French 2016">[1]</a>
@@ -373,12 +381,16 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             evolving a third activity directly into one of the two domains CxnA already has.
           </p>
           <p>
-            CxnA has exactly two domains: <strong>Cex</strong> (family GH10, exoglucanase) and
-            <strong>CenA</strong> (family GH6, endoglucanase), joined through a carbohydrate-binding
+            CxnA has exactly two domains: <strong>Cex</strong> (family GH10, exoglucanase/xylanase)
+            and <strong>CenA</strong> (family GH6, endoglucanase), joined through a carbohydrate-binding
             module (CBM). There is no third, pre-existing domain. The directed-evolution target in
             this project is to evolve new β-glucosidase-like activity directly within Cex's own
-            active site — its fold resembles known β-glucosidases closely enough to make this a
-            plausible, if unprecedented, target.
+            active site. Cex (GH10) and the β-glucosidases of family GH1 both belong to clan GH-A,
+            sharing a (β/α)₈ fold and an equivalent pair of catalytic glutamates — which is what
+            makes coaxing glucosidase chemistry out of Cex's own active site structurally
+            plausible, if ambitious: specificity engineering of Cex itself has precedent
+            <a class="cite" href="#ref-notenboom" aria-label="Reference 3: Notenboom et al. 1998">[3]</a>,
+            though not previously toward glucosidase activity.
           </p>
 
           <div class="callout mt-6">
@@ -402,7 +414,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
               <tr><th>Source organism</th><td><em>Cellulomonas fimi</em> (origin of the two fused domains)</td></tr>
               <tr><th>Built by</th><td>Duedu &amp; French, 2016 <a class="cite" href="#ref-duedu">[1]</a> — an engineered fusion, not a natural isolate</td></tr>
               <tr><th>Institution</th><td>University of Edinburgh</td></tr>
-              <tr><th>Domain 1</th><td>Cex — family GH10, exoglucanase</td></tr>
+              <tr><th>Domain 1</th><td>Cex — family GH10, exoglucanase/xylanase</td></tr>
               <tr><th>Domain 2</th><td>CenA — family GH6, endoglucanase</td></tr>
               <tr><th>Joined via</th><td>Carbohydrate-binding module (CBM)</td></tr>
               <tr><th>Crystal structure ref</th><td>1FHD (Cex, Notenboom 1998 <a class="cite" href="#ref-notenboom">[3]</a>)</td></tr>
@@ -435,9 +447,11 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
                 <h3>Introduce random mutations</h3>
                 <p>
                   Error-prone PCR (epPCR) amplifies the target gene with a deliberately elevated
-                  error rate, creating a library of thousands of sequence variants — each a slightly
-                  different version of the protein. This is analogous to natural mutation, but we
-                  control the rate.
+                  error rate, creating a library of sequence variants — each a slightly different
+                  version of the protein. In principle this can generate libraries of thousands of
+                  variants; what this project actually recovered was far smaller — see
+                  <a href={`${b}/results#wetlab-library`}>Results</a> for the real number and why.
+                  This is analogous to natural mutation, but we control the rate.
                 </p>
               </div>
             </div>
@@ -449,7 +463,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
                   Every colony in the library — not just survivors of a growth challenge — is
                   spread onto plates carrying a colour-change substrate: Congo red for retained
                   endoglucanase activity, X-gluc for the β-glucosidase-like activity being
-                  evolved. This narrows a large library down to a shortlist worth quantifying.
+                  evolved. This narrows the library down to a shortlist worth quantifying.
                 </p>
               </div>
             </div>
@@ -556,11 +570,11 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <div class="lit-year">1996 / 2010</div>
           <h3>Damude et al.; Cockburn et al. — CenA/GH6 mechanism</h3>
           <p id="ref-damude">
-            Characterisation of GH6-family endoglucanase catalysis, including the acid/base
-            catalytic triad architecture used to annotate CenA's active site.
-            <a class="cite" href="#ref-damude-full" aria-label="Reference 4: Damude et al. 1996 / Cockburn et al. 2010">[4]</a>
+            Characterisation of GH6-family endoglucanase catalysis, including the catalytic
+            residue architecture used to annotate CenA's active site.
+            <a class="cite" href="#ref-damude-full" aria-label="Reference 4: Damude et al. 1996">[4]</a><a class="cite" href="#ref-cockburn-full" aria-label="Reference 5: Cockburn et al. 2010">[5]</a>
           </p>
-          <div class="lit-role"><strong>Role in this project:</strong> Identifies CenA's catalytic triad (Asp595, Asp631, Asp771) used in the dry-lab structural analysis for Project B.</div>
+          <div class="lit-role"><strong>Role in this project:</strong> Identifies CenA's catalytic residues (Asp595, Asp631, Asp666, Asp771) used in the dry-lab structural analysis for Project B.</div>
         </div>
       </div>
 

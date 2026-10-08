@@ -198,7 +198,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             third trick</strong> — splitting cellobiose into usable glucose, the one job it's
             missing? And <strong>could the same process make the two jobs it already does faster or
             more robust?</strong> Both questions were tested with the same tool: scrambling CxnA's
-            DNA at random, then screening thousands of the resulting mutants for anything better.
+            DNA at random, then screening the resulting mutants for anything better.
           </p>
         </div>
 
@@ -222,15 +222,17 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             exoglucanase) and <strong>CenA</strong> (family GH6, endoglucanase), joined through a
             carbohydrate-binding module. There is no separate third domain in the protein — the
             goal for the missing β-glucosidase activity is to evolve it directly within Cex's
-            existing active site, which structurally resembles known β-glucosidases closely enough
-            to make this a plausible (if unprecedented) target.
+            existing active site. Cex (GH10) and the β-glucosidases of family GH1 both belong to
+            clan GH-A, sharing a (β/α)₈ fold and an equivalent pair of catalytic glutamates — which
+            is what makes coaxing glucosidase chemistry out of Cex's own active site structurally
+            plausible.
           </p>
           <p>
             Structural and docking analysis (see <a href={`${b}/results#drylab-cex-targets`}>Results — Dry Lab</a>)
             found that cellobiose can occupy Cex's active site in contact with its existing
             catalytic residues, GLU127 and GLU233 — the same two residues Cex already uses on its
-            natural substrate. Separately, CenA's own active site (Asp595, Asp631, Asp771) was
-            analysed for mutations that might improve its existing activity
+            natural substrate. Separately, CenA's own active site (Asp595, Asp631, Asp666, Asp771)
+            was analysed for mutations that might improve its existing activity
             (see <a href={`${b}/results#drylab-cena`}>Results — CenA</a>).
           </p>
           <p>
@@ -281,9 +283,11 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <div class="track-section">
             <h4>Honest framing</h4>
             <p>
-              No mutant matched the positive control, and the one candidate that beat wild type
-              (CO12, 1.35× on average) falls just short of our statistical confidence threshold.
-              This is reported as a real, interpretable result — not a hidden failure.
+              No mutant matched the positive control. CO12 read above wild type at 1.35× on
+              average, but sequencing returned the parent sequence for it and for every other
+              codon-optimised variant tested — so that figure sits inside the spread shown by
+              genetically identical isolates, and is not evidence of an evolved activity. Reported
+              as a real, interpretable negative result rather than a hidden failure.
             </p>
           </div>
 
@@ -291,8 +295,8 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <h4>Dry lab inputs</h4>
             <p>
               Cex structure validated against the 1FHD crystal structure · cellobiose docked next
-              to GLU127/GLU233 · conservation analysis confirming both residues are essential ·
-              computational mutation screen (FoldX + re-docking)
+              to GLU127/GLU233 · conservation analysis indicating both residues are functionally
+              essential · computational mutation screen (FoldX + re-docking)
             </p>
             <a href={`${b}/results#drylab-cex-targets`} class="track-link">View dry-lab results for Project A →</a>
           </div>
@@ -321,9 +325,12 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <p>
               Project B doubles as a sanity check on the whole pipeline: CxnA's existing activities
               are real and measurable, so if the screens can't detect genuine known activity
-              reliably, that would call the whole method into question. They did — the assay caught
-              real signal and real noise, including two mutants (T14, T15) that had clearly lost
-              function.
+              reliably, that would call the whole method into question. The assay cleared that bar
+              in one direction: it resolved complete loss of function unambiguously, with T14 and
+              T15 sitting at the dead-enzyme control. Resolving a modest <em>gain</em> proved
+              harder — colonies with no detectable mutations spanned 0.57× to 1.39× of wild type,
+              which is the real detection floor and the reason no variant could be called an
+              improvement.
             </p>
           </div>
 
@@ -331,8 +338,8 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
             <h4>Dry lab inputs</h4>
             <p>
               CenA structure and conservation analysis · cellotetraose docked against catalytic
-              Asp595/Asp631/Asp771 · combined stability + binding mutation screen, best candidate
-              K671S
+              Asp595/Asp631/Asp666/Asp771 · combined stability + binding mutation screen, best
+              candidate K671S
             </p>
             <a href={`${b}/results#drylab-cena`} class="track-link">View dry-lab results for Project B →</a>
           </div>
@@ -372,9 +379,11 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
           <div class="context-icon" aria-hidden="true">🤖</div>
           <h3>Testing AI-assisted protein engineering</h3>
           <p>
-            This project also tested, honestly, how far AlphaFold-based structural prediction can
-            responsibly guide directed evolution — and where it can't substitute for real
-            experimental data. Both the hits and the limits are documented, not hidden.
+            This project also shows where AlphaFold-based prediction sits in a directed-evolution
+            workflow — and where it stops. The computational work set priorities for where to look
+            and gave a reference point for interpreting what turned up; because the mutagenesis was
+            random, none of the predicted substitutions appeared in the library, so the predictions
+            themselves were never tested experimentally. That limit is part of the result.
           </p>
         </div>
       </div>

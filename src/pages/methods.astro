@@ -32,6 +32,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
         <a href="#method-dl5">DL-5</a>
         <div class="toc-divider"></div>
         <span class="toc-section-label">Wet lab</span>
+        <a href="#method-wl0">WL-0</a>
         <a href="#method-wl1">WL-1</a>
         <a href="#method-wl2">WL-2</a>
         <a href="#method-wl3">WL-3</a>
@@ -54,6 +55,7 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
       <a href="#method-dl4"><span class="toc-id">DL-4</span><span class="toc-label">PLIP analysis</span></a>
       <a href="#method-dl5"><span class="toc-id">DL-5</span><span class="toc-label">Mutation screening</span></a>
       <p class="toc-group-head">Wet lab</p>
+      <a href="#method-wl0"><span class="toc-id">WL-0</span><span class="toc-label">Cellobiose selection (set aside)</span></a>
       <a href="#method-wl1"><span class="toc-id">WL-1</span><span class="toc-label">Culture &amp; plates</span></a>
       <a href="#method-wl2"><span class="toc-id">WL-2</span><span class="toc-label">Plasmid &amp; DNA quant</span></a>
       <a href="#method-wl3"><span class="toc-id">WL-3</span><span class="toc-label">Library generation</span></a>
@@ -367,6 +369,33 @@ const b = import.meta.env.BASE_URL.replace(/\/$/, "");
       <div class="section-header">
         <p class="eyebrow">Molecular biology</p>
         <h2 id="wetlab-heading">Wet lab: construction, mutagenesis, and screening</h2>
+      </div>
+
+      <div class="method-block" id="method-wl0">
+        <div class="method-header">
+          <div class="method-num">WL-0</div>
+          <div>
+            <h3>Liquid cellobiose growth selection (tested, not used downstream)</h3>
+            <div class="method-status-row">
+              <span class="badge badge--confirmed">Confirmed</span>
+              <a href={`${b}/results#wetlab-cellobiose-selection`} class="method-link">View results →</a>
+            </div>
+          </div>
+        </div>
+        <div class="method-body">
+          <p>
+            Before committing to colony-by-colony screening, we tested whether growth on
+            cellobiose as the sole carbon source could itself serve as a selection — pool a
+            mutant library and let only variants with real β-glucosidase-like activity grow,
+            rather than screening colonies individually.
+          </p>
+          <ul class="param-list">
+            <li><strong>Strains:</strong> <em>E. coli</em> TOP10 expressing wild-type CxnA, or a secreted β-glucosidase as a positive-control comparator</li>
+            <li><strong>Media:</strong> M9 minimal medium + chloramphenicol + 0.1% casamino acids, with 0.2% glucose or 0.2% cellobiose as the carbon source</li>
+            <li><strong>Conditions:</strong> inoculated at OD₆₀₀ = 0.05, grown at 37 °C, 200 rpm</li>
+            <li><strong>Readouts:</strong> OD₆₀₀ at 24 h; viable counts by serial dilution plating on LB + chloramphenicol</li>
+          </ul>
+        </div>
       </div>
 
       <div class="method-block" id="method-wl1">

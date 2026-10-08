@@ -138,6 +138,32 @@ The index page has "All entries / Wet lab / Dry lab" buttons that toggle `hidden
 - Missing attachment files: `*[Attachment: filename.ext]*` in italics — these are deliberate placeholders, not errors.
 - Preserve negative results honestly. Use `status: pending` for entries whose outcome isn't recorded yet; use `status: in-progress` for entries that are partially complete.
 
+### Scanned original pages (`/notebook/scans`)
+
+The physical paper notebook exists as ~60+ photographed pages that can't be reliably
+matched to dates or to specific `labnotes` entries (undated, out of order, illegible in
+places). Rather than force them into the dated-entry content collection, they're served
+as a separate, unsorted gallery at `src/pages/notebook/scans.astro`.
+
+**How it works:** the page's frontmatter reads `public/images/notebook-scans/` with
+`node:fs` at build time (`fs.readdirSync`, filtered to `.jpg/.jpeg/.png/.webp`, sorted by
+filename) — same "drop files in, no route wiring" philosophy as the `labnotes` collection,
+just without Zod frontmatter since there's no reliable per-photo metadata to validate.
+A thumbnail grid opens a vanilla-JS lightbox (prev/next, Esc to close, click-outside to
+close) — no framework, consistent with the rest of the site. If the folder is empty or
+missing, the page renders a `.placeholder-block` empty state instead of erroring.
+
+**Adding photos:** drop image files into `public/images/notebook-scans/` and rebuild — no
+`.astro` changes needed. Compress/resize first (phone photos are typically several MB each
+and there are dozens); `sharp` is already resolvable in this project's `node_modules` for
+a quick resize script if needed. Filenames double as display order, so name them so a
+plain string sort gives a sane sequence if any partial ordering is known (e.g.
+`001.jpg`, `002.jpg`); otherwise order doesn't matter since these are explicitly
+presented as unsorted.
+
+The `/notebook` index links to this page ("View the original handwritten pages →"); this
+gallery does not attempt to cross-link individual photos back to specific dated entries.
+
 ---
 <!-- ▼▼▼ V2 EXPERIMENTAL — to remove: delete this section + src/pages/v2.astro + public/helix-spin.webp ▼▼▼ -->
 

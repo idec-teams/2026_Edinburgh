@@ -68,7 +68,7 @@ function statusLabel(s: string) {
 
 <BaseLayout
   title="Lab Notebook — TriCel CxnA Directed Evolution"
-  description="Dated wet-lab and dry-lab notebook entries from the CxnA directed evolution project, June–July 2026."
+  description="Dated wet-lab and dry-lab notebook entries from the CxnA directed evolution project, June–September 2026."
 >
 
   <div class="page-hero">
@@ -91,6 +91,10 @@ function statusLabel(s: string) {
         <span class="badge badge--progress">In progress</span>
         <span class="badge badge--pending">Pending</span>
       </div>
+      <p class="notebook-scans-link">
+        <a href={`${b}/notebook/scans`}>View the original handwritten pages →</a>
+        <span class="notebook-scans-note">— a parallel record; the two don't fully cover each other</span>
+      </p>
     </div>
   </div>
 
@@ -230,6 +234,14 @@ function statusLabel(s: string) {
     flex-wrap: wrap;
     gap: var(--sp-2);
     align-items: center;
+  }
+  .notebook-scans-link {
+    margin-top: var(--sp-3);
+    font-size: 0.92rem;
+  }
+  .notebook-scans-note {
+    color: var(--c-text-faint);
+    margin-left: var(--sp-1);
   }
 
   .notebook-index {
